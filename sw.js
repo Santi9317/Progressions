@@ -1,5 +1,5 @@
 const CACHE = 'workout-v1';
-const FILES = ['/', '/index.html'];
+const FILES = ['/Progressions/', '/Progressions/index.html'];
 
 self.addEventListener('install', e => {
   e.waitUntil(
