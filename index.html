@@ -226,7 +226,7 @@ const PLAN_TEMPLATE = [
   { name:"Day 7 — Rest / Optional Run", type:"rest", notes:"Rest day. Optional easy 20–30 min run. Focus on sleep and nutrition for recovery." }
 ];
 const PHASES = ["Foundation","Foundation","Build","Build","Overload","Overload","Peak","Peak","Peak","Deload","Deload","Deload"];
-const STORAGE_KEY = 'wt_v1';
+const STORAGE_KEY = 'wt_v2';
 let state = {
   currentWeek: 1,
   basePlan: JSON.parse(JSON.stringify(PLAN_TEMPLATE)),
@@ -250,12 +250,19 @@ function inputToKg(val) {
   return v;
 }
 function load() {
-  try { const s = localStorage.getItem(STORAGE_KEY); if (s) state = JSON.parse(s); } catch(e) {}
+  try {
+    const s = localStorage.getItem(STORAGE_KEY) || sessionStorage.getItem(STORAGE_KEY);
+    if (s) state = JSON.parse(s);
+  } catch(e) {}
   if (!state.settings.weightIncKg) state.settings.weightIncKg = 2.27;
   if (!state.settings.unit) state.settings.unit = 'lbs';
 }
 function save() {
-  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e) {}
+  try {
+    const data = JSON.stringify(state);
+    localStorage.setItem(STORAGE_KEY, data);
+    sessionStorage.setItem(STORAGE_KEY, data);
+  } catch(e) {}
 }
 function toast(msg) {
   const el = document.getElementById('toast');
