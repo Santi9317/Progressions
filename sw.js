@@ -1,4 +1,4 @@
-const CACHE = 'workout-v1';
+const CACHE = 'progressions-v1';
 const FILES = ['/Progressions/', '/Progressions/index.html'];
 
 self.addEventListener('install', e => {
@@ -24,7 +24,7 @@ self.addEventListener('fetch', e => {
         const clone = res.clone();
         caches.open(CACHE).then(c => c.put(e.request, clone));
         return res;
-      }).catch(() => caches.match('/index.html'));
+      }).catch(() => caches.match('/Progressions/index.html'));
     })
   );
 });
