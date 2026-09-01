@@ -1,11 +1,11 @@
 {
-  "name": "Workout Tracker",
-  "short_name": "Workout",
+  "name": "Progressions",
+  "short_name": "Progressions",
   "start_url": "/Progressions/index.html",
   "display": "standalone",
-  "background_color": "#111111",
-  "theme_color": "#111111",
-  "description": "Personal progressive overload workout tracker",
+  "background_color": "#0f0f0f",
+  "theme_color": "#0f0f0f",
+  "description": "Your daily fitness and nutrition plan",
   "icons": [
     {
       "src": "icon-192.png",
