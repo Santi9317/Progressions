@@ -80,16 +80,21 @@ main{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:16px 18px c
 .ex-table-head span:not(:first-child){text-align:center}
 .ex-row{display:grid;grid-template-columns:1fr 44px 44px 68px;gap:4px;align-items:center;padding:8px 16px;border-bottom:0.5px solid var(--border)}
 .ex-row:last-child{border-bottom:none}
-.ex-name{font-size:13px;font-weight:500}
+.ex-name-btn{cursor:pointer}
+.ex-name-btn:active{opacity:0.55}
+.ex-name{font-size:13px;font-weight:500;display:flex;align-items:center;justify-content:space-between;gap:6px}
 .ex-note{font-size:11px;color:var(--ink3);margin-top:1px}
 .ex-cell{text-align:center;font-size:13px;color:var(--ink2)}
 .ex-input{width:100%;text-align:center;font-size:13px;font-family:var(--font);border:0.5px solid var(--border2);border-radius:6px;padding:5px 2px;background:var(--paper2);color:var(--ink)}
 .ex-input:focus{outline:2px solid var(--lift);outline-offset:1px}
+.tap-arrow{color:var(--ink4);font-size:14px;flex-shrink:0}
 
 /* WARMUP / COOLDOWN */
 .mobility-block{padding:12px 16px;border-bottom:0.5px solid var(--border)}
 .mobility-title{font-size:11px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px}
-.mobility-item{font-size:13px;color:var(--ink2);padding:3px 0;display:flex;align-items:flex-start;gap:6px}
+.mobility-item{font-size:13px;color:var(--ink2);padding:5px 0;display:flex;align-items:center;justify-content:space-between;gap:6px;cursor:pointer}
+.mobility-item:active{opacity:0.55}
+.mobility-item-left{display:flex;align-items:flex-start;gap:6px}
 .mobility-dot{width:4px;height:4px;border-radius:50%;background:var(--flex);margin-top:6px;flex-shrink:0}
 
 /* LOG BUTTON */
@@ -117,6 +122,13 @@ main{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:16px 18px c
 .meal-name{font-size:13px;font-weight:600;margin-bottom:3px}
 .meal-detail{font-size:12px;color:var(--ink3);line-height:1.5}
 .meal-timing{font-size:11px;color:var(--ink4);margin-bottom:2px}
+.recipe-link{font-size:11px;color:var(--lift);font-weight:600;margin-top:5px;cursor:pointer}
+.recipe-link:active{opacity:0.55}
+
+/* SHOPPING LIST LINK */
+.shop-link-row{margin:0 0 14px}
+.shop-link{width:100%;padding:10px;font-size:13px;font-weight:600;border:0.5px dashed var(--border2);border-radius:var(--radius-sm);background:var(--paper2);color:var(--ink2);cursor:pointer;font-family:var(--font)}
+.shop-link:active{background:var(--paper3)}
 
 /* STATS SCREEN */
 .stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
@@ -149,6 +161,21 @@ main{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:16px 18px c
 .week-badge{font-size:12px;padding:4px 12px;border-radius:20px;background:var(--paper3);color:var(--ink3);border:0.5px solid var(--border);font-weight:500}
 .progress-wrap{height:3px;background:var(--paper3);border-radius:2px;margin-bottom:16px}
 .progress-bar{height:3px;border-radius:2px;background:var(--lift);transition:width 0.4s}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.45);display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.2s;z-index:200}
+.modal-overlay.show{opacity:1;pointer-events:auto}
+.modal-sheet{width:100%;max-width:430px;max-height:80vh;background:var(--paper);border-radius:18px 18px 0 0;overflow-y:auto;-webkit-overflow-scrolling:touch;transform:translateY(100%);transition:transform 0.25s ease}
+.modal-overlay.show .modal-sheet{transform:translateY(0)}
+.modal-handle{width:36px;height:4px;background:var(--border2);border-radius:2px;margin:10px auto 0}
+.modal-header{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 18px 8px}
+.modal-title{font-size:17px;font-weight:700;letter-spacing:-0.3px}
+.modal-close{border:none;background:var(--paper3);width:28px;height:28px;min-width:28px;border-radius:50%;font-size:13px;color:var(--ink2);cursor:pointer}
+.modal-body{padding:4px 18px calc(env(safe-area-inset-bottom,16px) + 24px);font-size:13px;color:var(--ink2);line-height:1.65}
+.modal-body h4{font-size:11px;text-transform:uppercase;letter-spacing:0.06em;color:var(--ink3);margin:16px 0 6px;font-weight:600}
+.modal-body h4:first-of-type{margin-top:4px}
+.modal-body ul{padding-left:18px;margin:2px 0}
+.modal-body li{margin-bottom:5px}
 </style>
 </head>
 <body>
@@ -174,7 +201,7 @@ main{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:16px 18px c
       <div class="day-sublabel" id="day-sublabel">Day 1 of 7</div>
     </div>
     <div style="display:flex;align-items:center;gap:8px">
-      <span class="today-pill" id="today-pill" style="display:none">Today</span>
+      <span class="today-pill" id="today-pill" style="display:none">Current</span>
       <div class="day-nav-arrows">
         <button id="prev-day" onclick="changeDay(-1)">‹</button>
         <button id="next-day" onclick="changeDay(1)">›</button>
@@ -186,6 +213,7 @@ main{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:16px 18px c
     <span class="week-badge" id="week-phase"></span>
   </div>
   <div class="progress-wrap"><div class="progress-bar" id="week-progress" style="width:0%"></div></div>
+  <div class="shop-link-row"><button class="shop-link" onclick="showShoppingList()">🛒 This week's shopping list</button></div>
   <div id="day-content"></div>
 </div>
 
@@ -210,11 +238,11 @@ main{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:16px 18px c
     <div class="settings-row"><label>Weight unit</label><select id="set-unit"><option value="lbs" selected>lbs</option><option value="kg">kg</option></select></div>
     <div class="settings-row"><label id="set-inc-label">Overload increase / week (lbs)</label><input type="number" id="set-inc" value="5" step="1" min="1" max="30"></div>
     <div class="settings-row"><label>Experience level</label><select id="set-level"><option value="intermediate">Intermediate</option><option value="advanced" selected>Advanced</option></select></div>
-    <div class="settings-note">Progressive overload: weights increase automatically each week. You can always edit individual exercises in the Log tab.</div>
+    <div class="settings-note">Progressive overload: weights increase automatically each week you complete. You can always edit individual exercises in the Log tab.</div>
   </div>
   <div class="settings-section">
     <div class="settings-section-label">Data</div>
-    <div class="settings-row"><label>Reset to Week 1</label><button onclick="resetWeek()" style="font-size:13px;padding:6px 14px;border:0.5px solid var(--border2);border-radius:6px;background:transparent;cursor:pointer;font-family:var(--font);color:var(--ink)">Reset</button></div>
+    <div class="settings-row"><label>Reset to Day 1</label><button onclick="resetWeek()" style="font-size:13px;padding:6px 14px;border:0.5px solid var(--border2);border-radius:6px;background:transparent;cursor:pointer;font-family:var(--font);color:var(--ink)">Reset</button></div>
     <div class="settings-row"><label>Clear all history</label><button onclick="clearHistory()" style="font-size:13px;padding:6px 14px;border:0.5px solid var(--border2);border-radius:6px;background:transparent;cursor:pointer;font-family:var(--font);color:#c0392b">Clear</button></div>
   </div>
   <button class="save-btn" onclick="saveSettings()">Save Settings</button>
@@ -222,6 +250,19 @@ main{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:16px 18px c
 
 </main>
 <div class="toast" id="toast"></div>
+
+<!-- INFO / RECIPE / SHOPPING LIST MODAL -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModalBg(event)">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-header">
+      <span class="modal-title" id="modal-title"></span>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
+
 <script>
 // ─── PLAN ───────────────────────────────────────────────────────────────────
 const PLAN = [
@@ -318,37 +359,123 @@ const PLAN = [
   }
 ];
 
+// ─── EXERCISE HOW-TO ──────────────────────────────────────────────────────────
+const EXERCISE_INFO = {
+  "Barbell Bench Press":"Lie on a flat bench, feet flat on the floor. Grip the bar slightly wider than shoulder-width. Lower it to your mid-chest with control, elbows at about a 45° angle from your torso, then press back up to lockout without bouncing off your chest.",
+  "Incline Dumbbell Press":"Set the bench to a 30–45° incline. Press dumbbells up and slightly inward until they nearly touch above your upper chest, then lower with control to chest level, keeping elbows tucked around 45°.",
+  "Cable Lateral Raises":"Stand side-on to a low cable pulley, handle in the far hand. With a slight bend in the elbow, raise your arm out to the side to about shoulder height, leading with the elbow. Lower slowly — resist the pull down.",
+  "Dumbbell Overhead Press":"Stand or sit with dumbbells at shoulder height, palms forward. Press straight overhead until arms are extended, without arching your lower back. Lower with control back to shoulder height.",
+  "Cable Tricep Pushdown":"Stand facing a high cable with a straight bar or rope attachment. Keep elbows pinned to your sides and press down until arms are fully extended, then control the return without letting elbows flare.",
+  "Overhead Tricep Extension":"Hold a dumbbell with both hands overhead, elbows pointing forward. Lower the weight behind your head by bending only at the elbows, then extend back to full overhead lockout.",
+  "Barbell Back Squat":"Bar rests on your upper traps, feet shoulder-width. Brace your core, break at the hips and knees together, and descend to at least parallel. Drive through the whole foot to stand, keeping knees tracking over your toes.",
+  "Romanian Deadlift":"Hold the bar at hip level. Push your hips back while keeping a slight knee bend and a flat back, lowering the bar along your legs until you feel a hamstring stretch. Drive hips forward to return to standing — this is a hinge, not a squat.",
+  "Walking Lunges (Dumbbell)":"Holding dumbbells at your sides, step forward into a lunge until both knees are near 90°, then push off the front foot into the next step. Keep your torso upright and core braced throughout.",
+  "Leg Extension":"Sit with the pad resting on your lower shins, knees aligned with the machine's pivot. Extend your legs to full contraction, squeeze at the top, then lower under control — don't let the weight stack slam.",
+  "Seated Calf Raise":"Sit with the balls of your feet on the platform, pad on your thighs. Lower your heels for a full stretch, then rise onto your toes as high as possible, pausing briefly at the top.",
+  "Cable Woodchop":"Set the pulley high, grip the handle with both hands, and rotate through your torso and hips to pull it diagonally across your body — think of chopping wood. Control the return, keeping the movement in your core, not your arms.",
+  "Plank":"Forearms and toes on the ground, elbows under shoulders. Keep a straight line from head to heels by bracing your core and squeezing your glutes — don't let your hips sag or pike up.",
+  "Deadlift":"Bar over midfoot, grip just outside your shins. Brace your core, flatten your back, and drive through the floor by extending your hips and knees together, keeping the bar close to your body throughout.",
+  "Barbell Row":"Hinge forward to about 45°, holding the bar with a flat back. Pull the bar toward your lower ribs/waist, squeezing your shoulder blades together, then lower with control without letting your torso swing.",
+  "Lat Pulldown (Cable)":"Grip the bar wider than shoulder-width, sit with your thighs secured. Pull the bar down to your upper chest, driving your elbows down and back, then let it rise slowly with control.",
+  "Face Pulls (Cable)":"Set the pulley to upper-chest/head height with a rope attachment. Pull the rope toward your face, separating the ends and driving your elbows high and back — great for rear delts and shoulder health.",
+  "Incline Dumbbell Curl":"Sit on an incline bench, arms hanging fully extended. Curl the dumbbells up while keeping your elbows pinned behind your torso, then lower slowly for a full stretch at the bottom.",
+  "Hammer Curl":"Hold dumbbells with a neutral (palms-in) grip. Curl straight up without rotating your wrists, keeping elbows close to your sides, then lower with control.",
+  "Hip Thrust (Barbell)":"Upper back braced on a bench, bar across your hips. Drive through your heels to lift your hips until your body forms a straight line from shoulders to knees, squeezing glutes hard at the top, then lower with control.",
+  "Bulgarian Split Squat":"Rear foot elevated on a bench behind you, front foot far enough forward for a stable stance. Lower straight down until your back knee nearly touches the floor, then drive through the front heel to stand.",
+  "Lying Leg Curl":"Lie face down with the pad against your lower calves/ankles. Curl your heels toward your glutes, squeezing your hamstrings at the top, then lower under control.",
+  "Abductor Machine":"Sit with pads against the outside of your knees/thighs. Push your legs outward against the resistance, squeeze at the end range, then let the pads return slowly.",
+  "Standing Calf Raise":"Balls of your feet on the platform, shoulders under the pads. Lower your heels for a full stretch, then rise onto your toes as high as possible, pausing briefly at the top.",
+  "Hanging Knee Raise":"Hang from a bar with arms fully extended. Without swinging, raise your knees toward your chest by curling your pelvis up, then lower with control.",
+  "Ab Wheel Rollout":"Kneeling, grip the wheel and roll forward slowly, keeping your core braced and back flat, extending as far as you can control. Pull back to the start using your abs, not your hips."
+};
+
+// ─── WARMUP / COOLDOWN / MOBILITY HOW-TO ─────────────────────────────────────
+const MOVE_INFO = {
+  "chest opener stretch":"Clasp your hands behind your back and gently lift, or stand in a doorway with your forearms on the frame and step through to feel a stretch across your chest and front shoulders.",
+  "shoulder circles + arm swings":"Roll your shoulders in big circles forward then backward, then swing your arms across your body and open them wide to loosen the shoulder joints.",
+  "thoracic spine rotations":"On all fours or standing, place a hand behind your head and rotate your upper back, opening your elbow toward the ceiling, then return — keep your hips still, the motion comes from the mid-back.",
+  "band pull-aparts":"Hold a light resistance band at shoulder height, arms extended. Pull the band apart by squeezing your shoulder blades together, then return with control.",
+  "doorframe chest stretch":"Place your forearm on a doorframe at shoulder height and gently lean your body forward through the doorway until you feel a stretch across your chest.",
+  "cross-body shoulder stretch":"Bring one arm straight across your chest and use your other arm to gently pull it closer, feeling the stretch in the back of the shoulder.",
+  "hip flexor stretch":"Kneel in a half-lunge position, back knee down. Tuck your pelvis under and shift your weight forward slightly until you feel a stretch in the front of the hip of the kneeling leg.",
+  "leg swings front/back + lateral":"Hold onto something for balance and swing one leg forward and back in a controlled arc, then switch to side-to-side swings, keeping the motion smooth, not forced.",
+  "glute bridges bodyweight":"Lie on your back, knees bent, feet flat. Drive through your heels to lift your hips until your body forms a straight line, squeeze your glutes, then lower with control.",
+  "ankle circles":"Lift one foot off the ground and rotate it slowly at the ankle, a full set of circles one way, then the other, then switch feet.",
+  "standing quad stretch":"Standing (hold something for balance if needed), grab one foot behind you and pull your heel toward your glutes, keeping your knees close together.",
+  "seated hamstring stretch":"Sit with one leg extended straight, the other bent with foot tucked in. Hinge forward from your hips over the straight leg, reaching toward your toes.",
+  "pigeon pose or figure-4":"From a tabletop or lying position, cross one ankle over the opposite knee (figure-4) or bring one shin forward on the floor (pigeon), and lean forward to stretch the glute and hip.",
+  "world's greatest stretch":"From a lunge position, place both hands inside your front foot, rotate your torso and reach one arm to the ceiling, then return — a full-body mobility flow through the hips, spine and hamstrings.",
+  "90/90 hip stretch":"Sit with your front leg bent 90° in front of you and back leg bent 90° to the side. Lean forward over the front shin to feel the stretch, then switch sides.",
+  "cat-cow":"On all fours, alternate between arching your back and dropping your belly (cow) and rounding your spine toward the ceiling while tucking your chin (cat), moving with your breath.",
+  "dead hang":"Hang from a pull-up bar with arms fully extended and shoulders relaxed, letting gravity decompress your spine and stretch your lats and grip.",
+  "t-spine rotations":"In a tabletop position, place one hand behind your head and rotate your upper back to open that elbow toward the ceiling, then return, keeping your hips square.",
+  "thread the needle":"From all fours, slide one arm underneath your body and through the gap between your other arm and leg, rotating your upper back, then return and repeat on the other side.",
+  "scapular retractions":"Hang from a bar or hold a band at chest height, and without bending your elbows, pull your shoulder blades together and down, then release.",
+  "neck side stretch":"Sit or stand tall, gently tilt your ear toward your shoulder until you feel a stretch along the side of your neck, optionally assisting lightly with your hand.",
+  "lat stretch — doorframe or hanging":"Grab a sturdy overhead bar or doorframe with one hand, then sink your hips back and down to feel a stretch along the side of your torso/lat, or simply hang from a bar with a slight side lean.",
+  "child's pose":"Kneel and sit back onto your heels, then fold forward with arms extended on the floor in front of you, relaxing your lower back and hips.",
+  "glute bridge":"Lie on your back, knees bent, feet flat. Drive through your heels to lift your hips, squeeze your glutes at the top, then lower with control — used here as an activation move.",
+  "lateral band walk":"Place a resistance band around your ankles or above your knees, get into a quarter-squat, and step sideways while maintaining tension on the band throughout.",
+  "seated glute stretch":"Sit tall, cross one ankle over the opposite knee, and gently lean your chest forward until you feel a stretch in the glute of the crossed leg.",
+  "standing hip flexor stretch":"From standing, step one foot back into a shallow lunge, tuck your pelvis under, and gently press your hips forward to stretch the front of the back hip.",
+  "supine spinal twist":"Lie on your back, knees bent and together, then let both knees fall to one side while keeping your shoulders flat on the floor, gently twisting your spine. Switch sides.",
+  "hamstring stretch seated":"Sit with one leg extended straight, the other bent with foot tucked in. Hinge forward from your hips over the straight leg, reaching toward your toes.",
+  "chest opener":"Clasp your hands behind your back and gently lift them while opening your chest, or interlace your fingers overhead and press up and back."
+};
+
 // ─── NUTRITION ──────────────────────────────────────────────────────────────
 const NUTRITION = {
   training:{cal:2400,protein:185,carbs:240,fat:70},
   rest:{cal:2100,protein:175,carbs:200,fat:70},
   meals:{
     breakfast:[
-      {name:"Eggs & Oats",timing:"Within 1hr of waking",detail:"3 scrambled eggs + ½ cup oats + banana. ~500 cal, 35g protein. Fast and filling."},
-      {name:"Greek Yogurt Bowl",timing:"Within 1hr of waking",detail:"1 cup full-fat Greek yogurt + berries + granola + honey. ~450 cal, 30g protein. 5 minutes."},
-      {name:"Turkey & Egg Wrap",timing:"Within 1hr of waking",detail:"3 eggs + 2oz turkey in a flour tortilla with salsa. ~500 cal, 40g protein."}
+      {name:"Eggs & Oats",timing:"Within 1hr of waking",detail:"3 scrambled eggs + ½ cup oats + banana. ~500 cal, 35g protein. Fast and filling.",
+        recipe:{ingredients:[{item:"Eggs",qty:3,unit:"large"},{item:"Rolled oats",qty:0.5,unit:"cup"},{item:"Banana",qty:1,unit:""}],
+          steps:["Cook oats with water or milk per package directions.","Scramble eggs in a nonstick pan over medium heat.","Slice banana and serve alongside."]}},
+      {name:"Greek Yogurt Bowl",timing:"Within 1hr of waking",detail:"1 cup full-fat Greek yogurt + berries + granola + honey. ~450 cal, 30g protein. 5 minutes.",
+        recipe:{ingredients:[{item:"Full-fat Greek yogurt",qty:1,unit:"cup"},{item:"Mixed berries",qty:0.5,unit:"cup"},{item:"Granola",qty:0.25,unit:"cup"},{item:"Honey",qty:1,unit:"tbsp"}],
+          steps:["Add yogurt to a bowl.","Top with berries and granola.","Drizzle honey over the top."]}},
+      {name:"Turkey & Egg Wrap",timing:"Within 1hr of waking",detail:"3 eggs + 2oz turkey in a flour tortilla with salsa. ~500 cal, 40g protein.",
+        recipe:{ingredients:[{item:"Eggs",qty:3,unit:"large"},{item:"Deli turkey",qty:2,unit:"oz"},{item:"Flour tortilla",qty:1,unit:""},{item:"Salsa",qty:2,unit:"tbsp"}],
+          steps:["Scramble the eggs.","Warm the tortilla, layer turkey and scrambled eggs.","Top with salsa, fold and roll into a wrap."]}}
     ],
     lunch:[
-      {name:"Chicken Rice Bowl",timing:"Midday",detail:"Pan-seared chicken thigh over white rice + roasted broccoli + soy-sesame drizzle. ~550 cal, 45g protein. Under $4."},
-      {name:"Ground Turkey Taco Bowl",timing:"Midday",detail:"Seasoned turkey over rice + black beans + salsa + sour cream. ~600 cal, 50g protein."},
-      {name:"Tuna Avocado Wrap",timing:"Midday",detail:"Canned tuna + avocado + lemon in a wrap with greens. ~450 cal, 40g protein. No cooking needed."}
+      {name:"Chicken Rice Bowl",timing:"Midday",detail:"Pan-seared chicken thigh over white rice + roasted broccoli + soy-sesame drizzle. ~550 cal, 45g protein. Under $4.",
+        recipe:{ingredients:[{item:"Chicken thighs",qty:6,unit:"oz"},{item:"White rice (cooked)",qty:1,unit:"cup"},{item:"Broccoli",qty:1,unit:"cup"},{item:"Soy sauce",qty:1,unit:"tbsp"},{item:"Sesame oil",qty:1,unit:"tsp"}],
+          steps:["Pan-sear chicken thigh until cooked through, ~6-7 min per side.","Roast or steam broccoli.","Serve chicken and broccoli over rice, drizzle with soy sauce and sesame oil."]}},
+      {name:"Ground Turkey Taco Bowl",timing:"Midday",detail:"Seasoned turkey over rice + black beans + salsa + sour cream. ~600 cal, 50g protein.",
+        recipe:{ingredients:[{item:"Ground turkey",qty:6,unit:"oz"},{item:"White rice (cooked)",qty:1,unit:"cup"},{item:"Black beans",qty:0.5,unit:"cup"},{item:"Salsa",qty:2,unit:"tbsp"},{item:"Sour cream",qty:1,unit:"tbsp"}],
+          steps:["Brown ground turkey in a pan with taco seasoning.","Warm black beans.","Build the bowl over rice with turkey, beans, salsa and sour cream."]}},
+      {name:"Tuna Avocado Wrap",timing:"Midday",detail:"Canned tuna + avocado + lemon in a wrap with greens. ~450 cal, 40g protein. No cooking needed.",
+        recipe:{ingredients:[{item:"Canned tuna",qty:5,unit:"oz"},{item:"Avocado",qty:0.5,unit:""},{item:"Lemon",qty:0.5,unit:""},{item:"Tortilla wrap",qty:1,unit:""},{item:"Mixed greens",qty:1,unit:"cup"}],
+          steps:["Mix drained tuna with mashed avocado and a squeeze of lemon.","Lay greens on the wrap and add the tuna mixture.","Fold and roll tightly."]}}
     ],
     dinner:[
-      {name:"Salmon & Sweet Potato",timing:"Evening",detail:"Pan-seared salmon + microwaved sweet potato + steamed green beans. ~600 cal, 45g protein. 20 min."},
-      {name:"Steak Stir Fry",timing:"Evening",detail:"Thin-sliced flank steak + bell peppers + onion + soy sauce over rice. ~550 cal, 45g protein. 20 min."},
-      {name:"Shrimp & Pasta",timing:"Evening",detail:"Shrimp in garlic butter + whole wheat pasta + cherry tomatoes. ~550 cal, 40g protein. 20 min."},
-      {name:"Sheet Pan Chicken Thighs",timing:"Evening",detail:"Chicken thighs + broccoli + red onion, 425°F for 25 min. ~500 cal, 45g protein. Near zero cleanup."}
+      {name:"Salmon & Sweet Potato",timing:"Evening",detail:"Pan-seared salmon + microwaved sweet potato + steamed green beans. ~600 cal, 45g protein. 20 min.",
+        recipe:{ingredients:[{item:"Salmon fillet",qty:6,unit:"oz"},{item:"Sweet potato",qty:1,unit:"medium"},{item:"Green beans",qty:1,unit:"cup"}],
+          steps:["Microwave or bake the sweet potato until soft.","Pan-sear salmon skin-side down until crisp, then flip to finish, ~8 min total.","Steam green beans and plate everything together."]}},
+      {name:"Steak Stir Fry",timing:"Evening",detail:"Thin-sliced flank steak + bell peppers + onion + soy sauce over rice. ~550 cal, 45g protein. 20 min.",
+        recipe:{ingredients:[{item:"Flank steak",qty:6,unit:"oz"},{item:"Bell pepper",qty:1,unit:""},{item:"Onion",qty:0.5,unit:""},{item:"Soy sauce",qty:1,unit:"tbsp"},{item:"White rice (cooked)",qty:1,unit:"cup"}],
+          steps:["Slice steak thin against the grain.","Stir-fry steak, peppers and onion in a hot pan with soy sauce for a few minutes until cooked.","Serve over rice."]}},
+      {name:"Shrimp & Pasta",timing:"Evening",detail:"Shrimp in garlic butter + whole wheat pasta + cherry tomatoes. ~550 cal, 40g protein. 20 min.",
+        recipe:{ingredients:[{item:"Shrimp",qty:6,unit:"oz"},{item:"Whole wheat pasta",qty:2,unit:"oz"},{item:"Garlic",qty:2,unit:"cloves"},{item:"Butter",qty:1,unit:"tbsp"},{item:"Cherry tomatoes",qty:1,unit:"cup"}],
+          steps:["Cook pasta according to package directions.","Sauté garlic in butter, add shrimp and cherry tomatoes until shrimp is pink.","Toss with the cooked pasta."]}},
+      {name:"Sheet Pan Chicken Thighs",timing:"Evening",detail:"Chicken thighs + broccoli + red onion, 425°F for 25 min. ~500 cal, 45g protein. Near zero cleanup.",
+        recipe:{ingredients:[{item:"Chicken thighs",qty:18,unit:"oz"},{item:"Broccoli",qty:1,unit:"cup"},{item:"Red onion",qty:0.5,unit:""}],
+          steps:["Toss chicken thighs, broccoli and red onion with oil, salt and pepper on a sheet pan.","Roast at 425°F for 25 minutes.","Let rest a few minutes before serving."]}}
     ]
   }
 };
 
 const PHASES=["Foundation","Foundation","Build","Build","Overload","Overload","Peak","Peak","Peak","Deload","Deload","Deload"];
 const SK='prog_v1';
+const FORWARD_PREVIEW_DAYS=27;
 
 let state={
   currentWeek:1,
-  viewDayOffset:0,
-  basePlan:JSON.parse(JSON.stringify(PLAN)),
+  currentDayIdx:0,
+  viewOffset:0,
+  basePlan:buildDefaultBasePlan(),
   logs:[],
   settings:{unit:'lbs',incKg:2.27,level:'advanced'}
 };
@@ -358,6 +485,56 @@ function load(){
   try{const s=localStorage.getItem(SK)||sessionStorage.getItem(SK);if(s){const p=JSON.parse(s);state={...state,...p};}}catch(e){}
   if(!state.settings.incKg)state.settings.incKg=2.27;
   if(!state.settings.unit)state.settings.unit='lbs';
+  if(typeof state.currentDayIdx!=='number'){
+    // migrating from the old calendar-locked version — seed the self-paced
+    // pointer from today's real weekday so nothing feels like it jumped
+    const dow=new Date().getDay();
+    state.currentDayIdx=[6,0,1,2,3,4,5][dow];
+  }
+  if(typeof state.viewOffset!=='number')state.viewOffset=0;
+  migrateWeightUnits();
+}
+
+// ─── WEIGHT UNIT FIX (one-time) ───────────────────────────────────────────────
+// The seed PLAN weights were authored as lb-scale numbers (135, 225...) but
+// stored straight into the internal kg field with no conversion, so lbs-mode
+// display doubly-converted them (135 -> "298 lbs"). Any weight you actually
+// typed in went through toKg() correctly and is untouched. This migration
+// only corrects entries still sitting at their original, never-edited default.
+function seedToKg(w){return w===0?0:parseFloat((w/2.2046).toFixed(2));}
+function buildDefaultBasePlan(){
+  return PLAN.map(day=>{
+    const copy=JSON.parse(JSON.stringify(day));
+    if(day.type!=='lift')return copy;
+    copy.exercises=copy.exercises.map(ex=>({...ex,weight:seedToKg(ex.weight)}));
+    return copy;
+  });
+}
+function migrateWeightUnits(){
+  if(state.weightUnitFixed)return;
+  const incKg=state.settings.incKg||2.27;
+  state.basePlan.forEach((day,di)=>{
+    const seedDay=PLAN[di];
+    if(!seedDay||seedDay.type!=='lift'||day.type!=='lift')return;
+    day.exercises.forEach((ex,ei)=>{
+      const seedEx=seedDay.exercises[ei];
+      if(!seedEx||seedEx.name!==ex.name||seedEx.weight===0)return;
+      if(Math.abs(ex.weight-seedEx.weight)<0.001)ex.weight=seedToKg(seedEx.weight);
+    });
+  });
+  state.logs.forEach(log=>{
+    if(log.type!=='lift'||!log.exercises)return;
+    const seedDay=PLAN[log.dayIdx];
+    if(!seedDay||seedDay.type!=='lift')return;
+    log.exercises.forEach((ex,ei)=>{
+      const seedEx=seedDay.exercises[ei];
+      if(!seedEx||seedEx.name!==ex.name||seedEx.weight===0)return;
+      const expectedDefault=parseFloat((seedEx.weight+incKg*(log.week-1)).toFixed(2));
+      if(Math.abs(ex.weight-expectedDefault)<0.01)ex.weight=parseFloat((seedToKg(seedEx.weight)+incKg*(log.week-1)).toFixed(2));
+    });
+  });
+  state.weightUnitFixed=true;
+  save();
 }
 function save(){
   try{const d=JSON.stringify(state);localStorage.setItem(SK,d);sessionStorage.setItem(SK,d);}catch(e){}
@@ -379,10 +556,16 @@ function toKg(val){
   if(unit()==='lbs')return parseFloat((v/2.2046).toFixed(2));
   return v;
 }
+function fmtQty(n){
+  const r=Math.round(n*100)/100;
+  if(Number.isInteger(r))return String(r);
+  return r.toFixed(2).replace(/0+$/,'').replace(/\.$/,'');
+}
 
 // ─── WEEK PLAN ───────────────────────────────────────────────────────────────
-function getWeekPlan(){
-  const incKg=state.settings.incKg*(state.currentWeek-1);
+function getWeekPlan(week){
+  const w=week||state.currentWeek;
+  const incKg=state.settings.incKg*(w-1);
   return state.basePlan.map(day=>{
     if(day.type!=='lift')return day;
     return{...day,exercises:day.exercises.map(ex=>({
@@ -391,41 +574,49 @@ function getWeekPlan(){
   });
 }
 
-// ─── DAY NAV ─────────────────────────────────────────────────────────────────
-function todayDayIndex(){
-  const dow=new Date().getDay();
-  return[6,0,1,2,3,4,5][dow]; // Mon=0
-}
+// ─── SELF-PACED DAY NAV ───────────────────────────────────────────────────────
+// The plan advances when you log a day, not with the calendar — currentWeek /
+// currentDayIdx is the "you are here" pointer; viewOffset lets you browse
+// without moving it.
+function currentAbsoluteDay(){return(state.currentWeek-1)*7+state.currentDayIdx;}
+function viewAbsoluteDay(){return currentAbsoluteDay()+state.viewOffset;}
+function viewWeek(){return Math.floor(viewAbsoluteDay()/7)+1;}
+function viewDayIndex(){return((viewAbsoluteDay()%7)+7)%7;}
+function isViewingCurrent(){return state.viewOffset===0;}
 function changeDay(d){
-  state.viewDayOffset=Math.max(-13,Math.min(13,state.viewDayOffset+d));
-  const absDay=todayDayIndex()+state.viewDayOffset;
-  const weekDelta=Math.floor(absDay/7);
-  state.currentWeek=Math.max(1,Math.min(12,1+weekDelta));
+  const newOffset=state.viewOffset+d;
+  if(currentAbsoluteDay()+newOffset<0)return;
+  if(newOffset>FORWARD_PREVIEW_DAYS)return;
+  state.viewOffset=newOffset;
   save();renderToday();
 }
-function viewDayIndex(){
-  const abs=todayDayIndex()+state.viewDayOffset;
-  return((abs%7)+7)%7;
-}
-function isViewingToday(){return state.viewDayOffset===0;}
 
 // ─── LOGGING ─────────────────────────────────────────────────────────────────
 function isLogged(dayIdx,week){
-  week=week||state.currentWeek;
+  week=week||viewWeek();
   return state.logs.some(l=>l.week===week&&l.dayIdx===dayIdx);
 }
 function logDay(dayIdx){
-  const existing=state.logs.findIndex(l=>l.week===state.currentWeek&&l.dayIdx===dayIdx);
-  const plan=getWeekPlan();const day=plan[dayIdx];
-  if(existing>=0){state.logs.splice(existing,1);toast('Session removed');}
-  else{
+  const week=viewWeek();
+  const existing=state.logs.findIndex(l=>l.week===week&&l.dayIdx===dayIdx);
+  const plan=getWeekPlan(week);const day=plan[dayIdx];
+  if(existing>=0){
+    state.logs.splice(existing,1);toast('Session removed');
+  }else{
     state.logs.push({
-      week:state.currentWeek,dayIdx,type:day.type,name:day.label||day.day,
+      week,dayIdx,type:day.type,name:day.label||day.day,
       date:new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}),
       timestamp:Date.now(),
       exercises:day.type==='lift'?day.exercises.map(e=>({...e})):null
     });
-    toast('Logged! 💪');
+    if(isViewingCurrent()){
+      state.currentDayIdx++;
+      if(state.currentDayIdx>6){state.currentDayIdx=0;state.currentWeek++;}
+      state.viewOffset=0;
+      toast('Logged! 💪 On to the next day');
+    }else{
+      toast('Logged! 💪');
+    }
   }
   save();renderToday();renderStats();
 }
@@ -438,29 +629,91 @@ function updateExField(dayIdx,exIdx,field,val){
   if(!isNaN(v)){state.basePlan[dayIdx].exercises[exIdx][field]=v;save();}
 }
 
+// ─── MODAL ───────────────────────────────────────────────────────────────────
+function openModal(title,bodyHtml){
+  document.getElementById('modal-title').textContent=title;
+  document.getElementById('modal-body').innerHTML=bodyHtml;
+  document.getElementById('modal-overlay').classList.add('show');
+}
+function closeModal(){
+  document.getElementById('modal-overlay').classList.remove('show');
+}
+function closeModalBg(e){
+  if(e.target.id==='modal-overlay')closeModal();
+}
+function moveKey(str){
+  const idx=str.lastIndexOf('—');
+  return(idx<0?str:str.slice(0,idx)).trim().toLowerCase();
+}
+function showMoveInfo(di,cat,idx){
+  const day=getWeekPlan(viewWeek())[di];
+  const text=day[cat][idx];
+  const info=MOVE_INFO[moveKey(text)]||"No description available yet.";
+  openModal(text.split('—')[0].trim(),`<p>${info}</p>`);
+}
+function showExerciseInfo(di,ei){
+  const ex=getWeekPlan(viewWeek())[di].exercises[ei];
+  const info=EXERCISE_INFO[ex.name]||"No description available yet.";
+  openModal(ex.name,`<p>${info}</p>`);
+}
+function showRecipe(cat,idx){
+  const meal=NUTRITION.meals[cat][idx];
+  if(!meal||!meal.recipe){openModal(meal?meal.name:'Recipe','<p>No recipe available.</p>');return;}
+  const ing=meal.recipe.ingredients.map(i=>`<li>${fmtQty(i.qty)}${i.unit?' '+i.unit:''} ${i.item}</li>`).join('');
+  const steps=meal.recipe.steps.map(s=>`<li>${s}</li>`).join('');
+  openModal(meal.name,`<p>${meal.detail}</p><h4>Ingredients</h4><ul>${ing}</ul><h4>Steps</h4><ul>${steps}</ul>`);
+}
+function buildWeekShoppingList(){
+  const counts={breakfast:{},lunch:{},dinner:{}};
+  for(let di=0;di<7;di++){
+    const bi=di%3,li=di%3,dii=di%4;
+    counts.breakfast[bi]=(counts.breakfast[bi]||0)+1;
+    counts.lunch[li]=(counts.lunch[li]||0)+1;
+    counts.dinner[dii]=(counts.dinner[dii]||0)+1;
+  }
+  const agg={};
+  function addMeal(cat,idx,times){
+    const meal=NUTRITION.meals[cat][idx];
+    if(!meal||!meal.recipe)return;
+    meal.recipe.ingredients.forEach(ing=>{
+      const key=ing.item+'|'+ing.unit;
+      if(!agg[key])agg[key]={item:ing.item,unit:ing.unit,qty:0};
+      agg[key].qty+=ing.qty*times;
+    });
+  }
+  Object.entries(counts.breakfast).forEach(([idx,times])=>addMeal('breakfast',+idx,times));
+  Object.entries(counts.lunch).forEach(([idx,times])=>addMeal('lunch',+idx,times));
+  Object.entries(counts.dinner).forEach(([idx,times])=>addMeal('dinner',+idx,times));
+  return Object.values(agg).sort((a,b)=>a.item.localeCompare(b.item));
+}
+function showShoppingList(){
+  const items=buildWeekShoppingList();
+  const html=items.map(i=>`<li>${fmtQty(i.qty)}${i.unit?' '+i.unit:''} ${i.item}</li>`).join('');
+  openModal('Shopping List',`<p style="margin-bottom:10px">Everything you need to cover this week's rotating breakfasts, lunches and dinners.</p><ul>${html}</ul>`);
+}
+
 // ─── RENDER TODAY ─────────────────────────────────────────────────────────────
 function renderToday(){
-  const plan=getWeekPlan();
+  const week=viewWeek();
+  const plan=getWeekPlan(week);
   const di=viewDayIndex();
   const day=plan[di];
-  const isToday=isViewingToday();
-  const logged=isLogged(di);
+  const current=isViewingCurrent();
+  const logged=isLogged(di,week);
 
-  // date header
-  const viewDate=new Date();
-  viewDate.setDate(viewDate.getDate()+state.viewDayOffset);
-  document.getElementById('header-date').textContent=viewDate.toLocaleDateString('en-US',{month:'short',day:'numeric'});
+  document.getElementById('header-date').textContent=new Date().toLocaleDateString('en-US',{month:'short',day:'numeric'});
   document.getElementById('day-label').textContent=day.day;
-  document.getElementById('day-sublabel').textContent=`Day ${di+1} of 7 · Week ${state.currentWeek}`;
+  document.getElementById('day-sublabel').textContent=`Day ${di+1} of 7 · Week ${week}`;
   const pill=document.getElementById('today-pill');
-  pill.style.display=isToday?'inline-block':'none';
-  document.getElementById('week-label').textContent=`Week ${state.currentWeek}`;
-  document.getElementById('week-phase').textContent=PHASES[Math.min(state.currentWeek-1,PHASES.length-1)];
-  document.getElementById('prev-day').disabled=state.viewDayOffset<=-13;
-  document.getElementById('next-day').disabled=state.viewDayOffset>=13;
+  pill.textContent='Current';
+  pill.style.display=current?'inline-block':'none';
+  document.getElementById('week-label').textContent=`Week ${week}`;
+  document.getElementById('week-phase').textContent=PHASES[Math.min(week-1,PHASES.length-1)];
+  document.getElementById('prev-day').disabled=(currentAbsoluteDay()+state.viewOffset)<=0;
+  document.getElementById('next-day').disabled=state.viewOffset>=FORWARD_PREVIEW_DAYS;
 
   // week progress
-  const weekLogs=state.logs.filter(l=>l.week===state.currentWeek).length;
+  const weekLogs=state.logs.filter(l=>l.week===week).length;
   document.getElementById('week-progress').style.width=Math.round(weekLogs/7*100)+'%';
 
   let html='';
@@ -477,13 +730,13 @@ function renderToday(){
       </div>
       <div class="section-body" id="wu-${di}">
         <div class="mobility-block">
-          ${day.warmup.map(w=>`<div class="mobility-item"><div class="mobility-dot"></div><span>${w}</span></div>`).join('')}
+          ${day.warmup.map((w,wi)=>`<div class="mobility-item" onclick="showMoveInfo(${di},'warmup',${wi})"><div class="mobility-item-left"><div class="mobility-dot"></div><span>${w}</span></div><span class="tap-arrow">›</span></div>`).join('')}
         </div>
       </div>
     </div>`;
 
     // Exercises
-    const isEditable=isToday;
+    const isEditable=current;
     html+=`<div class="section-block">
       <div class="section-header" onclick="toggle('ex-${di}','ec-${di}')">
         <div class="section-header-left">
@@ -495,7 +748,7 @@ function renderToday(){
       <div class="section-body open" id="ex-${di}">
         <div class="ex-table-head"><span>Exercise</span><span>Sets</span><span>Reps</span><span>${unit()}</span></div>
         ${day.exercises.map((ex,ei)=>`<div class="ex-row">
-          <div><div class="ex-name">${ex.name}</div>${ex.note?`<div class="ex-note">${ex.note}</div>`:''}</div>
+          <div class="ex-name-btn" onclick="showExerciseInfo(${di},${ei})"><div class="ex-name"><span>${ex.name}</span><span class="tap-arrow">›</span></div>${ex.note?`<div class="ex-note">${ex.note}</div>`:''}</div>
           <div class="ex-cell">${ex.sets}</div>
           <div class="ex-cell">${ex.reps}</div>
           ${isEditable
@@ -517,7 +770,7 @@ function renderToday(){
       </div>
       <div class="section-body" id="cd-${di}">
         <div class="mobility-block">
-          ${day.cooldown.map(c=>`<div class="mobility-item"><div class="mobility-dot"></div><span>${c}</span></div>`).join('')}
+          ${day.cooldown.map((c,ci)=>`<div class="mobility-item" onclick="showMoveInfo(${di},'cooldown',${ci})"><div class="mobility-item-left"><div class="mobility-dot"></div><span>${c}</span></div><span class="tap-arrow">›</span></div>`).join('')}
         </div>
       </div>
     </div>`;
@@ -567,7 +820,7 @@ function renderToday(){
       </div>
       <div class="section-body" id="mob-${di}">
         <div class="mobility-block">
-          ${day.mobility.map(m=>`<div class="mobility-item"><div class="mobility-dot"></div><span>${m}</span></div>`).join('')}
+          ${day.mobility.map((m,mi)=>`<div class="mobility-item" onclick="showMoveInfo(${di},'mobility',${mi})"><div class="mobility-item-left"><div class="mobility-dot"></div><span>${m}</span></div><span class="tap-arrow">›</span></div>`).join('')}
         </div>
       </div>
     </div>`;
@@ -596,7 +849,7 @@ function renderToday(){
   const isTraining=day.type==='lift';
   const nut=isTraining?NUTRITION.training:NUTRITION.rest;
   const meals=NUTRITION.meals;
-  const todayMealRotation=di%3;
+  const bIdx=di%3,lIdx=di%3,dIdx=di%4;
   html+=`<div class="section-block">
     <div class="section-header" onclick="toggle('nut-${di}','nutc-${di}')">
       <div class="section-header-left">
@@ -611,9 +864,9 @@ function renderToday(){
         <div class="macro-cell"><div class="macro-val">${nut.protein}g</div><div class="macro-label">Protein</div></div>
         <div class="macro-cell"><div class="macro-val">${nut.carbs}g</div><div class="macro-label">Carbs</div></div>
       </div>
-      <div class="meal-row"><div class="meal-timing">Breakfast</div><div class="meal-name">${meals.breakfast[todayMealRotation].name}</div><div class="meal-detail">${meals.breakfast[todayMealRotation].detail}</div></div>
-      <div class="meal-row"><div class="meal-timing">Lunch</div><div class="meal-name">${meals.lunch[todayMealRotation].name}</div><div class="meal-detail">${meals.lunch[todayMealRotation].detail}</div></div>
-      <div class="meal-row"><div class="meal-timing">Dinner</div><div class="meal-name">${meals.dinner[todayMealRotation%4].name}</div><div class="meal-detail">${meals.dinner[todayMealRotation%4].detail}</div></div>
+      <div class="meal-row"><div class="meal-timing">Breakfast</div><div class="meal-name">${meals.breakfast[bIdx].name}</div><div class="meal-detail">${meals.breakfast[bIdx].detail}</div><div class="recipe-link" onclick="showRecipe('breakfast',${bIdx})">View recipe ›</div></div>
+      <div class="meal-row"><div class="meal-timing">Lunch</div><div class="meal-name">${meals.lunch[lIdx].name}</div><div class="meal-detail">${meals.lunch[lIdx].detail}</div><div class="recipe-link" onclick="showRecipe('lunch',${lIdx})">View recipe ›</div></div>
+      <div class="meal-row"><div class="meal-timing">Dinner</div><div class="meal-name">${meals.dinner[dIdx].name}</div><div class="meal-detail">${meals.dinner[dIdx].detail}</div><div class="recipe-link" onclick="showRecipe('dinner',${dIdx})">View recipe ›</div></div>
       <div class="info-card" style="padding-top:8px;border-top:0.5px solid var(--border)">
         <p style="color:var(--ink3);font-size:12px">💡 Weekend flexibility is built in. Keep protein high and enjoy going out — one or two meals out won't derail your progress if weekdays are dialed in.</p>
       </div>
@@ -671,8 +924,8 @@ function saveSettings(){
   save();renderToday();toast('Settings saved');
 }
 function resetWeek(){
-  if(!confirm('Reset to Week 1?'))return;
-  state.currentWeek=1;state.viewDayOffset=0;save();renderToday();toast('Reset to Week 1');
+  if(!confirm('Reset progress to Day 1, Week 1? Your logged history stays intact.'))return;
+  state.currentWeek=1;state.currentDayIdx=0;state.viewOffset=0;save();renderToday();toast('Reset to Day 1');
 }
 function clearHistory(){
   if(!confirm('Clear all history? This cannot be undone.'))return;
