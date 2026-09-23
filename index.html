@@ -19,6 +19,7 @@
   --lift:#52A87C;--lift2:#3d8460;--lift-bg:#eaf4ee;--lift-border:#b8dfc8;
   --burn:#E07B4F;--burn-bg:#fdf0e8;--burn-border:#f0c4a8;
   --flex:#7B8FD4;--flex-bg:#eceffe;--flex-border:#c5ccf0;
+  --food-bg:#fef9ec;--danger:#c0392b;
   --radius:14px;--radius-sm:9px;
   --font:-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue',sans-serif;
 }
@@ -30,6 +31,7 @@
     --lift:#52A87C;--lift2:#6dc495;--lift-bg:#0d2318;--lift-border:#1e4d30;
     --burn:#E07B4F;--burn-bg:#261508;--burn-border:#4d2810;
     --flex:#7B8FD4;--flex-bg:#0e1225;--flex-border:#1e2850;
+    --food-bg:#2a2314;--danger:#f09588;
   }
 }
 html,body{height:100%;background:var(--paper);color:var(--ink);font-family:var(--font);-webkit-font-smoothing:antialiased}
@@ -42,7 +44,7 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto}
 .app-name{font-size:24px;font-weight:700;letter-spacing:-0.5px}
 .header-date{font-size:13px;color:var(--ink3)}
 .tab-bar{display:flex}
-.tab-bar button{flex:1;padding:10px 2px;font-size:11px;font-weight:500;border:none;background:transparent;color:var(--ink3);cursor:pointer;font-family:var(--font);border-bottom:2px solid transparent;transition:all 0.15s;letter-spacing:0.02em}
+.tab-bar button{flex:1;padding:10px 0;font-size:11px;font-weight:500;border:none;background:transparent;color:var(--ink3);cursor:pointer;font-family:var(--font);border-bottom:2px solid transparent;transition:all 0.15s;letter-spacing:0.01em;white-space:nowrap}
 .tab-bar button.active{color:var(--ink);border-bottom:2px solid var(--ink)}
 
 /* MAIN */
@@ -57,17 +59,19 @@ main{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:16px 18px c
 .day-nav-arrows button:disabled{opacity:0.2}
 .day-label{font-size:19px;font-weight:600;letter-spacing:-0.3px}
 .day-sublabel{font-size:12px;color:var(--ink3);margin-top:1px}
-.today-pill{font-size:11px;padding:3px 10px;border-radius:20px;background:var(--lift-bg);color:var(--lift);border:0.5px solid var(--lift-border);font-weight:500}
+.today-pill{font-family:var(--font);font-size:11px;padding:3px 10px;border-radius:20px;background:var(--lift-bg);color:var(--lift);border:0.5px solid var(--lift-border);font-weight:500;cursor:default}
+.today-pill.jump{cursor:pointer;background:var(--paper3);color:var(--ink2);border-color:var(--border)}
 
 /* SECTION CARDS */
 .section-block{border:0.5px solid var(--border);border-radius:var(--radius);margin-bottom:12px;overflow:hidden;background:var(--paper)}
 .section-header{display:flex;align-items:center;justify-content:space-between;padding:13px 16px;cursor:pointer;user-select:none}
+.section-header:focus-visible{outline:2px solid var(--lift);outline-offset:-2px}
 .section-header-left{display:flex;align-items:center;gap:10px}
 .section-icon{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
 .icon-lift{background:var(--lift-bg)}
 .icon-burn{background:var(--burn-bg)}
 .icon-flex{background:var(--flex-bg)}
-.icon-food{background:#fef9ec}
+.icon-food{background:var(--food-bg)}
 .section-title{font-size:15px;font-weight:600}
 .section-meta{font-size:12px;color:var(--ink3);margin-top:1px}
 .section-chevron{font-size:11px;color:var(--ink4);transition:transform 0.2s}
@@ -78,21 +82,21 @@ main{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:16px 18px c
 /* WORKOUT TABLE */
 .ex-table-head{display:grid;grid-template-columns:1fr 44px 44px 68px;gap:4px;padding:8px 16px 4px;font-size:10px;color:var(--ink4);font-weight:500}
 .ex-table-head span:not(:first-child){text-align:center}
-.ex-row{display:grid;grid-template-columns:1fr 44px 44px 68px;gap:4px;align-items:center;padding:8px 16px;border-bottom:0.5px solid var(--border)}
+.ex-row{display:grid;grid-template-columns:1fr 44px 44px 68px;gap:4px;align-items:start;padding:10px 16px;border-bottom:0.5px solid var(--border)}
 .ex-row:last-child{border-bottom:none}
-.ex-name-btn{cursor:pointer}
+.ex-name-btn{cursor:pointer;border:none;background:transparent;padding:0;text-align:left;font-family:var(--font);color:inherit;width:100%}
 .ex-name-btn:active{opacity:0.55}
 .ex-name{font-size:13px;font-weight:500;display:flex;align-items:center;justify-content:space-between;gap:6px}
 .ex-note{font-size:11px;color:var(--ink3);margin-top:1px}
-.ex-cell{text-align:center;font-size:13px;color:var(--ink2)}
-.ex-input{width:100%;text-align:center;font-size:13px;font-family:var(--font);border:0.5px solid var(--border2);border-radius:6px;padding:5px 2px;background:var(--paper2);color:var(--ink)}
+.ex-cell{text-align:center;font-size:13px;color:var(--ink2);padding-top:4px}
+.ex-input{width:100%;text-align:center;font-size:13px;font-family:var(--font);border:0.5px solid var(--border2);border-radius:6px;padding:5px 2px;margin-top:1px;background:var(--paper2);color:var(--ink)}
 .ex-input:focus{outline:2px solid var(--lift);outline-offset:1px}
 .tap-arrow{color:var(--ink4);font-size:14px;flex-shrink:0}
 
 /* WARMUP / COOLDOWN */
 .mobility-block{padding:12px 16px;border-bottom:0.5px solid var(--border)}
 .mobility-title{font-size:11px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px}
-.mobility-item{font-size:13px;color:var(--ink2);padding:5px 0;display:flex;align-items:center;justify-content:space-between;gap:6px;cursor:pointer}
+.mobility-item{width:100%;font-size:13px;color:var(--ink2);padding:5px 0;display:flex;align-items:center;justify-content:space-between;gap:6px;cursor:pointer;border:none;background:transparent;text-align:left;font-family:var(--font)}
 .mobility-item:active{opacity:0.55}
 .mobility-item-left{display:flex;align-items:flex-start;gap:6px}
 .mobility-dot{width:4px;height:4px;border-radius:50%;background:var(--flex);margin-top:6px;flex-shrink:0}
@@ -113,16 +117,21 @@ main{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:16px 18px c
 .tag-rest{background:var(--paper3);color:var(--ink3);border:0.5px solid var(--border)}
 
 /* NUTRITION CARD */
-.macro-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:14px 16px;border-bottom:0.5px solid var(--border)}
+.macro-row{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;padding:14px 16px;border-bottom:0.5px solid var(--border)}
 .macro-cell{text-align:center}
-.macro-val{font-size:20px;font-weight:600}
+.macro-val{font-size:18px;font-weight:600}
 .macro-label{font-size:10px;color:var(--ink3);margin-top:2px;font-weight:500}
 .meal-row{padding:10px 16px;border-bottom:0.5px solid var(--border)}
 .meal-row:last-child{border-bottom:none}
 .meal-name{font-size:13px;font-weight:600;margin-bottom:3px}
 .meal-detail{font-size:12px;color:var(--ink3);line-height:1.5}
 .meal-timing{font-size:11px;color:var(--ink4);margin-bottom:2px}
-.recipe-link{font-size:11px;color:var(--lift);font-weight:600;margin-top:5px;cursor:pointer}
+.meal-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.meal-top .recipe-link{margin-top:0}
+.meal-row.made .meal-name{text-decoration:line-through;color:var(--ink3)}
+.made-toggle{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--ink3);font-weight:600}
+.made-toggle input,.made-hit input,.shop-item input{width:20px;height:20px;accent-color:var(--lift);flex-shrink:0}
+.recipe-link{font-size:11px;color:var(--lift);font-weight:600;margin-top:5px;cursor:pointer;border:none;background:transparent;padding:0;font-family:var(--font)}
 .recipe-link:active{opacity:0.55}
 
 /* SHOPPING LIST LINK */
@@ -176,6 +185,52 @@ main{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:16px 18px c
 .modal-body h4:first-of-type{margin-top:4px}
 .modal-body ul{padding-left:18px;margin:2px 0}
 .modal-body li{margin-bottom:5px}
+
+.set-row{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
+.set-pip{width:32px;height:32px;border-radius:8px;border:0.5px solid var(--border2);background:var(--paper2);font-size:12px;font-weight:600;color:var(--ink3);font-family:var(--font);cursor:pointer;padding:0}
+.set-pip.done{background:var(--lift);color:#fff;border-color:var(--lift)}
+.set-pip:disabled{cursor:default}
+.set-pip:focus-visible,.today-pill:focus-visible,.rest-skip:focus-visible{outline:2px solid var(--lift);outline-offset:2px}
+.log-btn.ready{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.text-btn,.danger-btn{font-size:13px;padding:6px 14px;border:0.5px solid var(--border2);border-radius:6px;background:transparent;cursor:pointer;font-family:var(--font)}
+.text-btn{color:var(--ink)}
+.danger-btn{color:var(--danger)}
+.rest-bar{position:fixed;bottom:calc(env(safe-area-inset-bottom, 16px) + 16px);left:50%;transform:translateX(-50%) translateY(12px);width:min(394px, calc(100% - 32px));background:var(--ink);color:var(--paper);border-radius:14px;padding:10px 12px;display:flex;align-items:center;gap:10px;z-index:98;opacity:0;pointer-events:none;overflow:hidden;transition:opacity 0.2s, transform 0.2s}
+.rest-bar.show{opacity:1;pointer-events:auto;transform:translateX(-50%) translateY(0)}
+.rest-fill{position:absolute;inset:0 auto 0 0;width:100%;background:var(--lift);opacity:0.38;transform:scaleX(1);transform-origin:left center;pointer-events:none}
+.rest-time,.rest-label,.rest-skip{position:relative;z-index:1}
+.rest-time{font-variant-numeric:tabular-nums;font-weight:700;font-size:18px;letter-spacing:-0.3px;min-width:48px}
+.rest-label{flex:1;font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rest-skip{border:none;background:transparent;color:inherit;font-weight:600;font-size:13px;cursor:pointer;font-family:var(--font);padding:4px 2px}
+body.resting .toast{bottom:calc(env(safe-area-inset-bottom, 16px) + 78px)}
+.screen-title{font-size:19px;font-weight:600;letter-spacing:-0.3px}
+.seg{display:flex;background:var(--paper3);border-radius:11px;padding:3px;margin:0 0 14px}
+.seg button{flex:1;border:none;background:transparent;border-radius:8px;padding:8px 6px;font-size:13px;font-weight:600;color:var(--ink3);font-family:var(--font);cursor:pointer}
+.seg button.active{background:var(--paper);color:var(--ink)}
+.menu-day{border:0.5px solid var(--border);border-radius:var(--radius);margin-bottom:10px;overflow:hidden;background:var(--paper)}
+.menu-day.current{border-color:var(--lift-border)}
+.menu-day-h{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:11px 14px;background:var(--paper2)}
+.menu-day-h strong{font-size:14px;font-weight:600}
+.menu-day-h span{font-size:12px;color:var(--ink3)}
+.menu-slot{display:grid;grid-template-columns:28px minmax(0,1fr) auto;gap:8px;align-items:center;padding:10px 14px;border-top:0.5px solid var(--border)}
+.menu-slot.made{opacity:0.72}
+.menu-slot select{width:100%;font-family:var(--font);font-size:14px;font-weight:600;color:var(--ink);background:var(--paper2);border:0.5px solid var(--border2);border-radius:8px;padding:7px 8px}
+.menu-hint{font-size:12px;color:var(--ink3);line-height:1.45;margin:-4px 2px 12px}
+.menu-detail{font-size:12px;color:var(--ink3);line-height:1.45;margin-top:4px}
+.menu-slot .recipe-link{margin-top:0}
+.shop-summary{font-size:13px;color:var(--ink2);margin-bottom:10px}
+.shop-tools{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px}
+.shop-actions{display:flex;gap:6px;flex-shrink:0}
+.quiet-btn{border:0.5px solid var(--border2);background:transparent;color:var(--ink2);border-radius:8px;padding:6px 10px;font-size:12px;font-weight:600;font-family:var(--font);cursor:pointer}
+.aisle-label{font-size:11px;color:var(--ink3);font-weight:600;letter-spacing:0.06em;text-transform:uppercase;margin:14px 2px 6px}
+.shop-item{display:flex;align-items:flex-start;gap:10px;padding:10px 2px;border-bottom:0.5px solid var(--border);cursor:pointer}
+.shop-name{display:block;font-size:14px;font-weight:600}
+.shop-uses{display:block;font-size:11px;color:var(--ink3);margin-top:2px;line-height:1.4}
+.shop-item.bought .shop-name{text-decoration:line-through;color:var(--ink3)}
+button,.ex-name-btn,.mobility-item,.recipe-link,.shop-link{touch-action:manipulation}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{transition:none!important;animation:none!important}
+}
 </style>
 </head>
 <body>
@@ -185,10 +240,11 @@ main{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:16px 18px c
     <span class="app-name">Progressions</span>
     <span class="header-date" id="header-date"></span>
   </div>
-  <nav class="tab-bar">
-    <button class="active" onclick="showTab('today',this)">Today</button>
-    <button onclick="showTab('stats',this)">Stats</button>
-    <button onclick="showTab('settings',this)">Settings</button>
+  <nav class="tab-bar" role="tablist">
+    <button type="button" class="active" role="tab" aria-selected="true" data-tab="today" onclick="showTab('today',this)">Today</button>
+    <button type="button" role="tab" aria-selected="false" data-tab="meals" onclick="openMeals('menu',this)">Meals</button>
+    <button type="button" role="tab" aria-selected="false" data-tab="stats" onclick="showTab('stats',this)">Stats</button>
+    <button type="button" role="tab" aria-selected="false" data-tab="settings" onclick="showTab('settings',this)">Settings</button>
   </nav>
 </header>
 <main>
@@ -201,10 +257,10 @@ main{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:16px 18px c
       <div class="day-sublabel" id="day-sublabel">Day 1 of 7</div>
     </div>
     <div style="display:flex;align-items:center;gap:8px">
-      <span class="today-pill" id="today-pill" style="display:none">Current</span>
+      <button type="button" class="today-pill" id="today-pill">Current</button>
       <div class="day-nav-arrows">
-        <button id="prev-day" onclick="changeDay(-1)">‹</button>
-        <button id="next-day" onclick="changeDay(1)">›</button>
+        <button type="button" id="prev-day" onclick="changeDay(-1)" aria-label="Previous day">‹</button>
+        <button type="button" id="next-day" onclick="changeDay(1)" aria-label="Next day">›</button>
       </div>
     </div>
   </div>
@@ -213,8 +269,27 @@ main{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:16px 18px c
     <span class="week-badge" id="week-phase"></span>
   </div>
   <div class="progress-wrap"><div class="progress-bar" id="week-progress" style="width:0%"></div></div>
-  <div class="shop-link-row"><button class="shop-link" onclick="showShoppingList()">🛒 This week's shopping list</button></div>
+  <div class="shop-link-row"><button type="button" class="shop-link" onclick="openMeals('shop')">🛒 This week's shopping list</button></div>
   <div id="day-content"></div>
+</div>
+
+<!-- MEALS SCREEN -->
+<div id="screen-meals" class="screen">
+  <div style="padding:4px 0 12px;display:flex;align-items:flex-start;justify-content:space-between;gap:8px">
+    <div>
+      <div class="screen-title">Meals</div>
+      <div class="day-sublabel" id="meals-week" style="margin-top:2px"></div>
+    </div>
+    <div class="day-nav-arrows">
+      <button type="button" id="meals-prev" data-meal-week="-1" aria-label="Previous week">‹</button>
+      <button type="button" id="meals-next" data-meal-week="1" aria-label="Next week">›</button>
+    </div>
+  </div>
+  <div class="seg" role="tablist">
+    <button type="button" id="pane-menu" data-meals-pane="menu" role="tab" aria-selected="true">Menu</button>
+    <button type="button" id="pane-shop" data-meals-pane="shop" role="tab" aria-selected="false">Shop</button>
+  </div>
+  <div id="meals-body"></div>
 </div>
 
 <!-- STATS SCREEN -->
@@ -235,29 +310,37 @@ main{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:16px 18px c
   <div style="padding:4px 0 16px"><span style="font-size:19px;font-weight:600;letter-spacing:-0.3px">Settings</span></div>
   <div class="settings-section">
     <div class="settings-section-label">Training</div>
-    <div class="settings-row"><label>Weight unit</label><select id="set-unit"><option value="lbs" selected>lbs</option><option value="kg">kg</option></select></div>
-    <div class="settings-row"><label id="set-inc-label">Overload increase / week (lbs)</label><input type="number" id="set-inc" value="5" step="1" min="1" max="30"></div>
-    <div class="settings-row"><label>Experience level</label><select id="set-level"><option value="intermediate">Intermediate</option><option value="advanced" selected>Advanced</option></select></div>
-    <div class="settings-note">Progressive overload: weights increase automatically each week you complete. You can always edit individual exercises in the Log tab.</div>
+    <div class="settings-row"><label for="set-unit">Weight unit</label><select id="set-unit"><option value="lbs" selected>lbs</option><option value="kg">kg</option></select></div>
+    <div class="settings-row"><label for="set-inc" id="set-inc-label">Overload increase / week (lbs)</label><input type="number" id="set-inc" value="5" step="0.25" min="0.25" max="50" inputmode="decimal"></div>
+    <div class="settings-row"><label for="set-level">Experience level</label><select id="set-level"><option value="intermediate">Intermediate</option><option value="advanced" selected>Advanced</option></select></div>
+    <div class="settings-row"><label for="set-rest">Rest timer</label><select id="set-rest"><option value="45">45 sec</option><option value="60">60 sec</option><option value="90" selected>90 sec</option><option value="120">2 min</option><option value="180">3 min</option></select></div>
+    <div class="settings-row"><label for="set-chime">Rest chime</label><input type="checkbox" id="set-chime" checked></div>
+    <div class="settings-note">Each finished week steps the working weights up by the amount above. Every 12-week block ends with 3 deload weeks at 60%, then the climb continues. Edit a weight on today’s lift to set a new baseline. Choosing a level fills in a suggested weekly increase — smaller for intermediate, larger for advanced.</div>
   </div>
   <div class="settings-section">
     <div class="settings-section-label">Data</div>
-    <div class="settings-row"><label>Reset to Day 1</label><button onclick="resetWeek()" style="font-size:13px;padding:6px 14px;border:0.5px solid var(--border2);border-radius:6px;background:transparent;cursor:pointer;font-family:var(--font);color:var(--ink)">Reset</button></div>
-    <div class="settings-row"><label>Clear all history</label><button onclick="clearHistory()" style="font-size:13px;padding:6px 14px;border:0.5px solid var(--border2);border-radius:6px;background:transparent;cursor:pointer;font-family:var(--font);color:#c0392b">Clear</button></div>
+    <div class="settings-row"><label>Reset to Day 1</label><button type="button" class="text-btn" onclick="resetWeek()">Reset</button></div>
+    <div class="settings-row"><label>Clear all history</label><button type="button" class="danger-btn" onclick="clearHistory()">Clear</button></div>
   </div>
-  <button class="save-btn" onclick="saveSettings()">Save Settings</button>
+  <button type="button" class="save-btn" onclick="saveSettings()">Save Settings</button>
 </div>
 
 </main>
+<div class="rest-bar" id="rest-bar" role="status" aria-live="polite">
+  <div class="rest-fill" id="rest-fill"></div>
+  <span class="rest-time" id="rest-time">1:30</span>
+  <span class="rest-label" id="rest-label">Rest</span>
+  <button type="button" class="rest-skip" id="rest-skip">Skip</button>
+</div>
 <div class="toast" id="toast"></div>
 
 <!-- INFO / RECIPE / SHOPPING LIST MODAL -->
 <div class="modal-overlay" id="modal-overlay" onclick="closeModalBg(event)">
-  <div class="modal-sheet">
+  <div class="modal-sheet" role="dialog" aria-modal="true" aria-labelledby="modal-title">
     <div class="modal-handle"></div>
     <div class="modal-header">
       <span class="modal-title" id="modal-title"></span>
-      <button class="modal-close" onclick="closeModal()">✕</button>
+      <button type="button" class="modal-close" onclick="closeModal()" aria-label="Close">✕</button>
     </div>
     <div class="modal-body" id="modal-body"></div>
   </div>
@@ -477,7 +560,9 @@ let state={
   viewOffset:0,
   basePlan:buildDefaultBasePlan(),
   logs:[],
-  settings:{unit:'lbs',incKg:2.27,level:'advanced'}
+  setProgress:{},
+  menu:{choices:{},made:{},bought:{}},
+  settings:{unit:'lbs',incKg:2.27,level:'advanced',restSec:90,chime:true}
 };
 
 // ─── STORAGE ─────────────────────────────────────────────────────────────────
@@ -492,6 +577,10 @@ function load(){
     state.currentDayIdx=[6,0,1,2,3,4,5][dow];
   }
   if(typeof state.viewOffset!=='number')state.viewOffset=0;
+  if(!state.setProgress||typeof state.setProgress!=='object')state.setProgress={};
+  ensureMenu();
+  if(!state.settings.restSec)state.settings.restSec=90;
+  if(typeof state.settings.chime!=='boolean')state.settings.chime=true;
   migrateWeightUnits();
 }
 
@@ -543,13 +632,20 @@ function save(){
 // ─── UNIT HELPERS ────────────────────────────────────────────────────────────
 function unit(){return state.settings.unit||'lbs';}
 function dispW(kg){
-  if(kg===0)return'BW';
+  if(!kg)return'BW';
   if(unit()==='lbs')return Math.round(kg*2.2046)+' lbs';
-  return kg+' kg';
+  return fmtQty(kg)+' kg';
 }
 function dispWNum(kg){
-  if(unit()==='lbs')return parseFloat((kg*2.2046).toFixed(0));
-  return kg;
+  if(unit()==='lbs')return Math.round((kg||0)*2.2046);
+  return parseFloat(Number(kg||0).toFixed(2));
+}
+function incDisplay(kg,u){
+  if(u==='lbs'){
+    const lbs=(kg||0)*2.2046;
+    return Math.abs(lbs-Math.round(lbs))<0.05?Math.round(lbs):parseFloat(lbs.toFixed(1));
+  }
+  return parseFloat(Number(kg||0).toFixed(2));
 }
 function toKg(val){
   const v=parseFloat(val);if(isNaN(v))return 0;
@@ -563,14 +659,39 @@ function fmtQty(n){
 }
 
 // ─── WEEK PLAN ───────────────────────────────────────────────────────────────
+// 12-week blocks: 9 loading weeks, then 3 deload weeks at 60% of that block's
+// peak. Steps survive the deload, so the next block starts one jump higher.
+const LOAD_WEEKS=PHASES.filter(p=>p!=='Deload').length;
+const DELOAD_FACTOR=0.6;
+function phaseName(week){return PHASES[(Math.max(week,1)-1)%PHASES.length];}
+function weekLoad(week){
+  const w=Math.max(week,1);
+  const cycle=Math.floor((w-1)/PHASES.length);
+  const idx=(w-1)%PHASES.length;
+  const deload=PHASES[idx]==='Deload';
+  const steps=deload?cycle*LOAD_WEEKS+(LOAD_WEEKS-1):cycle*LOAD_WEEKS+idx;
+  return {deload,steps};
+}
+function workingKg(baseKg,week){
+  if(!baseKg)return 0;
+  const {deload,steps}=weekLoad(week);
+  let kg=baseKg+(state.settings.incKg||0)*steps;
+  if(deload)kg*=DELOAD_FACTOR;
+  return Math.max(0,parseFloat(kg.toFixed(2)));
+}
+function baseFromWorking(shownKg,week){
+  if(!shownKg)return 0;
+  const {deload,steps}=weekLoad(week);
+  let kg=shownKg;
+  if(deload)kg/=DELOAD_FACTOR;
+  kg-=(state.settings.incKg||0)*steps;
+  return Math.max(0,parseFloat(kg.toFixed(2)));
+}
 function getWeekPlan(week){
   const w=week||state.currentWeek;
-  const incKg=state.settings.incKg*(w-1);
   return state.basePlan.map(day=>{
     if(day.type!=='lift')return day;
-    return{...day,exercises:day.exercises.map(ex=>({
-      ...ex,weight:ex.weight===0?0:Math.max(0,parseFloat((ex.weight+incKg).toFixed(2)))
-    }))};
+    return {...day,exercises:day.exercises.map(ex=>({...ex,weight:workingKg(ex.weight,w)}))};
   });
 }
 
@@ -596,47 +717,92 @@ function isLogged(dayIdx,week){
   week=week||viewWeek();
   return state.logs.some(l=>l.week===week&&l.dayIdx===dayIdx);
 }
+function setKey(week,dayIdx,exIdx){return week+':'+dayIdx+':'+exIdx;}
+function logEntry(week,dayIdx){return state.logs.find(l=>l.week===week&&l.dayIdx===dayIdx);}
+function setsDoneFor(week,dayIdx,exIdx,prescribed){
+  const log=logEntry(week,dayIdx);
+  if(log){
+    const saved=log.exercises&&log.exercises[exIdx];
+    // A logged session is done. Show the sets you actually tapped when you
+    // tracked some; otherwise fill every pip.
+    if(saved&&saved.setsChecked)return saved.setsChecked;
+    return prescribed;
+  }
+  return state.setProgress[setKey(week,dayIdx,exIdx)]||0;
+}
+function rewindIfJustCompleted(week,dayIdx){
+  const abs=(week-1)*7+dayIdx;
+  if(abs!==currentAbsoluteDay()-1)return;
+  if(state.currentDayIdx===0){
+    if(state.currentWeek>1){state.currentWeek--;state.currentDayIdx=6;}
+  }else state.currentDayIdx--;
+  state.viewOffset=0;
+}
 function logDay(dayIdx){
   const week=viewWeek();
   const existing=state.logs.findIndex(l=>l.week===week&&l.dayIdx===dayIdx);
   const plan=getWeekPlan(week);const day=plan[dayIdx];
   if(existing>=0){
-    state.logs.splice(existing,1);toast('Session removed');
+    const removed=state.logs[existing];
+    state.logs.splice(existing,1);
+    if(removed.exercises){
+      removed.exercises.forEach((ex,ei)=>{
+        const n=ex.setsChecked||0;
+        if(n)state.setProgress[setKey(removed.week,removed.dayIdx,ei)]=n;
+      });
+    }
+    rewindIfJustCompleted(week,dayIdx);
+    toast('Session removed');
   }else{
+    let exercises=null;
+    if(day.type==='lift'){
+      // Logging means the session is done. Sets you tapped are remembered
+      // separately so a rest-timer tap doesn't look like a short workout.
+      exercises=day.exercises.map((e,ei)=>({
+        ...e,
+        setsDone:e.sets,
+        setsChecked:state.setProgress[setKey(week,dayIdx,ei)]||0
+      }));
+      day.exercises.forEach((e,ei)=>{delete state.setProgress[setKey(week,dayIdx,ei)];});
+    }
     state.logs.push({
       week,dayIdx,type:day.type,name:day.label||day.day,
       date:new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}),
       timestamp:Date.now(),
-      exercises:day.type==='lift'?day.exercises.map(e=>({...e})):null
+      exercises
     });
     if(isViewingCurrent()){
       state.currentDayIdx++;
       if(state.currentDayIdx>6){state.currentDayIdx=0;state.currentWeek++;}
       state.viewOffset=0;
-      toast('Logged! 💪 On to the next day');
+      toast(day.type==='rest'?'Rest day logged':'Logged! 💪 On to the next day');
     }else{
       toast('Logged! 💪');
     }
   }
+  stopRest(false);
   save();renderToday();renderStats();
 }
 function updateExWeight(dayIdx,exIdx,val){
   const kg=toKg(val);
-  if(!isNaN(kg)){state.basePlan[dayIdx].exercises[exIdx].weight=kg;save();}
-}
-function updateExField(dayIdx,exIdx,field,val){
-  const v=parseFloat(val);
-  if(!isNaN(v)){state.basePlan[dayIdx].exercises[exIdx][field]=v;save();}
+  if(isNaN(kg))return;
+  state.basePlan[dayIdx].exercises[exIdx].weight=baseFromWorking(kg,viewWeek());
+  save();
 }
 
 // ─── MODAL ───────────────────────────────────────────────────────────────────
 function openModal(title,bodyHtml){
   document.getElementById('modal-title').textContent=title;
   document.getElementById('modal-body').innerHTML=bodyHtml;
-  document.getElementById('modal-overlay').classList.add('show');
+  const overlay=document.getElementById('modal-overlay');
+  overlay.classList.add('show');
+  document.body.style.overflow='hidden';
+  const closeBtn=overlay.querySelector('.modal-close');
+  if(closeBtn)closeBtn.focus();
 }
 function closeModal(){
   document.getElementById('modal-overlay').classList.remove('show');
+  document.body.style.overflow='';
 }
 function closeModalBg(e){
   if(e.target.id==='modal-overlay')closeModal();
@@ -663,36 +829,156 @@ function showRecipe(cat,idx){
   const steps=meal.recipe.steps.map(s=>`<li>${s}</li>`).join('');
   openModal(meal.name,`<p>${meal.detail}</p><h4>Ingredients</h4><ul>${ing}</ul><h4>Steps</h4><ul>${steps}</ul>`);
 }
-function buildWeekShoppingList(){
-  const counts={breakfast:{},lunch:{},dinner:{}};
-  for(let di=0;di<7;di++){
-    const bi=di%3,li=di%3,dii=di%4;
-    counts.breakfast[bi]=(counts.breakfast[bi]||0)+1;
-    counts.lunch[li]=(counts.lunch[li]||0)+1;
-    counts.dinner[dii]=(counts.dinner[dii]||0)+1;
-  }
+const MEAL_SLOTS=[{id:'breakfast',label:'Breakfast'},{id:'lunch',label:'Lunch'},{id:'dinner',label:'Dinner'}];
+const AISLE_OF={
+  'Eggs':'Protein','Deli turkey':'Protein','Chicken thighs':'Protein','Ground turkey':'Protein','Canned tuna':'Protein','Salmon fillet':'Protein','Flank steak':'Protein','Shrimp':'Protein',
+  'Full-fat Greek yogurt':'Dairy','Sour cream':'Dairy','Butter':'Dairy',
+  'Banana':'Produce','Mixed berries':'Produce','Broccoli':'Produce','Avocado':'Produce','Lemon':'Produce','Mixed greens':'Produce','Sweet potato':'Produce','Green beans':'Produce','Bell pepper':'Produce','Onion':'Produce','Cherry tomatoes':'Produce','Garlic':'Produce','Red onion':'Produce',
+  'Rolled oats':'Pantry','Granola':'Pantry','Honey':'Pantry','Flour tortilla':'Pantry','Salsa':'Pantry','White rice (cooked)':'Pantry','Soy sauce':'Pantry','Sesame oil':'Pantry','Black beans':'Pantry','Tortilla wrap':'Pantry','Whole wheat pasta':'Pantry'
+};
+const AISLE_ORDER=['Produce','Protein','Dairy','Pantry','Other'];
+let mealsPane='menu';
+let shopOnlyUnmade=false;
+
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function ensureMenu(){
+  if(!state.menu||typeof state.menu!=='object')state.menu={};
+  if(!state.menu.choices)state.menu.choices={};
+  if(!state.menu.made)state.menu.made={};
+  if(!state.menu.bought)state.menu.bought={};
+}
+function defaultMealIndex(dayIdx,slot){
+  const list=NUTRITION.meals[slot];
+  return slot==='dinner'?dayIdx%list.length:dayIdx%list.length;
+}
+function mealKey(week,dayIdx,slot){return week+':'+dayIdx+':'+slot;}
+function mealIndex(week,dayIdx,slot){
+  ensureMenu();
+  const list=NUTRITION.meals[slot];
+  const stored=state.menu.choices[mealKey(week,dayIdx,slot)];
+  if(typeof stored==='number'&&stored>=0&&stored<list.length)return stored;
+  return defaultMealIndex(dayIdx,slot);
+}
+function chosenMeal(week,dayIdx,slot){return NUTRITION.meals[slot][mealIndex(week,dayIdx,slot)];}
+function isMealMade(week,dayIdx,slot){ensureMenu();return !!state.menu.made[mealKey(week,dayIdx,slot)];}
+function setMealMade(week,dayIdx,slot,on){
+  ensureMenu();
+  const k=mealKey(week,dayIdx,slot);
+  if(on)state.menu.made[k]=true;else delete state.menu.made[k];
+  save();
+}
+function setMealChoice(week,dayIdx,slot,idx){
+  ensureMenu();
+  const n=parseInt(idx,10);
+  const k=mealKey(week,dayIdx,slot);
+  if(n===defaultMealIndex(dayIdx,slot))delete state.menu.choices[k];
+  else state.menu.choices[k]=n;
+  save();
+}
+function buyKey(week,item,unit){return week+':'+item+'|'+(unit||'');}
+function weekMealStats(week){
+  let made=0;
+  const total=7*MEAL_SLOTS.length;
+  for(let di=0;di<7;di++) MEAL_SLOTS.forEach(s=>{if(isMealMade(week,di,s.id))made++;});
+  return {made,total,left:total-made};
+}
+function mealOptions(slot,selected){
+  return NUTRITION.meals[slot].map((m,i)=>`<option value="${i}"${i===selected?' selected':''}>${esc(m.name)}</option>`).join('');
+}
+function buildWeekShoppingList(week,onlyUnmade){
   const agg={};
-  function addMeal(cat,idx,times){
-    const meal=NUTRITION.meals[cat][idx];
-    if(!meal||!meal.recipe)return;
-    meal.recipe.ingredients.forEach(ing=>{
-      const key=ing.item+'|'+ing.unit;
-      if(!agg[key])agg[key]={item:ing.item,unit:ing.unit,qty:0};
-      agg[key].qty+=ing.qty*times;
+  for(let di=0;di<7;di++){
+    MEAL_SLOTS.forEach(slot=>{
+      if(onlyUnmade&&isMealMade(week,di,slot.id))return;
+      const meal=chosenMeal(week,di,slot.id);
+      if(!meal||!meal.recipe)return;
+      meal.recipe.ingredients.forEach(ing=>{
+        const key=ing.item+'|'+(ing.unit||'');
+        if(!agg[key])agg[key]={item:ing.item,unit:ing.unit||'',qty:0,uses:[]};
+        agg[key].qty+=ing.qty;
+        const label=PLAN[di].day.slice(0,3)+' '+meal.name;
+        if(!agg[key].uses.includes(label))agg[key].uses.push(label);
+      });
     });
   }
-  Object.entries(counts.breakfast).forEach(([idx,times])=>addMeal('breakfast',+idx,times));
-  Object.entries(counts.lunch).forEach(([idx,times])=>addMeal('lunch',+idx,times));
-  Object.entries(counts.dinner).forEach(([idx,times])=>addMeal('dinner',+idx,times));
-  return Object.values(agg).sort((a,b)=>a.item.localeCompare(b.item));
+  return Object.values(agg).map(row=>({...row,aisle:AISLE_OF[row.item]||'Other'})).sort((a,b)=>{
+    const d=AISLE_ORDER.indexOf(a.aisle)-AISLE_ORDER.indexOf(b.aisle);
+    return d||a.item.localeCompare(b.item);
+  });
 }
-function showShoppingList(){
-  const items=buildWeekShoppingList();
-  const html=items.map(i=>`<li>${fmtQty(i.qty)}${i.unit?' '+i.unit:''} ${i.item}</li>`).join('');
-  openModal('Shopping List',`<p style="margin-bottom:10px">Everything you need to cover this week's rotating breakfasts, lunches and dinners.</p><ul>${html}</ul>`);
+function usesLabel(uses){
+  if(uses.length<=2)return uses.join(' · ');
+  return uses.slice(0,2).join(' · ')+' · +'+(uses.length-2);
 }
+function shoppingListText(week){
+  const items=buildWeekShoppingList(week,shopOnlyUnmade).filter(item=>!state.menu.bought[buyKey(week,item.item,item.unit)]);
+  if(!items.length)return '';
+  const lines=['Week '+week+' shopping list',''];
+  let aisle='';
+  items.forEach(item=>{
+    if(item.aisle!==aisle){aisle=item.aisle;lines.push(aisle);}
+    lines.push('- '+fmtQty(item.qty)+(item.unit?' '+item.unit:'')+' '+item.item);
+  });
+  return lines.join('\n');
+}
+function clearShopChecks(week){
+  ensureMenu();
+  Object.keys(state.menu.bought).forEach(k=>{if(k.startsWith(week+':'))delete state.menu.bought[k];});
+  save();
+}
+function showShoppingList(){openMeals('shop');}
 
 // ─── RENDER TODAY ─────────────────────────────────────────────────────────────
+function setPips(week,di,ei,ex){
+  const done=setsDoneFor(week,di,ei,ex.sets);
+  const locked=isLogged(di,week);
+  let html='';
+  for(let i=0;i<ex.sets;i++){
+    const on=i<done;
+    if(locked){
+      html+=`<button type="button" class="set-pip${on?' done':''}" disabled aria-pressed="${on}">${i+1}</button>`;
+    }else{
+      html+=`<button type="button" class="set-pip${on?' done':''}" data-day="${di}" data-ex="${ei}" data-pip="${i}" aria-pressed="${on}" aria-label="Set ${i+1}, ${ex.name}">${i+1}</button>`;
+    }
+  }
+  return `<div class="set-row" data-ex="${ei}">${html}</div>`;
+}
+function paintSets(exIdx,done){
+  const row=document.querySelector('#day-content .set-row[data-ex="'+exIdx+'"]');
+  if(!row){renderToday();return;}
+  row.querySelectorAll('.set-pip').forEach((btn,i)=>{
+    const on=i<done;
+    btn.classList.toggle('done',on);
+    btn.setAttribute('aria-pressed',on?'true':'false');
+  });
+}
+function updateSetSummary(){
+  const el=document.getElementById('set-summary');
+  const pips=[...document.querySelectorAll('#day-content .set-pip')];
+  if(el){
+    const done=pips.filter(p=>p.classList.contains('done')).length;
+    el.textContent=done+'/'+pips.length+' sets'+(el.dataset.suffix||'');
+  }
+  const btn=document.querySelector('#day-content .log-btn');
+  if(btn&&!btn.classList.contains('logged')&&pips.length){
+    const done=pips.filter(p=>p.classList.contains('done')).length;
+    btn.classList.toggle('ready',done===pips.length);
+  }
+}
+function toggleSet(dayIdx,exIdx,pipIdx){
+  const week=viewWeek();
+  if(isLogged(dayIdx,week))return;
+  const key=setKey(week,dayIdx,exIdx);
+  const cur=state.setProgress[key]||0;
+  const ex=getWeekPlan(week)[dayIdx].exercises[exIdx];
+  const next=pipIdx<cur?pipIdx:Math.min(ex.sets,pipIdx+1);
+  if(next<=0)delete state.setProgress[key];
+  else state.setProgress[key]=next;
+  save();
+  paintSets(exIdx,next);
+  updateSetSummary();
+  if(next>cur)startRest(ex.name);
+}
 function renderToday(){
   const week=viewWeek();
   const plan=getWeekPlan(week);
@@ -700,15 +986,16 @@ function renderToday(){
   const day=plan[di];
   const current=isViewingCurrent();
   const logged=isLogged(di,week);
+  const deload=weekLoad(week).deload;
 
   document.getElementById('header-date').textContent=new Date().toLocaleDateString('en-US',{month:'short',day:'numeric'});
   document.getElementById('day-label').textContent=day.day;
   document.getElementById('day-sublabel').textContent=`Day ${di+1} of 7 · Week ${week}`;
   const pill=document.getElementById('today-pill');
-  pill.textContent='Current';
-  pill.style.display=current?'inline-block':'none';
+  pill.classList.toggle('jump',!current);
+  pill.textContent=current?'Current':'Back to today';
   document.getElementById('week-label').textContent=`Week ${week}`;
-  document.getElementById('week-phase').textContent=PHASES[Math.min(week-1,PHASES.length-1)];
+  document.getElementById('week-phase').textContent=phaseName(week);
   document.getElementById('prev-day').disabled=(currentAbsoluteDay()+state.viewOffset)<=0;
   document.getElementById('next-day').disabled=state.viewOffset>=FORWARD_PREVIEW_DAYS;
 
@@ -721,7 +1008,7 @@ function renderToday(){
   if(day.type==='lift'){
     // Warmup
     html+=`<div class="section-block">
-      <div class="section-header" onclick="toggle('wu-${di}','wc-${di}')">
+      <div class="section-header" role="button" tabindex="0" data-toggle="wu-${di}" data-chev="wc-${di}">
         <div class="section-header-left">
           <div class="section-icon icon-flex">🧘</div>
           <div><div class="section-title">Warmup</div><div class="section-meta">${day.warmup.length} movements · 5 min</div></div>
@@ -730,38 +1017,42 @@ function renderToday(){
       </div>
       <div class="section-body" id="wu-${di}">
         <div class="mobility-block">
-          ${day.warmup.map((w,wi)=>`<div class="mobility-item" onclick="showMoveInfo(${di},'warmup',${wi})"><div class="mobility-item-left"><div class="mobility-dot"></div><span>${w}</span></div><span class="tap-arrow">›</span></div>`).join('')}
+          ${day.warmup.map((w,wi)=>`<button type="button" class="mobility-item" data-day="${di}" data-move="warmup" data-idx="${wi}"><div class="mobility-item-left"><div class="mobility-dot"></div><span>${w}</span></div><span class="tap-arrow">›</span></button>`).join('')}
         </div>
       </div>
     </div>`;
 
     // Exercises
-    const isEditable=current;
+    const isEditable=current&&!logged;
+    let doneSets=0,totalSets=0;
+    day.exercises.forEach((ex,ei)=>{totalSets+=ex.sets;doneSets+=setsDoneFor(week,di,ei,ex.sets);});
+    const setSuffix=' · '+day.tags[1]+(deload?' · Deload 60%':'');
+    const ready=!logged&&totalSets>0&&doneSets===totalSets;
     html+=`<div class="section-block">
-      <div class="section-header" onclick="toggle('ex-${di}','ec-${di}')">
+      <div class="section-header" role="button" tabindex="0" data-toggle="ex-${di}" data-chev="ec-${di}">
         <div class="section-header-left">
           <div class="section-icon icon-lift">🏋️</div>
-          <div><div class="section-title">${day.label}</div><div class="section-meta">${day.exercises.length} exercises · ${day.tags[1]}</div></div>
+          <div><div class="section-title">${day.label}</div><div class="section-meta" id="set-summary" data-suffix="${setSuffix}">${doneSets}/${totalSets} sets${setSuffix}</div></div>
         </div>
         <span class="section-chevron open" id="ec-${di}">▾</span>
       </div>
       <div class="section-body open" id="ex-${di}">
         <div class="ex-table-head"><span>Exercise</span><span>Sets</span><span>Reps</span><span>${unit()}</span></div>
         ${day.exercises.map((ex,ei)=>`<div class="ex-row">
-          <div class="ex-name-btn" onclick="showExerciseInfo(${di},${ei})"><div class="ex-name"><span>${ex.name}</span><span class="tap-arrow">›</span></div>${ex.note?`<div class="ex-note">${ex.note}</div>`:''}</div>
+          <div><button type="button" class="ex-name-btn" data-day="${di}" data-exinfo="${ei}"><div class="ex-name"><span>${ex.name}</span><span class="tap-arrow">›</span></div>${ex.note?`<div class="ex-note">${ex.note}</div>`:''}</button>${setPips(week,di,ei,ex)}</div>
           <div class="ex-cell">${ex.sets}</div>
           <div class="ex-cell">${ex.reps}</div>
           ${isEditable
-            ?`<input class="ex-input" type="number" value="${dispWNum(ex.weight)}" min="0" max="1500" step="${unit()==='lbs'?5:2.5}" onchange="updateExWeight(${di},${ei},this.value)">`
+            ?`<input class="ex-input" type="number" inputmode="decimal" autocomplete="off" data-day="${di}" data-w="${ei}" value="${dispWNum(ex.weight)}" min="0" max="1500" step="${unit()==='lbs'?5:2.5}" aria-label="${ex.name} weight">`
             :`<div class="ex-cell">${dispW(ex.weight)}</div>`}
         </div>`).join('')}
-        <button class="log-btn ${logged?'logged':''}" onclick="logDay(${di})">${logged?'✓ Session logged':'Log this session'}</button>
+        <button type="button" class="log-btn${logged?' logged':''}${ready?' ready':''}" data-log="${di}">${logged?'✓ Session logged':'Log this session'}</button>
       </div>
     </div>`;
 
     // Cooldown
     html+=`<div class="section-block">
-      <div class="section-header" onclick="toggle('cd-${di}','cc-${di}')">
+      <div class="section-header" role="button" tabindex="0" data-toggle="cd-${di}" data-chev="cc-${di}">
         <div class="section-header-left">
           <div class="section-icon icon-flex">🧊</div>
           <div><div class="section-title">Cool-down</div><div class="section-meta">${day.cooldown.length} stretches · 3 min</div></div>
@@ -770,7 +1061,7 @@ function renderToday(){
       </div>
       <div class="section-body" id="cd-${di}">
         <div class="mobility-block">
-          ${day.cooldown.map((c,ci)=>`<div class="mobility-item" onclick="showMoveInfo(${di},'cooldown',${ci})"><div class="mobility-item-left"><div class="mobility-dot"></div><span>${c}</span></div><span class="tap-arrow">›</span></div>`).join('')}
+          ${day.cooldown.map((c,ci)=>`<button type="button" class="mobility-item" data-day="${di}" data-move="cooldown" data-idx="${ci}"><div class="mobility-item-left"><div class="mobility-dot"></div><span>${c}</span></div><span class="tap-arrow">›</span></button>`).join('')}
         </div>
       </div>
     </div>`;
@@ -778,7 +1069,7 @@ function renderToday(){
     // Cardio note
     if(day.cardio){
       html+=`<div class="section-block">
-        <div class="section-header" onclick="toggle('ca-${di}','cac-${di}')">
+        <div class="section-header" role="button" tabindex="0" data-toggle="ca-${di}" data-chev="cac-${di}">
           <div class="section-header-left">
             <div class="section-icon icon-burn">🏃</div>
             <div><div class="section-title">Cardio</div><div class="section-meta">${day.cardio.type}</div></div>
@@ -794,7 +1085,7 @@ function renderToday(){
 
   if(day.type==='cardio'){
     html+=`<div class="section-block">
-      <div class="section-header" onclick="toggle('cd-main-${di}','cd-c-${di}')">
+      <div class="section-header" role="button" tabindex="0" data-toggle="cd-main-${di}" data-chev="cd-c-${di}">
         <div class="section-header-left">
           <div class="section-icon icon-burn">🏃</div>
           <div><div class="section-title">${day.label}</div><div class="section-meta">${day.tags.join(' · ')}</div></div>
@@ -806,12 +1097,12 @@ function renderToday(){
           <p>${day.detail}</p>
           ${day.options.map(o=>`<p>• ${o}</p>`).join('')}
         </div>
-        <button class="log-btn ${logged?'logged':''}" onclick="logDay(${di})">${logged?'✓ Logged':'Log cardio session'}</button>
+        <button type="button" class="log-btn${logged?' logged':''}" data-log="${di}">${logged?'✓ Logged':'Log cardio session'}</button>
       </div>
     </div>`;
 
     html+=`<div class="section-block">
-      <div class="section-header" onclick="toggle('mob-${di}','mobc-${di}')">
+      <div class="section-header" role="button" tabindex="0" data-toggle="mob-${di}" data-chev="mobc-${di}">
         <div class="section-header-left">
           <div class="section-icon icon-flex">🧘</div>
           <div><div class="section-title">Mobility Work</div><div class="section-meta">${day.mobility.length} movements</div></div>
@@ -820,7 +1111,7 @@ function renderToday(){
       </div>
       <div class="section-body" id="mob-${di}">
         <div class="mobility-block">
-          ${day.mobility.map((m,mi)=>`<div class="mobility-item" onclick="showMoveInfo(${di},'mobility',${mi})"><div class="mobility-item-left"><div class="mobility-dot"></div><span>${m}</span></div><span class="tap-arrow">›</span></div>`).join('')}
+          ${day.mobility.map((m,mi)=>`<button type="button" class="mobility-item" data-day="${di}" data-move="mobility" data-idx="${mi}"><div class="mobility-item-left"><div class="mobility-dot"></div><span>${m}</span></div><span class="tap-arrow">›</span></button>`).join('')}
         </div>
       </div>
     </div>`;
@@ -828,7 +1119,7 @@ function renderToday(){
 
   if(day.type==='rest'){
     html+=`<div class="section-block">
-      <div class="section-header" onclick="toggle('rest-${di}','restc-${di}')">
+      <div class="section-header" role="button" tabindex="0" data-toggle="rest-${di}" data-chev="restc-${di}">
         <div class="section-header-left">
           <div class="section-icon icon-food">💤</div>
           <div><div class="section-title">Rest Day</div><div class="section-meta">Recovery · Reset</div></div>
@@ -841,6 +1132,7 @@ function renderToday(){
           ${day.recovery.map(r=>`<p>• ${r}</p>`).join('')}
           ${day.nutrition_focus?`<p style="margin-top:8px;padding-top:8px;border-top:0.5px solid var(--border);color:var(--ink3)">💡 ${day.nutrition_focus}</p>`:''}
         </div>
+        <button type="button" class="log-btn${logged?' logged':''}" data-log="${di}">${logged?'✓ Rest day logged':'Log rest day'}</button>
       </div>
     </div>`;
   }
@@ -848,13 +1140,12 @@ function renderToday(){
   // Nutrition card — shown every day
   const isTraining=day.type==='lift';
   const nut=isTraining?NUTRITION.training:NUTRITION.rest;
-  const meals=NUTRITION.meals;
-  const bIdx=di%3,lIdx=di%3,dIdx=di%4;
+  const madeN=MEAL_SLOTS.filter(s=>isMealMade(week,di,s.id)).length;
   html+=`<div class="section-block">
-    <div class="section-header" onclick="toggle('nut-${di}','nutc-${di}')">
+    <div class="section-header" role="button" tabindex="0" data-toggle="nut-${di}" data-chev="nutc-${di}">
       <div class="section-header-left">
         <div class="section-icon icon-food">🥗</div>
-        <div><div class="section-title">Nutrition</div><div class="section-meta">${nut.cal} cal · ${nut.protein}g protein · ${isTraining?'Training day':'Rest day'}</div></div>
+        <div><div class="section-title">Nutrition</div><div class="section-meta" id="nut-meta-${di}">${madeN}/3 meals · ${nut.cal} cal · ${isTraining?'Training day':'Rest day'}</div></div>
       </div>
       <span class="section-chevron" id="nutc-${di}">▾</span>
     </div>
@@ -863,12 +1154,24 @@ function renderToday(){
         <div class="macro-cell"><div class="macro-val">${nut.cal}</div><div class="macro-label">Calories</div></div>
         <div class="macro-cell"><div class="macro-val">${nut.protein}g</div><div class="macro-label">Protein</div></div>
         <div class="macro-cell"><div class="macro-val">${nut.carbs}g</div><div class="macro-label">Carbs</div></div>
+        <div class="macro-cell"><div class="macro-val">${nut.fat}g</div><div class="macro-label">Fat</div></div>
       </div>
-      <div class="meal-row"><div class="meal-timing">Breakfast</div><div class="meal-name">${meals.breakfast[bIdx].name}</div><div class="meal-detail">${meals.breakfast[bIdx].detail}</div><div class="recipe-link" onclick="showRecipe('breakfast',${bIdx})">View recipe ›</div></div>
-      <div class="meal-row"><div class="meal-timing">Lunch</div><div class="meal-name">${meals.lunch[lIdx].name}</div><div class="meal-detail">${meals.lunch[lIdx].detail}</div><div class="recipe-link" onclick="showRecipe('lunch',${lIdx})">View recipe ›</div></div>
-      <div class="meal-row"><div class="meal-timing">Dinner</div><div class="meal-name">${meals.dinner[dIdx].name}</div><div class="meal-detail">${meals.dinner[dIdx].detail}</div><div class="recipe-link" onclick="showRecipe('dinner',${dIdx})">View recipe ›</div></div>
+      ${MEAL_SLOTS.map(slot=>{
+        const idx=mealIndex(week,di,slot.id);
+        const meal=NUTRITION.meals[slot.id][idx];
+        const made=isMealMade(week,di,slot.id);
+        return `<div class="meal-row${made?' made':''}">
+          <div class="meal-top">
+            <label class="made-toggle"><input type="checkbox" data-made-slot="${slot.id}" data-day="${di}" ${made?'checked':''}> ${slot.label}</label>
+            <button type="button" class="recipe-link" data-recipe="${slot.id}" data-idx="${idx}">Recipe ›</button>
+          </div>
+          <div class="meal-name">${esc(meal.name)}</div>
+          <div class="meal-detail">${esc(meal.detail)}</div>
+        </div>`;
+      }).join('')}
       <div class="info-card" style="padding-top:8px;border-top:0.5px solid var(--border)">
-        <p style="color:var(--ink3);font-size:12px">💡 Weekend flexibility is built in. Keep protein high and enjoy going out — one or two meals out won't derail your progress if weekdays are dialed in.</p>
+        <button type="button" class="recipe-link" data-open-meals>Plan this week’s meals ›</button>
+        <p style="color:var(--ink3);font-size:12px;margin-top:8px">Weekend flexibility is built in. Keep protein high and enjoy going out — one or two meals out won't derail your progress if weekdays are dialed in.</p>
       </div>
     </div>
   </div>`;
@@ -885,6 +1188,13 @@ function toggle(bodyId,chevronId){
 }
 
 // ─── STATS ───────────────────────────────────────────────────────────────────
+function historyDetail(s){
+  if(!s.exercises)return `<div class="history-detail">${s.type==='rest'?'Rest day':'Cardio session'}</div>`;
+  const total=s.exercises.reduce((t,e)=>t+(parseInt(e.sets,10)||0),0);
+  const checked=s.exercises.reduce((t,e)=>t+(e.setsChecked||0),0);
+  const tracked=checked>0?` · ${checked} of ${total} sets tracked`:` · ${total} sets`;
+  return `<div class="history-detail">${s.exercises.length} exercises${tracked}</div>`;
+}
 function renderStats(){
   document.getElementById('s-sessions').textContent=state.logs.length;
   document.getElementById('s-runs').textContent=state.logs.filter(l=>l.type==='cardio').length;
@@ -898,22 +1208,30 @@ function renderStats(){
   document.getElementById('history-list').innerHTML=sessions.map(s=>`<div class="history-item">
     <div class="history-date">Week ${s.week} · ${s.date||''}</div>
     <div class="history-title">${s.name}</div>
-    ${s.exercises?`<div class="history-detail">${s.exercises.length} exercises · ${s.exercises.reduce((t,e)=>t+(parseInt(e.sets)||0),0)} sets</div>`:'<div class="history-detail">Cardio session</div>'}
+    ${historyDetail(s)}
   </div>`).join('');
 }
 
 function calcStreak(){
-  const dates=[...new Set(state.logs.map(l=>l.date).filter(Boolean))];
-  return dates.length;
+  const logged=new Set(state.logs.map(l=>(l.week-1)*7+l.dayIdx));
+  let cursor=currentAbsoluteDay();
+  if(!logged.has(cursor))cursor--;
+  let streak=0;
+  while(cursor>=0&&logged.has(cursor)){streak++;cursor--;}
+  return streak;
 }
 
 // ─── SETTINGS ────────────────────────────────────────────────────────────────
+let settingsUnitShown='lbs';
 function loadSettings(){
   const u=unit();
+  settingsUnitShown=u;
   document.getElementById('set-unit').value=u;
-  document.getElementById('set-inc').value=u==='lbs'?Math.round((state.settings.incKg||2.27)*2.2046):(state.settings.incKg||2.27);
+  document.getElementById('set-inc').value=incDisplay(state.settings.incKg||2.27,u);
   document.getElementById('set-inc-label').textContent=`Overload increase / week (${u})`;
   document.getElementById('set-level').value=state.settings.level||'advanced';
+  document.getElementById('set-rest').value=String(state.settings.restSec||90);
+  document.getElementById('set-chime').checked=state.settings.chime!==false;
 }
 function saveSettings(){
   const u=document.getElementById('set-unit').value;
@@ -921,7 +1239,26 @@ function saveSettings(){
   state.settings.unit=u;
   state.settings.incKg=u==='lbs'?parseFloat((incVal/2.2046).toFixed(3)):incVal;
   state.settings.level=document.getElementById('set-level').value;
+  state.settings.restSec=parseInt(document.getElementById('set-rest').value,10)||90;
+  state.settings.chime=document.getElementById('set-chime').checked;
+  settingsUnitShown=u;
   save();renderToday();toast('Settings saved');
+}
+function onUnitChange(){
+  const u=document.getElementById('set-unit').value;
+  const incEl=document.getElementById('set-inc');
+  const inc=parseFloat(incEl.value);
+  if(!isNaN(inc)){
+    const kg=settingsUnitShown==='lbs'?inc/2.2046:inc;
+    incEl.value=incDisplay(kg,u);
+  }
+  settingsUnitShown=u;
+  document.getElementById('set-inc-label').textContent=`Overload increase / week (${u})`;
+}
+function onLevelChange(){
+  const u=document.getElementById('set-unit').value;
+  const level=document.getElementById('set-level').value;
+  document.getElementById('set-inc').value=level==='intermediate'?(u==='lbs'?2.5:1.25):(u==='lbs'?5:2.5);
 }
 function resetWeek(){
   if(!confirm('Reset progress to Day 1, Week 1? Your logged history stays intact.'))return;
@@ -929,17 +1266,125 @@ function resetWeek(){
 }
 function clearHistory(){
   if(!confirm('Clear all history? This cannot be undone.'))return;
-  state.logs=[];save();renderStats();toast('History cleared');
+  state.logs=[];state.setProgress={};save();renderToday();renderStats();toast('History cleared');
 }
 
 // ─── TAB NAV ─────────────────────────────────────────────────────────────────
 function showTab(tab,btn){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  document.querySelectorAll('.tab-bar button').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.tab-bar button').forEach(b=>{b.classList.remove('active');b.setAttribute('aria-selected','false');});
   document.getElementById('screen-'+tab).classList.add('active');
   btn.classList.add('active');
+  btn.setAttribute('aria-selected','true');
+  const main=document.querySelector('main');
+  if(main)main.scrollTop=0;
   if(tab==='stats')renderStats();
   if(tab==='settings')loadSettings();
+  if(tab==='meals')renderMeals();
+}
+function openMeals(pane,btn){
+  if(pane)mealsPane=pane;
+  showTab('meals',btn||document.querySelector('[data-tab="meals"]'));
+}
+function changeMealWeek(delta){
+  const target=viewWeek()+delta;
+  if(target<1)return;
+  const targetAbs=(target-1)*7+viewDayIndex();
+  const offset=targetAbs-currentAbsoluteDay();
+  if(targetAbs<0||offset>FORWARD_PREVIEW_DAYS)return;
+  state.viewOffset=offset;
+  save();
+  const main=document.querySelector('main');
+  if(main)main.scrollTop=0;
+  renderToday();
+  renderMeals();
+}
+function renderMeals(){
+  const main=document.querySelector('main');
+  const top=main?main.scrollTop:0;
+  const week=viewWeek();
+  const stats=weekMealStats(week);
+  const weekEl=document.getElementById('meals-week');
+  if(weekEl)weekEl.textContent=`Week ${week} · ${phaseName(week)} · ${stats.made} of ${stats.total} cooked`;
+  const prev=document.getElementById('meals-prev');
+  const next=document.getElementById('meals-next');
+  if(prev)prev.disabled=week<=1;
+  if(next){
+    const nextAbs=week*7+viewDayIndex();
+    next.disabled=nextAbs-currentAbsoluteDay()>FORWARD_PREVIEW_DAYS;
+  }
+  document.getElementById('pane-menu').classList.toggle('active',mealsPane!=='shop');
+  document.getElementById('pane-shop').classList.toggle('active',mealsPane==='shop');
+  document.getElementById('pane-menu').setAttribute('aria-selected',mealsPane!=='shop'?'true':'false');
+  document.getElementById('pane-shop').setAttribute('aria-selected',mealsPane==='shop'?'true':'false');
+  document.getElementById('meals-body').innerHTML=mealsPane==='shop'?renderShopPane(week,stats):renderMenuPane(week);
+  if(main)main.scrollTop=top;
+}
+function renderMenuPane(week){
+  const viewing=viewDayIndex();
+  let html='';
+  for(let di=0;di<7;di++){
+    const day=PLAN[di];
+    const kind=day.type==='lift'?'Training':day.type==='cardio'?'Cardio':'Rest';
+    const nut=day.type==='lift'?NUTRITION.training:NUTRITION.rest;
+    const current=di===viewing;
+    const planCurrent=week===state.currentWeek&&di===state.currentDayIdx;
+    html+=`<section class="menu-day${current?' current':''}">
+      <div class="menu-day-h"><strong>${day.day}</strong><span>${kind} · ${nut.cal} cal${planCurrent?' · Current':''}</span></div>
+      ${MEAL_SLOTS.map(slot=>{
+        const idx=mealIndex(week,di,slot.id);
+        const meal=NUTRITION.meals[slot.id][idx];
+        const made=isMealMade(week,di,slot.id);
+        return `<div class="menu-slot${made?' made':''}">
+          <label class="made-hit"><input type="checkbox" data-meal-made data-week="${week}" data-day="${di}" data-slot="${slot.id}" ${made?'checked':''} aria-label="Mark ${slot.label} on ${day.day} made"></label>
+          <div>
+            <div class="meal-timing">${slot.label}</div>
+            <select data-meal-choice data-week="${week}" data-day="${di}" data-slot="${slot.id}" aria-label="${slot.label} for ${day.day}">${mealOptions(slot.id,idx)}</select>
+            <div class="menu-detail">${esc(meal.detail)}</div>
+          </div>
+          <button type="button" class="recipe-link" data-recipe="${slot.id}" data-idx="${idx}">Recipe</button>
+        </div>`;
+      }).join('')}
+    </section>`;
+  }
+  return `<p class="menu-hint">Check a meal after you cook it. Change any meal and the shopping list follows.</p>`+html;
+}
+function renderShopPane(week,stats){
+  const items=buildWeekShoppingList(week,shopOnlyUnmade);
+  const boughtN=items.filter(item=>state.menu.bought[buyKey(week,item.item,item.unit)]).length;
+  const leftBuy=items.length-boughtN;
+  let list='';
+  if(!items.length){
+    list='<div class="empty-state">Every meal this week is marked made, so this filtered list is empty.</div>';
+  }else{
+    let aisle='';
+    items.forEach(item=>{
+      if(item.aisle!==aisle){aisle=item.aisle;list+=`<div class="aisle-label">${aisle}</div>`;}
+      const bought=!!state.menu.bought[buyKey(week,item.item,item.unit)];
+      const unit=item.unit?' '+esc(item.unit):'';
+      list+=`<label class="shop-item${bought?' bought':''}">
+        <input type="checkbox" data-shop-item data-item="${esc(item.item)}" data-unit="${esc(item.unit)}" ${bought?'checked':''}>
+        <span><span class="shop-name">${fmtQty(item.qty)}${unit} ${esc(item.item)}</span><span class="shop-uses">${esc(usesLabel(item.uses))}</span></span>
+      </label>`;
+    });
+  }
+  return `<div class="shop-summary">${leftBuy} to buy · ${stats.left} meals still to cook</div>
+    <div class="shop-tools">
+      <label class="made-toggle"><input type="checkbox" data-shop-unmade ${shopOnlyUnmade?'checked':''}> Still to cook</label>
+      <div class="shop-actions">
+        <button type="button" class="quiet-btn" data-copy-list>Copy</button>
+        <button type="button" class="quiet-btn" data-clear-shop>Clear</button>
+      </div>
+    </div>
+    ${list}`;
+}
+async function copyShoppingList(){
+  const text=shoppingListText(viewWeek());
+  if(!text){toast('Nothing left to copy');return;}
+  try{
+    await navigator.clipboard.writeText(text);
+    toast('Unchecked items copied');
+  }catch(e){toast('Could not copy the list');}
 }
 
 // ─── TOAST ───────────────────────────────────────────────────────────────────
@@ -949,10 +1394,172 @@ function toast(msg){
   setTimeout(()=>el.classList.remove('show'),2200);
 }
 
+// ─── REST TIMER ──────────────────────────────────────────────────────────────
+let restTimer=null,restUntil=0,restTotal=90,audioCtx=null;
+function unlockAudio(){
+  try{
+    const Ctx=window.AudioContext||window.webkitAudioContext;
+    if(!Ctx)return;
+    audioCtx=audioCtx||new Ctx();
+    if(audioCtx.state==='suspended')audioCtx.resume();
+  }catch(e){}
+}
+function chime(){
+  if(state.settings.chime===false)return;
+  try{
+    unlockAudio();
+    if(!audioCtx)return;
+    const o=audioCtx.createOscillator();
+    const g=audioCtx.createGain();
+    o.frequency.value=880;
+    o.type='sine';
+    const t=audioCtx.currentTime;
+    g.gain.setValueAtTime(0.0001,t);
+    g.gain.exponentialRampToValueAtTime(0.18,t+0.02);
+    g.gain.exponentialRampToValueAtTime(0.0001,t+0.38);
+    o.connect(g);g.connect(audioCtx.destination);
+    o.start(t);o.stop(t+0.4);
+  }catch(e){}
+}
+function startRest(label){
+  unlockAudio();
+  restTotal=state.settings.restSec||90;
+  restUntil=Date.now()+restTotal*1000;
+  document.getElementById('rest-label').textContent=label;
+  document.getElementById('rest-bar').classList.add('show');
+  document.body.classList.add('resting');
+  tickRest();
+  if(restTimer)clearInterval(restTimer);
+  restTimer=setInterval(tickRest,250);
+}
+function tickRest(){
+  const leftMs=restUntil-Date.now();
+  if(leftMs<=0){stopRest(true);return;}
+  const left=Math.ceil(leftMs/1000);
+  document.getElementById('rest-time').textContent=Math.floor(left/60)+':'+String(left%60).padStart(2,'0');
+  const fill=document.getElementById('rest-fill');
+  if(fill)fill.style.transform='scaleX('+(leftMs/(restTotal*1000))+')';
+}
+function stopRest(done){
+  if(restTimer){clearInterval(restTimer);restTimer=null;}
+  restUntil=0;
+  const bar=document.getElementById('rest-bar');
+  if(bar)bar.classList.remove('show');
+  document.body.classList.remove('resting');
+  if(!done)return;
+  try{if(navigator.vibrate)navigator.vibrate([180,80,180]);}catch(e){}
+  chime();
+  toast('Rest complete');
+}
+
+// ─── DAY EVENTS ──────────────────────────────────────────────────────────────
+function onDayClick(e){
+  const t=e.target;
+  if(t.closest('input,select,textarea'))return;
+  const pip=t.closest('[data-pip]');
+  if(pip){toggleSet(+pip.dataset.day,+pip.dataset.ex,+pip.dataset.pip);return;}
+  const log=t.closest('[data-log]');
+  if(log){logDay(+log.dataset.log);return;}
+  if(t.closest('[data-open-meals]')){openMeals('menu');return;}
+  const recipe=t.closest('[data-recipe]');
+  if(recipe){showRecipe(recipe.dataset.recipe,+recipe.dataset.idx);return;}
+  const move=t.closest('[data-move]');
+  if(move){showMoveInfo(+move.dataset.day,move.dataset.move,+move.dataset.idx);return;}
+  const ex=t.closest('[data-exinfo]');
+  if(ex){showExerciseInfo(+ex.dataset.day,+ex.dataset.exinfo);return;}
+  const tog=t.closest('[data-toggle]');
+  if(tog)toggle(tog.dataset.toggle,tog.dataset.chev);
+}
+function onDayChange(e){
+  const made=e.target.closest('[data-made-slot]');
+  if(made){
+    const di=+made.dataset.day;
+    setMealMade(viewWeek(),di,made.dataset.madeSlot,made.checked);
+    const row=made.closest('.meal-row');
+    if(row)row.classList.toggle('made',made.checked);
+    const meta=document.getElementById('nut-meta-'+di);
+    if(meta){
+      const n=MEAL_SLOTS.filter(s=>isMealMade(viewWeek(),di,s.id)).length;
+      const isTraining=getWeekPlan(viewWeek())[di].type==='lift';
+      const nut=isTraining?NUTRITION.training:NUTRITION.rest;
+      meta.textContent=n+'/3 meals · '+nut.cal+' cal · '+(isTraining?'Training day':'Rest day');
+    }
+    return;
+  }
+  const input=e.target.closest('[data-w]');
+  if(!input)return;
+  updateExWeight(+input.dataset.day,+input.dataset.w,input.value);
+}
+function onMealsClick(e){
+  const t=e.target;
+  if(t.closest('select,input,label'))return;
+  const pane=t.closest('[data-meals-pane]');
+  if(pane){mealsPane=pane.dataset.mealsPane;const main=document.querySelector('main');if(main)main.scrollTop=0;renderMeals();return;}
+  const weekBtn=t.closest('[data-meal-week]');
+  if(weekBtn){changeMealWeek(+weekBtn.dataset.mealWeek);return;}
+  const recipe=t.closest('[data-recipe]');
+  if(recipe){showRecipe(recipe.dataset.recipe,+recipe.dataset.idx);return;}
+  if(t.closest('[data-copy-list]')){copyShoppingList();return;}
+  if(t.closest('[data-clear-shop]')){
+    if(confirm('Clear the check marks on this week\'s shopping list?')){clearShopChecks(viewWeek());renderMeals();}
+  }
+}
+function onMealsChange(e){
+  const t=e.target;
+  if(t.matches('[data-meal-choice]')){
+    setMealChoice(+t.dataset.week,+t.dataset.day,t.dataset.slot,t.value);
+    renderToday();
+    renderMeals();
+    return;
+  }
+  if(t.matches('[data-meal-made]')){
+    setMealMade(+t.dataset.week,+t.dataset.day,t.dataset.slot,t.checked);
+    renderToday();
+    renderMeals();
+    return;
+  }
+  if(t.matches('[data-shop-item]')){
+    ensureMenu();
+    const k=buyKey(viewWeek(),t.dataset.item,t.dataset.unit||'');
+    if(t.checked)state.menu.bought[k]=true;else delete state.menu.bought[k];
+    save();
+    renderMeals();
+    return;
+  }
+  if(t.matches('[data-shop-unmade]')){
+    shopOnlyUnmade=t.checked;
+    renderMeals();
+  }
+}
+
 // ─── INIT ────────────────────────────────────────────────────────────────────
 load();
 renderToday();
 document.getElementById('header-date').textContent=new Date().toLocaleDateString('en-US',{month:'short',day:'numeric'});
+document.getElementById('day-content').addEventListener('click',onDayClick);
+document.getElementById('day-content').addEventListener('change',onDayChange);
+document.getElementById('screen-meals').addEventListener('click',onMealsClick);
+document.getElementById('screen-meals').addEventListener('change',onMealsChange);
+document.getElementById('day-content').addEventListener('keydown',e=>{
+  if(e.key!=='Enter'&&e.key!==' ')return;
+  const tog=e.target.closest('[data-toggle]');
+  if(!tog||e.target!==tog)return;
+  e.preventDefault();
+  toggle(tog.dataset.toggle,tog.dataset.chev);
+});
+document.getElementById('today-pill').addEventListener('click',()=>{
+  if(state.viewOffset===0)return;
+  state.viewOffset=0;save();renderToday();
+});
+document.getElementById('rest-skip').addEventListener('click',()=>stopRest(false));
+document.getElementById('set-unit').addEventListener('change',onUnitChange);
+document.getElementById('set-level').addEventListener('change',onLevelChange);
+document.addEventListener('keydown',e=>{
+  if(e.key!=='Escape')return;
+  if(document.getElementById('modal-overlay').classList.contains('show'))closeModal();
+  else if(document.getElementById('rest-bar').classList.contains('show'))stopRest(false);
+});
+document.addEventListener('visibilitychange',()=>{if(!document.hidden&&restTimer)tickRest();});
 
 if('serviceWorker' in navigator){
   navigator.serviceWorker.register('sw.js').catch(()=>{});
