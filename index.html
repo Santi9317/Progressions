@@ -8,6 +8,7 @@
 <meta name="apple-mobile-web-app-title" content="Progressions">
 <meta name="theme-color" content="#0f0f0f">
 <link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.svg">
 <title>Progressions</title>
 <style>
@@ -231,6 +232,54 @@ button,.ex-name-btn,.mobility-item,.recipe-link,.shop-link{touch-action:manipula
 @media (prefers-reduced-motion: reduce){
   *,*::before,*::after{transition:none!important;animation:none!important}
 }
+
+.tab-bar button{font-size:11px;padding:9px 0}
+@media(max-width:380px){.tab-bar button{font-size:10px;letter-spacing:0}}
+.alert{display:flex;gap:8px;align-items:flex-start;background:var(--burn-bg);border:0.5px solid var(--burn-border);color:var(--ink);border-radius:10px;padding:10px 12px;margin-bottom:10px;font-size:13px;line-height:1.45}
+.alert.welcome{background:var(--lift-bg);border-color:var(--lift-border)}
+.alert span{flex:1}
+.alert button{flex-shrink:0;border:none;background:transparent;color:var(--ink2);font-weight:700;cursor:pointer;font-family:var(--font);padding:0 2px}
+.lift-card{padding:12px 14px;border-bottom:0.5px solid var(--border)}
+.lift-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.lift-load{display:flex;align-items:center;gap:8px;margin-top:8px}
+.lift-load input,.run-field input,.run-field select{font-family:var(--font);border:0.5px solid var(--border2);border-radius:8px;background:var(--paper2);color:var(--ink)}
+.lift-load input{width:96px;text-align:center;font-size:20px;font-weight:700;padding:8px}
+.lift-load span{font-size:13px;color:var(--ink3);font-weight:600}
+.run-field{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:8px;font-size:14px;font-weight:600}
+.run-field input,.run-field select{width:120px;text-align:right;font-size:16px;padding:8px}
+.result-row{display:flex;gap:6px;margin-top:8px}
+.result-row button{flex:1;border:0.5px solid var(--border2);background:var(--paper2);border-radius:8px;padding:8px 0;font-size:12px;font-weight:700;font-family:var(--font);color:var(--ink2);cursor:pointer}
+.result-row button.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.result-row button.on.short{background:var(--burn);border-color:var(--burn);color:#fff}
+.result-row button.on.easy{background:var(--lift);border-color:var(--lift);color:#fff}
+.result-row button:disabled{cursor:default}
+.scheme{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:8px 0 12px}
+.scheme div{border:0.5px solid var(--border);border-radius:10px;padding:8px 4px;text-align:center;background:var(--paper2)}
+.scheme .on{border-color:var(--lift-border);background:var(--lift-bg)}
+.scheme strong{display:block;font-size:11px}
+.scheme span{font-size:10px;color:var(--ink3)}
+.sub-pick{display:flex;justify-content:space-between;align-items:center;gap:8px;width:100%;text-align:left;border:0.5px solid var(--border);background:var(--paper);border-radius:10px;padding:10px 12px;margin-bottom:6px;font-family:var(--font);color:var(--ink);cursor:pointer}
+.sub-pick.on{border-color:var(--lift-border);background:var(--lift-bg)}
+.sub-meta{font-size:11px;color:var(--ink3);white-space:nowrap}
+.settings-stack{display:block;padding:12px 14px;background:var(--paper);border:0.5px solid var(--border);border-radius:var(--radius-sm);margin-bottom:6px}
+.settings-stack label{display:block;font-size:13px;font-weight:600;margin-bottom:6px}
+.settings-stack input{width:100%;font-size:14px;font-family:var(--font);border:0.5px solid var(--border2);border-radius:6px;padding:8px;background:var(--paper2);color:var(--ink)}
+.meter{height:6px;background:var(--paper3);border-radius:4px;overflow:hidden;margin-top:8px}
+.meter span{display:block;height:100%;background:var(--lift);width:0}
+#alerts:empty{display:none}
+.meal-meta{font-size:11px;color:var(--ink3);font-weight:600;margin-bottom:2px}
+.shop-hero{border:0.5px solid var(--border);border-radius:var(--radius);padding:14px;background:var(--paper2);margin-bottom:12px}
+.shop-hero strong{display:block;font-size:16px;letter-spacing:-0.2px;margin-bottom:4px}
+.shop-hero p{font-size:13px;color:var(--ink2);line-height:1.45}
+.shop-stat{margin-top:8px;font-size:13px;font-weight:600}
+.used-block{margin-bottom:18px}
+.used-block h3{font-size:13px;font-weight:700;margin-bottom:8px}
+.staple-grid{display:flex;flex-wrap:wrap;gap:6px}
+.staple-grid label{display:flex;align-items:center;gap:6px;font-size:12px;border:0.5px solid var(--border);border-radius:999px;padding:6px 10px;background:var(--paper)}
+.history-actions{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.edit-grid textarea,.edit-grid input,.edit-grid select{width:100%;font-family:var(--font);font-size:14px;border:0.5px solid var(--border2);border-radius:8px;padding:8px;background:var(--paper2);color:var(--ink);margin-top:4px}
+.edit-grid textarea{min-height:72px;resize:vertical}
+.edit-grid label{display:block;font-size:12px;font-weight:600;margin-top:10px}
 </style>
 </head>
 <body>
@@ -241,26 +290,27 @@ button,.ex-name-btn,.mobility-item,.recipe-link,.shop-link{touch-action:manipula
     <span class="header-date" id="header-date"></span>
   </div>
   <nav class="tab-bar" role="tablist">
-    <button type="button" class="active" role="tab" aria-selected="true" data-tab="today" onclick="showTab('today',this)">Today</button>
-    <button type="button" role="tab" aria-selected="false" data-tab="meals" onclick="openMeals('menu',this)">Meals</button>
-    <button type="button" role="tab" aria-selected="false" data-tab="stats" onclick="showTab('stats',this)">Stats</button>
-    <button type="button" role="tab" aria-selected="false" data-tab="settings" onclick="showTab('settings',this)">Settings</button>
+    <button type="button" class="active" role="tab" aria-selected="true" data-tab="today">Today</button>
+    <button type="button" role="tab" aria-selected="false" data-tab="lift">Lift</button>
+    <button type="button" role="tab" aria-selected="false" data-tab="run">Run</button>
+    <button type="button" role="tab" aria-selected="false" data-tab="meals">Meals</button>
+    <button type="button" role="tab" aria-selected="false" data-tab="settings">Settings</button>
   </nav>
 </header>
 <main>
+<div id="alerts"></div>
 
-<!-- TODAY SCREEN -->
 <div id="screen-today" class="screen active">
   <div class="day-nav">
     <div>
       <div class="day-label" id="day-label">Monday</div>
-      <div class="day-sublabel" id="day-sublabel">Day 1 of 7</div>
+      <div class="day-sublabel" id="day-sublabel"></div>
     </div>
     <div style="display:flex;align-items:center;gap:8px">
       <button type="button" class="today-pill" id="today-pill">Current</button>
       <div class="day-nav-arrows">
-        <button type="button" id="prev-day" onclick="changeDay(-1)" aria-label="Previous day">‹</button>
-        <button type="button" id="next-day" onclick="changeDay(1)" aria-label="Next day">›</button>
+        <button type="button" id="prev-day" aria-label="Previous day">‹</button>
+        <button type="button" id="next-day" aria-label="Next day">›</button>
       </div>
     </div>
   </div>
@@ -269,11 +319,14 @@ button,.ex-name-btn,.mobility-item,.recipe-link,.shop-link{touch-action:manipula
     <span class="week-badge" id="week-phase"></span>
   </div>
   <div class="progress-wrap"><div class="progress-bar" id="week-progress" style="width:0%"></div></div>
-  <div class="shop-link-row"><button type="button" class="shop-link" onclick="openMeals('shop')">🛒 This week's shopping list</button></div>
+  <div class="shop-link-row"><button type="button" class="shop-link" id="open-shop">This week’s shopping list</button></div>
   <div id="day-content"></div>
 </div>
 
-<!-- MEALS SCREEN -->
+<div id="screen-lift" class="screen"><div id="lift-body"></div></div>
+
+<div id="screen-run" class="screen"><div id="run-body"></div></div>
+
 <div id="screen-meals" class="screen">
   <div style="padding:4px 0 12px;display:flex;align-items:flex-start;justify-content:space-between;gap:8px">
     <div>
@@ -281,51 +334,51 @@ button,.ex-name-btn,.mobility-item,.recipe-link,.shop-link{touch-action:manipula
       <div class="day-sublabel" id="meals-week" style="margin-top:2px"></div>
     </div>
     <div class="day-nav-arrows">
-      <button type="button" id="meals-prev" data-meal-week="-1" aria-label="Previous week">‹</button>
-      <button type="button" id="meals-next" data-meal-week="1" aria-label="Next week">›</button>
+      <button type="button" id="meals-prev" aria-label="Previous week">‹</button>
+      <button type="button" id="meals-next" aria-label="Next week">›</button>
     </div>
   </div>
   <div class="seg" role="tablist">
-    <button type="button" id="pane-menu" data-meals-pane="menu" role="tab" aria-selected="true">Menu</button>
+    <button type="button" id="pane-menu" class="active" data-meals-pane="menu" role="tab" aria-selected="true">Menu</button>
     <button type="button" id="pane-shop" data-meals-pane="shop" role="tab" aria-selected="false">Shop</button>
+    <button type="button" id="pane-used" data-meals-pane="used" role="tab" aria-selected="false">Used</button>
   </div>
   <div id="meals-body"></div>
 </div>
 
-<!-- STATS SCREEN -->
-<div id="screen-stats" class="screen">
-  <div style="padding:4px 0 16px"><span style="font-size:19px;font-weight:600;letter-spacing:-0.3px">Progress</span></div>
-  <div class="stats-grid">
-    <div class="stat-card"><div class="stat-val" id="s-sessions">0</div><div class="stat-label">Sessions logged</div></div>
-    <div class="stat-card"><div class="stat-val" id="s-streak">0</div><div class="stat-label">Day streak</div></div>
-    <div class="stat-card"><div class="stat-val" id="s-weeks">0</div><div class="stat-label">Weeks active</div></div>
-    <div class="stat-card"><div class="stat-val" id="s-runs">0</div><div class="stat-label">Cardio sessions</div></div>
-  </div>
-  <div style="font-size:13px;font-weight:600;margin-bottom:10px;color:var(--ink2)">Recent sessions</div>
-  <div id="history-list"><div class="empty-state">No sessions logged yet.<br>Complete your first workout to see progress here.</div></div>
-</div>
-
-<!-- SETTINGS SCREEN -->
 <div id="screen-settings" class="screen">
-  <div style="padding:4px 0 16px"><span style="font-size:19px;font-weight:600;letter-spacing:-0.3px">Settings</span></div>
+  <div style="padding:4px 0 16px"><span class="screen-title">Settings</span></div>
   <div class="settings-section">
     <div class="settings-section-label">Training</div>
-    <div class="settings-row"><label for="set-unit">Weight unit</label><select id="set-unit"><option value="lbs" selected>lbs</option><option value="kg">kg</option></select></div>
-    <div class="settings-row"><label for="set-inc" id="set-inc-label">Overload increase / week (lbs)</label><input type="number" id="set-inc" value="5" step="0.25" min="0.25" max="50" inputmode="decimal"></div>
-    <div class="settings-row"><label for="set-level">Experience level</label><select id="set-level"><option value="intermediate">Intermediate</option><option value="advanced" selected>Advanced</option></select></div>
-    <div class="settings-row"><label for="set-rest">Rest timer</label><select id="set-rest"><option value="45">45 sec</option><option value="60">60 sec</option><option value="90" selected>90 sec</option><option value="120">2 min</option><option value="180">3 min</option></select></div>
+    <div class="settings-row"><label for="set-unit">Weight unit</label><select id="set-unit"><option value="lbs">lbs</option><option value="kg">kg</option></select></div>
+    <div class="settings-row"><label for="set-inc" id="set-inc-label">Upper-body increase (lbs)</label><input type="number" id="set-inc" value="5" step="0.25" min="0.25" max="50" inputmode="decimal"></div>
+    <div class="settings-row"><label for="set-level">Experience</label><select id="set-level"><option value="intermediate">Intermediate</option><option value="advanced">Advanced</option></select></div>
+    <div class="settings-row"><label for="set-rest">Rest timer</label><select id="set-rest"><option value="45">45 sec</option><option value="60">60 sec</option><option value="90">90 sec</option><option value="120">2 min</option><option value="180">3 min</option></select></div>
     <div class="settings-row"><label for="set-chime">Rest chime</label><input type="checkbox" id="set-chime" checked></div>
-    <div class="settings-note">Each finished week steps the working weights up by the amount above. Every 12-week block ends with 3 deload weeks at 60%, then the climb continues. Edit a weight on today’s lift to set a new baseline. Choosing a level fills in a suggested weekly increase — smaller for intermediate, larger for advanced.</div>
+    <div class="settings-note">Lower-body compounds use twice this increase. Isolation moves use half. Choosing a level only fills in a suggested increase. It does not change weights you have already logged.</div>
+  </div>
+  <div class="settings-section">
+    <div class="settings-section-label">Model</div>
+    <div class="settings-stack"><label for="set-base">API address</label><input type="url" id="set-base" value="https://api.openai.com/v1" autocomplete="off" spellcheck="false"></div>
+    <div class="settings-stack"><label for="set-model">Model</label><input type="text" id="set-model" value="gpt-4o-mini" list="model-list" autocomplete="off" spellcheck="false"><datalist id="model-list"><option value="gpt-4o-mini"></option><option value="gpt-4.1-mini"></option><option value="gpt-4.1-nano"></option><option value="gpt-4o"></option></datalist></div>
+    <div class="settings-stack"><label for="set-key">API key</label><input type="password" id="set-key" autocomplete="off" spellcheck="false" placeholder="Stored on this phone"></div>
+    <div class="settings-note" id="spend-label">$0.00 of $3.00 this week</div>
+    <div class="meter" aria-hidden="true"><span id="spend-fill"></span></div>
+    <div class="settings-note">The key stays on this phone and is sent only to the address above. Calls stop at $3 each Monday-to-Sunday week. Lifting, running, and the weekly menu share that limit. Past it, or if a call fails, the built-in plan is used and a banner says so. The counter lives on this phone, so clearing site data resets it. With no key, the built-in plans run on their own, and the meals still change every week.</div>
+  </div>
+  <div class="settings-section">
+    <div class="settings-section-label">Updates</div>
+    <div class="settings-note">Opening the app checks for a new version and reloads it. The first jump off an old home-screen icon can still need one reinstall. After that, you should not have to delete the icon to pick up changes.</div>
   </div>
   <div class="settings-section">
     <div class="settings-section-label">Data</div>
-    <div class="settings-row"><label>Reset to Day 1</label><button type="button" class="text-btn" onclick="resetWeek()">Reset</button></div>
-    <div class="settings-row"><label>Clear all history</label><button type="button" class="danger-btn" onclick="clearHistory()">Clear</button></div>
+    <div class="settings-row"><label>Back to day 1</label><button type="button" class="text-btn" id="reset-week">Reset</button></div>
+    <div class="settings-row"><label>Clear training history</label><button type="button" class="danger-btn" id="clear-history">Clear</button></div>
   </div>
-  <button type="button" class="save-btn" onclick="saveSettings()">Save Settings</button>
+  <button type="button" class="save-btn" id="save-settings">Save settings</button>
 </div>
-
 </main>
+
 <div class="rest-bar" id="rest-bar" role="status" aria-live="polite">
   <div class="rest-fill" id="rest-fill"></div>
   <span class="rest-time" id="rest-time">1:30</span>
@@ -333,1237 +386,19 @@ button,.ex-name-btn,.mobility-item,.recipe-link,.shop-link{touch-action:manipula
   <button type="button" class="rest-skip" id="rest-skip">Skip</button>
 </div>
 <div class="toast" id="toast"></div>
-
-<!-- INFO / RECIPE / SHOPPING LIST MODAL -->
-<div class="modal-overlay" id="modal-overlay" onclick="closeModalBg(event)">
+<div class="modal-overlay" id="modal-overlay">
   <div class="modal-sheet" role="dialog" aria-modal="true" aria-labelledby="modal-title">
     <div class="modal-handle"></div>
     <div class="modal-header">
       <span class="modal-title" id="modal-title"></span>
-      <button type="button" class="modal-close" onclick="closeModal()" aria-label="Close">✕</button>
+      <button type="button" class="modal-close" id="modal-close" aria-label="Close">✕</button>
     </div>
     <div class="modal-body" id="modal-body"></div>
   </div>
 </div>
-
-<script>
-// ─── PLAN ───────────────────────────────────────────────────────────────────
-const PLAN = [
-  {
-    day:"Monday", type:"lift", label:"Upper Push",
-    tags:["Strength","Chest · Shoulders · Triceps"],
-    warmup:["Chest opener stretch — 45 sec","Shoulder circles + arm swings — 45 sec","Thoracic spine rotations — 60 sec","Band pull-aparts — 2×15"],
-    exercises:[
-      {name:"Barbell Bench Press",sets:4,reps:"6–8",weight:135,note:"Control the descent"},
-      {name:"Incline Dumbbell Press",sets:3,reps:"10–12",weight:40,note:""},
-      {name:"Cable Lateral Raises",sets:3,reps:"15–20",weight:15,note:"Light, strict form"},
-      {name:"Dumbbell Overhead Press",sets:3,reps:"10–12",weight:35,note:""},
-      {name:"Cable Tricep Pushdown",sets:3,reps:"12–15",weight:40,note:""},
-      {name:"Overhead Tricep Extension",sets:2,reps:"12–15",weight:30,note:""}
-    ],
-    cooldown:["Doorframe chest stretch — 45s each side","Cross-body shoulder stretch — 30s each side"],
-    cardio:{type:"Optional",detail:"20 min Zone 2 treadmill or bike at conversational pace"}
-  },
-  {
-    day:"Tuesday", type:"lift", label:"Lower — Quad Focus",
-    tags:["Strength","Quads · Hamstrings · Core"],
-    warmup:["Hip flexor stretch — 45s each side","Leg swings front/back + lateral — 30s each","Glute bridges bodyweight — 2×15","Ankle circles — 30s each"],
-    exercises:[
-      {name:"Barbell Back Squat",sets:4,reps:"6–8",weight:185,note:"Depth to parallel or below"},
-      {name:"Romanian Deadlift",sets:3,reps:"10–12",weight:135,note:"Hinge, not squat"},
-      {name:"Walking Lunges (Dumbbell)",sets:3,reps:"12 each",weight:30,note:""},
-      {name:"Leg Extension",sets:3,reps:"15",weight:80,note:"Squeeze at top"},
-      {name:"Seated Calf Raise",sets:4,reps:"15–20",weight:90,note:"Full range of motion"},
-      {name:"Cable Woodchop",sets:3,reps:"12 each",weight:25,note:"Core — rotate from hips"},
-      {name:"Plank",sets:3,reps:"45 sec",weight:0,note:""}
-    ],
-    cooldown:["Standing quad stretch — 45s each","Seated hamstring stretch — 60s","Pigeon pose or figure-4 — 45s each side"],
-    cardio:{type:"Optional",detail:"15 min easy bike cooldown"}
-  },
-  {
-    day:"Wednesday", type:"cardio", label:"Cardio + Recovery",
-    tags:["Cardio","Active Recovery"],
-    detail:"Zone 2 cardio day — keep heart rate conversational (you can hold a sentence). This burns fat without taxing your muscles.",
-    options:[
-      "25–30 min treadmill walk/jog — pace where you can hold a conversation",
-      "30 min stationary bike — moderate resistance",
-      "Outdoor calisthenics day — pull-ups, dips, push-ups, hanging leg raises + light jog"
-    ],
-    mobility:["World's greatest stretch — 3 each side","90/90 hip stretch — 60s each side","Cat-cow — 10 reps","Dead hang — 2×20 sec","T-spine rotations — 10 each side","Doorframe chest stretch — 45s"]
-  },
-  {
-    day:"Thursday", type:"lift", label:"Upper Pull",
-    tags:["Strength","Back · Biceps · Rear Delts"],
-    warmup:["Cat-cow — 60s","Thread the needle — 45s each side","Dead hang — 2×20s","Scapular retractions — 2×10"],
-    exercises:[
-      {name:"Deadlift",sets:4,reps:"5",weight:225,note:"Brace, hinge, drive through floor"},
-      {name:"Barbell Row",sets:4,reps:"8–10",weight:135,note:"Pull to lower chest"},
-      {name:"Lat Pulldown (Cable)",sets:3,reps:"10–12",weight:100,note:""},
-      {name:"Face Pulls (Cable)",sets:3,reps:"15–20",weight:35,note:"Rear delts + rotator cuff health"},
-      {name:"Incline Dumbbell Curl",sets:3,reps:"10–12",weight:25,note:"Full stretch at bottom"},
-      {name:"Hammer Curl",sets:2,reps:"12–15",weight:25,note:""}
-    ],
-    cooldown:["Lat stretch — doorframe or hanging — 60s","Child's pose — 60s","Neck side stretch — 30s each side"],
-    cardio:{type:"Optional",detail:"20 min Zone 2 treadmill or bike"}
-  },
-  {
-    day:"Friday", type:"lift", label:"Lower — Posterior Chain",
-    tags:["Strength","Glutes · Hamstrings · Core"],
-    warmup:["Glute bridge — 2×15","90/90 hip stretch — 60s each side","World's greatest stretch — 3 each side","Lateral band walk — 2×15"],
-    exercises:[
-      {name:"Hip Thrust (Barbell)",sets:4,reps:"10–12",weight:185,note:"Full extension at top"},
-      {name:"Bulgarian Split Squat",sets:3,reps:"10 each",weight:35,note:"Rear foot elevated"},
-      {name:"Lying Leg Curl",sets:3,reps:"12–15",weight:60,note:""},
-      {name:"Abductor Machine",sets:3,reps:"15–20",weight:100,note:"Glute med — longevity"},
-      {name:"Standing Calf Raise",sets:3,reps:"15–20",weight:100,note:""},
-      {name:"Hanging Knee Raise",sets:3,reps:"15",weight:0,note:""},
-      {name:"Ab Wheel Rollout",sets:3,reps:"10–12",weight:0,note:""}
-    ],
-    cooldown:["Seated glute stretch — 45s each","Standing hip flexor stretch — 45s each","Supine spinal twist — 45s each side"],
-    cardio:{type:"Optional",detail:"15 min easy treadmill walk — stay moving, don't sprint"}
-  },
-  {
-    day:"Saturday", type:"cardio", label:"Active Day",
-    tags:["Cardio","Lifestyle"],
-    detail:"Weekend active day. Keep it enjoyable — this isn't a punishment session, it's movement that supports your lifestyle.",
-    options:[
-      "Outdoor calisthenics circuit — pull-ups, dips, push-ups, leg raises, box jumps (30–40 min)",
-      "Run outside — 2–4 miles easy pace, Zone 2",
-      "Recreational sport, hike, or long walk (45+ min)"
-    ],
-    mobility:["Hip flexor stretch — 60s each side","Hamstring stretch seated — 60s","Chest opener — 60s","Child's pose — 60s","Ankle circles — 30s each"]
-  },
-  {
-    day:"Sunday", type:"rest", label:"Rest & Reset",
-    tags:["Rest","Recovery"],
-    detail:"Full rest day. This is when your body actually builds muscle and repairs tissue. Don't skip it.",
-    recovery:["Sleep 7–9 hours — non-negotiable for body composition","Hydrate well — aim for 80–100oz water","Light walk is fine if you feel restless","Meal prep today sets up your whole week"],
-    nutrition_focus:"Sunday is a great day to batch cook. Rice cooker + sheet pan chicken = 4 meals ready in 25 minutes."
-  }
-];
-
-// ─── EXERCISE HOW-TO ──────────────────────────────────────────────────────────
-const EXERCISE_INFO = {
-  "Barbell Bench Press":"Lie on a flat bench, feet flat on the floor. Grip the bar slightly wider than shoulder-width. Lower it to your mid-chest with control, elbows at about a 45° angle from your torso, then press back up to lockout without bouncing off your chest.",
-  "Incline Dumbbell Press":"Set the bench to a 30–45° incline. Press dumbbells up and slightly inward until they nearly touch above your upper chest, then lower with control to chest level, keeping elbows tucked around 45°.",
-  "Cable Lateral Raises":"Stand side-on to a low cable pulley, handle in the far hand. With a slight bend in the elbow, raise your arm out to the side to about shoulder height, leading with the elbow. Lower slowly — resist the pull down.",
-  "Dumbbell Overhead Press":"Stand or sit with dumbbells at shoulder height, palms forward. Press straight overhead until arms are extended, without arching your lower back. Lower with control back to shoulder height.",
-  "Cable Tricep Pushdown":"Stand facing a high cable with a straight bar or rope attachment. Keep elbows pinned to your sides and press down until arms are fully extended, then control the return without letting elbows flare.",
-  "Overhead Tricep Extension":"Hold a dumbbell with both hands overhead, elbows pointing forward. Lower the weight behind your head by bending only at the elbows, then extend back to full overhead lockout.",
-  "Barbell Back Squat":"Bar rests on your upper traps, feet shoulder-width. Brace your core, break at the hips and knees together, and descend to at least parallel. Drive through the whole foot to stand, keeping knees tracking over your toes.",
-  "Romanian Deadlift":"Hold the bar at hip level. Push your hips back while keeping a slight knee bend and a flat back, lowering the bar along your legs until you feel a hamstring stretch. Drive hips forward to return to standing — this is a hinge, not a squat.",
-  "Walking Lunges (Dumbbell)":"Holding dumbbells at your sides, step forward into a lunge until both knees are near 90°, then push off the front foot into the next step. Keep your torso upright and core braced throughout.",
-  "Leg Extension":"Sit with the pad resting on your lower shins, knees aligned with the machine's pivot. Extend your legs to full contraction, squeeze at the top, then lower under control — don't let the weight stack slam.",
-  "Seated Calf Raise":"Sit with the balls of your feet on the platform, pad on your thighs. Lower your heels for a full stretch, then rise onto your toes as high as possible, pausing briefly at the top.",
-  "Cable Woodchop":"Set the pulley high, grip the handle with both hands, and rotate through your torso and hips to pull it diagonally across your body — think of chopping wood. Control the return, keeping the movement in your core, not your arms.",
-  "Plank":"Forearms and toes on the ground, elbows under shoulders. Keep a straight line from head to heels by bracing your core and squeezing your glutes — don't let your hips sag or pike up.",
-  "Deadlift":"Bar over midfoot, grip just outside your shins. Brace your core, flatten your back, and drive through the floor by extending your hips and knees together, keeping the bar close to your body throughout.",
-  "Barbell Row":"Hinge forward to about 45°, holding the bar with a flat back. Pull the bar toward your lower ribs/waist, squeezing your shoulder blades together, then lower with control without letting your torso swing.",
-  "Lat Pulldown (Cable)":"Grip the bar wider than shoulder-width, sit with your thighs secured. Pull the bar down to your upper chest, driving your elbows down and back, then let it rise slowly with control.",
-  "Face Pulls (Cable)":"Set the pulley to upper-chest/head height with a rope attachment. Pull the rope toward your face, separating the ends and driving your elbows high and back — great for rear delts and shoulder health.",
-  "Incline Dumbbell Curl":"Sit on an incline bench, arms hanging fully extended. Curl the dumbbells up while keeping your elbows pinned behind your torso, then lower slowly for a full stretch at the bottom.",
-  "Hammer Curl":"Hold dumbbells with a neutral (palms-in) grip. Curl straight up without rotating your wrists, keeping elbows close to your sides, then lower with control.",
-  "Hip Thrust (Barbell)":"Upper back braced on a bench, bar across your hips. Drive through your heels to lift your hips until your body forms a straight line from shoulders to knees, squeezing glutes hard at the top, then lower with control.",
-  "Bulgarian Split Squat":"Rear foot elevated on a bench behind you, front foot far enough forward for a stable stance. Lower straight down until your back knee nearly touches the floor, then drive through the front heel to stand.",
-  "Lying Leg Curl":"Lie face down with the pad against your lower calves/ankles. Curl your heels toward your glutes, squeezing your hamstrings at the top, then lower under control.",
-  "Abductor Machine":"Sit with pads against the outside of your knees/thighs. Push your legs outward against the resistance, squeeze at the end range, then let the pads return slowly.",
-  "Standing Calf Raise":"Balls of your feet on the platform, shoulders under the pads. Lower your heels for a full stretch, then rise onto your toes as high as possible, pausing briefly at the top.",
-  "Hanging Knee Raise":"Hang from a bar with arms fully extended. Without swinging, raise your knees toward your chest by curling your pelvis up, then lower with control.",
-  "Ab Wheel Rollout":"Kneeling, grip the wheel and roll forward slowly, keeping your core braced and back flat, extending as far as you can control. Pull back to the start using your abs, not your hips."
-};
-
-// ─── WARMUP / COOLDOWN / MOBILITY HOW-TO ─────────────────────────────────────
-const MOVE_INFO = {
-  "chest opener stretch":"Clasp your hands behind your back and gently lift, or stand in a doorway with your forearms on the frame and step through to feel a stretch across your chest and front shoulders.",
-  "shoulder circles + arm swings":"Roll your shoulders in big circles forward then backward, then swing your arms across your body and open them wide to loosen the shoulder joints.",
-  "thoracic spine rotations":"On all fours or standing, place a hand behind your head and rotate your upper back, opening your elbow toward the ceiling, then return — keep your hips still, the motion comes from the mid-back.",
-  "band pull-aparts":"Hold a light resistance band at shoulder height, arms extended. Pull the band apart by squeezing your shoulder blades together, then return with control.",
-  "doorframe chest stretch":"Place your forearm on a doorframe at shoulder height and gently lean your body forward through the doorway until you feel a stretch across your chest.",
-  "cross-body shoulder stretch":"Bring one arm straight across your chest and use your other arm to gently pull it closer, feeling the stretch in the back of the shoulder.",
-  "hip flexor stretch":"Kneel in a half-lunge position, back knee down. Tuck your pelvis under and shift your weight forward slightly until you feel a stretch in the front of the hip of the kneeling leg.",
-  "leg swings front/back + lateral":"Hold onto something for balance and swing one leg forward and back in a controlled arc, then switch to side-to-side swings, keeping the motion smooth, not forced.",
-  "glute bridges bodyweight":"Lie on your back, knees bent, feet flat. Drive through your heels to lift your hips until your body forms a straight line, squeeze your glutes, then lower with control.",
-  "ankle circles":"Lift one foot off the ground and rotate it slowly at the ankle, a full set of circles one way, then the other, then switch feet.",
-  "standing quad stretch":"Standing (hold something for balance if needed), grab one foot behind you and pull your heel toward your glutes, keeping your knees close together.",
-  "seated hamstring stretch":"Sit with one leg extended straight, the other bent with foot tucked in. Hinge forward from your hips over the straight leg, reaching toward your toes.",
-  "pigeon pose or figure-4":"From a tabletop or lying position, cross one ankle over the opposite knee (figure-4) or bring one shin forward on the floor (pigeon), and lean forward to stretch the glute and hip.",
-  "world's greatest stretch":"From a lunge position, place both hands inside your front foot, rotate your torso and reach one arm to the ceiling, then return — a full-body mobility flow through the hips, spine and hamstrings.",
-  "90/90 hip stretch":"Sit with your front leg bent 90° in front of you and back leg bent 90° to the side. Lean forward over the front shin to feel the stretch, then switch sides.",
-  "cat-cow":"On all fours, alternate between arching your back and dropping your belly (cow) and rounding your spine toward the ceiling while tucking your chin (cat), moving with your breath.",
-  "dead hang":"Hang from a pull-up bar with arms fully extended and shoulders relaxed, letting gravity decompress your spine and stretch your lats and grip.",
-  "t-spine rotations":"In a tabletop position, place one hand behind your head and rotate your upper back to open that elbow toward the ceiling, then return, keeping your hips square.",
-  "thread the needle":"From all fours, slide one arm underneath your body and through the gap between your other arm and leg, rotating your upper back, then return and repeat on the other side.",
-  "scapular retractions":"Hang from a bar or hold a band at chest height, and without bending your elbows, pull your shoulder blades together and down, then release.",
-  "neck side stretch":"Sit or stand tall, gently tilt your ear toward your shoulder until you feel a stretch along the side of your neck, optionally assisting lightly with your hand.",
-  "lat stretch — doorframe or hanging":"Grab a sturdy overhead bar or doorframe with one hand, then sink your hips back and down to feel a stretch along the side of your torso/lat, or simply hang from a bar with a slight side lean.",
-  "child's pose":"Kneel and sit back onto your heels, then fold forward with arms extended on the floor in front of you, relaxing your lower back and hips.",
-  "glute bridge":"Lie on your back, knees bent, feet flat. Drive through your heels to lift your hips, squeeze your glutes at the top, then lower with control — used here as an activation move.",
-  "lateral band walk":"Place a resistance band around your ankles or above your knees, get into a quarter-squat, and step sideways while maintaining tension on the band throughout.",
-  "seated glute stretch":"Sit tall, cross one ankle over the opposite knee, and gently lean your chest forward until you feel a stretch in the glute of the crossed leg.",
-  "standing hip flexor stretch":"From standing, step one foot back into a shallow lunge, tuck your pelvis under, and gently press your hips forward to stretch the front of the back hip.",
-  "supine spinal twist":"Lie on your back, knees bent and together, then let both knees fall to one side while keeping your shoulders flat on the floor, gently twisting your spine. Switch sides.",
-  "hamstring stretch seated":"Sit with one leg extended straight, the other bent with foot tucked in. Hinge forward from your hips over the straight leg, reaching toward your toes.",
-  "chest opener":"Clasp your hands behind your back and gently lift them while opening your chest, or interlace your fingers overhead and press up and back."
-};
-
-// ─── NUTRITION ──────────────────────────────────────────────────────────────
-const NUTRITION = {
-  training:{cal:2400,protein:185,carbs:240,fat:70},
-  rest:{cal:2100,protein:175,carbs:200,fat:70},
-  meals:{
-    breakfast:[
-      {name:"Eggs & Oats",timing:"Within 1hr of waking",detail:"3 scrambled eggs + ½ cup oats + banana. ~500 cal, 35g protein. Fast and filling.",
-        recipe:{ingredients:[{item:"Eggs",qty:3,unit:"large"},{item:"Rolled oats",qty:0.5,unit:"cup"},{item:"Banana",qty:1,unit:""}],
-          steps:["Cook oats with water or milk per package directions.","Scramble eggs in a nonstick pan over medium heat.","Slice banana and serve alongside."]}},
-      {name:"Greek Yogurt Bowl",timing:"Within 1hr of waking",detail:"1 cup full-fat Greek yogurt + berries + granola + honey. ~450 cal, 30g protein. 5 minutes.",
-        recipe:{ingredients:[{item:"Full-fat Greek yogurt",qty:1,unit:"cup"},{item:"Mixed berries",qty:0.5,unit:"cup"},{item:"Granola",qty:0.25,unit:"cup"},{item:"Honey",qty:1,unit:"tbsp"}],
-          steps:["Add yogurt to a bowl.","Top with berries and granola.","Drizzle honey over the top."]}},
-      {name:"Turkey & Egg Wrap",timing:"Within 1hr of waking",detail:"3 eggs + 2oz turkey in a flour tortilla with salsa. ~500 cal, 40g protein.",
-        recipe:{ingredients:[{item:"Eggs",qty:3,unit:"large"},{item:"Deli turkey",qty:2,unit:"oz"},{item:"Flour tortilla",qty:1,unit:""},{item:"Salsa",qty:2,unit:"tbsp"}],
-          steps:["Scramble the eggs.","Warm the tortilla, layer turkey and scrambled eggs.","Top with salsa, fold and roll into a wrap."]}}
-    ],
-    lunch:[
-      {name:"Chicken Rice Bowl",timing:"Midday",detail:"Pan-seared chicken thigh over white rice + roasted broccoli + soy-sesame drizzle. ~550 cal, 45g protein. Under $4.",
-        recipe:{ingredients:[{item:"Chicken thighs",qty:6,unit:"oz"},{item:"White rice (cooked)",qty:1,unit:"cup"},{item:"Broccoli",qty:1,unit:"cup"},{item:"Soy sauce",qty:1,unit:"tbsp"},{item:"Sesame oil",qty:1,unit:"tsp"}],
-          steps:["Pan-sear chicken thigh until cooked through, ~6-7 min per side.","Roast or steam broccoli.","Serve chicken and broccoli over rice, drizzle with soy sauce and sesame oil."]}},
-      {name:"Ground Turkey Taco Bowl",timing:"Midday",detail:"Seasoned turkey over rice + black beans + salsa + sour cream. ~600 cal, 50g protein.",
-        recipe:{ingredients:[{item:"Ground turkey",qty:6,unit:"oz"},{item:"White rice (cooked)",qty:1,unit:"cup"},{item:"Black beans",qty:0.5,unit:"cup"},{item:"Salsa",qty:2,unit:"tbsp"},{item:"Sour cream",qty:1,unit:"tbsp"}],
-          steps:["Brown ground turkey in a pan with taco seasoning.","Warm black beans.","Build the bowl over rice with turkey, beans, salsa and sour cream."]}},
-      {name:"Tuna Avocado Wrap",timing:"Midday",detail:"Canned tuna + avocado + lemon in a wrap with greens. ~450 cal, 40g protein. No cooking needed.",
-        recipe:{ingredients:[{item:"Canned tuna",qty:5,unit:"oz"},{item:"Avocado",qty:0.5,unit:""},{item:"Lemon",qty:0.5,unit:""},{item:"Tortilla wrap",qty:1,unit:""},{item:"Mixed greens",qty:1,unit:"cup"}],
-          steps:["Mix drained tuna with mashed avocado and a squeeze of lemon.","Lay greens on the wrap and add the tuna mixture.","Fold and roll tightly."]}}
-    ],
-    dinner:[
-      {name:"Salmon & Sweet Potato",timing:"Evening",detail:"Pan-seared salmon + microwaved sweet potato + steamed green beans. ~600 cal, 45g protein. 20 min.",
-        recipe:{ingredients:[{item:"Salmon fillet",qty:6,unit:"oz"},{item:"Sweet potato",qty:1,unit:"medium"},{item:"Green beans",qty:1,unit:"cup"}],
-          steps:["Microwave or bake the sweet potato until soft.","Pan-sear salmon skin-side down until crisp, then flip to finish, ~8 min total.","Steam green beans and plate everything together."]}},
-      {name:"Steak Stir Fry",timing:"Evening",detail:"Thin-sliced flank steak + bell peppers + onion + soy sauce over rice. ~550 cal, 45g protein. 20 min.",
-        recipe:{ingredients:[{item:"Flank steak",qty:6,unit:"oz"},{item:"Bell pepper",qty:1,unit:""},{item:"Onion",qty:0.5,unit:""},{item:"Soy sauce",qty:1,unit:"tbsp"},{item:"White rice (cooked)",qty:1,unit:"cup"}],
-          steps:["Slice steak thin against the grain.","Stir-fry steak, peppers and onion in a hot pan with soy sauce for a few minutes until cooked.","Serve over rice."]}},
-      {name:"Shrimp & Pasta",timing:"Evening",detail:"Shrimp in garlic butter + whole wheat pasta + cherry tomatoes. ~550 cal, 40g protein. 20 min.",
-        recipe:{ingredients:[{item:"Shrimp",qty:6,unit:"oz"},{item:"Whole wheat pasta",qty:2,unit:"oz"},{item:"Garlic",qty:2,unit:"cloves"},{item:"Butter",qty:1,unit:"tbsp"},{item:"Cherry tomatoes",qty:1,unit:"cup"}],
-          steps:["Cook pasta according to package directions.","Sauté garlic in butter, add shrimp and cherry tomatoes until shrimp is pink.","Toss with the cooked pasta."]}},
-      {name:"Sheet Pan Chicken Thighs",timing:"Evening",detail:"Chicken thighs + broccoli + red onion, 425°F for 25 min. ~500 cal, 45g protein. Near zero cleanup.",
-        recipe:{ingredients:[{item:"Chicken thighs",qty:18,unit:"oz"},{item:"Broccoli",qty:1,unit:"cup"},{item:"Red onion",qty:0.5,unit:""}],
-          steps:["Toss chicken thighs, broccoli and red onion with oil, salt and pepper on a sheet pan.","Roast at 425°F for 25 minutes.","Let rest a few minutes before serving."]}}
-    ]
-  }
-};
-
-const PHASES=["Foundation","Foundation","Build","Build","Overload","Overload","Peak","Peak","Peak","Deload","Deload","Deload"];
-const SK='prog_v1';
-const FORWARD_PREVIEW_DAYS=27;
-
-let state={
-  currentWeek:1,
-  currentDayIdx:0,
-  viewOffset:0,
-  basePlan:buildDefaultBasePlan(),
-  logs:[],
-  setProgress:{},
-  menu:{choices:{},made:{},bought:{}},
-  settings:{unit:'lbs',incKg:2.27,level:'advanced',restSec:90,chime:true}
-};
-
-// ─── STORAGE ─────────────────────────────────────────────────────────────────
-function load(){
-  try{const s=localStorage.getItem(SK)||sessionStorage.getItem(SK);if(s){const p=JSON.parse(s);state={...state,...p};}}catch(e){}
-  if(!state.settings.incKg)state.settings.incKg=2.27;
-  if(!state.settings.unit)state.settings.unit='lbs';
-  if(typeof state.currentDayIdx!=='number'){
-    // migrating from the old calendar-locked version — seed the self-paced
-    // pointer from today's real weekday so nothing feels like it jumped
-    const dow=new Date().getDay();
-    state.currentDayIdx=[6,0,1,2,3,4,5][dow];
-  }
-  if(typeof state.viewOffset!=='number')state.viewOffset=0;
-  if(!state.setProgress||typeof state.setProgress!=='object')state.setProgress={};
-  ensureMenu();
-  if(!state.settings.restSec)state.settings.restSec=90;
-  if(typeof state.settings.chime!=='boolean')state.settings.chime=true;
-  migrateWeightUnits();
-}
-
-// ─── WEIGHT UNIT FIX (one-time) ───────────────────────────────────────────────
-// The seed PLAN weights were authored as lb-scale numbers (135, 225...) but
-// stored straight into the internal kg field with no conversion, so lbs-mode
-// display doubly-converted them (135 -> "298 lbs"). Any weight you actually
-// typed in went through toKg() correctly and is untouched. This migration
-// only corrects entries still sitting at their original, never-edited default.
-function seedToKg(w){return w===0?0:parseFloat((w/2.2046).toFixed(2));}
-function buildDefaultBasePlan(){
-  return PLAN.map(day=>{
-    const copy=JSON.parse(JSON.stringify(day));
-    if(day.type!=='lift')return copy;
-    copy.exercises=copy.exercises.map(ex=>({...ex,weight:seedToKg(ex.weight)}));
-    return copy;
-  });
-}
-function migrateWeightUnits(){
-  if(state.weightUnitFixed)return;
-  const incKg=state.settings.incKg||2.27;
-  state.basePlan.forEach((day,di)=>{
-    const seedDay=PLAN[di];
-    if(!seedDay||seedDay.type!=='lift'||day.type!=='lift')return;
-    day.exercises.forEach((ex,ei)=>{
-      const seedEx=seedDay.exercises[ei];
-      if(!seedEx||seedEx.name!==ex.name||seedEx.weight===0)return;
-      if(Math.abs(ex.weight-seedEx.weight)<0.001)ex.weight=seedToKg(seedEx.weight);
-    });
-  });
-  state.logs.forEach(log=>{
-    if(log.type!=='lift'||!log.exercises)return;
-    const seedDay=PLAN[log.dayIdx];
-    if(!seedDay||seedDay.type!=='lift')return;
-    log.exercises.forEach((ex,ei)=>{
-      const seedEx=seedDay.exercises[ei];
-      if(!seedEx||seedEx.name!==ex.name||seedEx.weight===0)return;
-      const expectedDefault=parseFloat((seedEx.weight+incKg*(log.week-1)).toFixed(2));
-      if(Math.abs(ex.weight-expectedDefault)<0.01)ex.weight=parseFloat((seedToKg(seedEx.weight)+incKg*(log.week-1)).toFixed(2));
-    });
-  });
-  state.weightUnitFixed=true;
-  save();
-}
-function save(){
-  try{const d=JSON.stringify(state);localStorage.setItem(SK,d);sessionStorage.setItem(SK,d);}catch(e){}
-}
-
-// ─── UNIT HELPERS ────────────────────────────────────────────────────────────
-function unit(){return state.settings.unit||'lbs';}
-function dispW(kg){
-  if(!kg)return'BW';
-  if(unit()==='lbs')return Math.round(kg*2.2046)+' lbs';
-  return fmtQty(kg)+' kg';
-}
-function dispWNum(kg){
-  if(unit()==='lbs')return Math.round((kg||0)*2.2046);
-  return parseFloat(Number(kg||0).toFixed(2));
-}
-function incDisplay(kg,u){
-  if(u==='lbs'){
-    const lbs=(kg||0)*2.2046;
-    return Math.abs(lbs-Math.round(lbs))<0.05?Math.round(lbs):parseFloat(lbs.toFixed(1));
-  }
-  return parseFloat(Number(kg||0).toFixed(2));
-}
-function toKg(val){
-  const v=parseFloat(val);if(isNaN(v))return 0;
-  if(unit()==='lbs')return parseFloat((v/2.2046).toFixed(2));
-  return v;
-}
-function fmtQty(n){
-  const r=Math.round(n*100)/100;
-  if(Number.isInteger(r))return String(r);
-  return r.toFixed(2).replace(/0+$/,'').replace(/\.$/,'');
-}
-
-// ─── WEEK PLAN ───────────────────────────────────────────────────────────────
-// 12-week blocks: 9 loading weeks, then 3 deload weeks at 60% of that block's
-// peak. Steps survive the deload, so the next block starts one jump higher.
-const LOAD_WEEKS=PHASES.filter(p=>p!=='Deload').length;
-const DELOAD_FACTOR=0.6;
-function phaseName(week){return PHASES[(Math.max(week,1)-1)%PHASES.length];}
-function weekLoad(week){
-  const w=Math.max(week,1);
-  const cycle=Math.floor((w-1)/PHASES.length);
-  const idx=(w-1)%PHASES.length;
-  const deload=PHASES[idx]==='Deload';
-  const steps=deload?cycle*LOAD_WEEKS+(LOAD_WEEKS-1):cycle*LOAD_WEEKS+idx;
-  return {deload,steps};
-}
-function workingKg(baseKg,week){
-  if(!baseKg)return 0;
-  const {deload,steps}=weekLoad(week);
-  let kg=baseKg+(state.settings.incKg||0)*steps;
-  if(deload)kg*=DELOAD_FACTOR;
-  return Math.max(0,parseFloat(kg.toFixed(2)));
-}
-function baseFromWorking(shownKg,week){
-  if(!shownKg)return 0;
-  const {deload,steps}=weekLoad(week);
-  let kg=shownKg;
-  if(deload)kg/=DELOAD_FACTOR;
-  kg-=(state.settings.incKg||0)*steps;
-  return Math.max(0,parseFloat(kg.toFixed(2)));
-}
-function getWeekPlan(week){
-  const w=week||state.currentWeek;
-  return state.basePlan.map(day=>{
-    if(day.type!=='lift')return day;
-    return {...day,exercises:day.exercises.map(ex=>({...ex,weight:workingKg(ex.weight,w)}))};
-  });
-}
-
-// ─── SELF-PACED DAY NAV ───────────────────────────────────────────────────────
-// The plan advances when you log a day, not with the calendar — currentWeek /
-// currentDayIdx is the "you are here" pointer; viewOffset lets you browse
-// without moving it.
-function currentAbsoluteDay(){return(state.currentWeek-1)*7+state.currentDayIdx;}
-function viewAbsoluteDay(){return currentAbsoluteDay()+state.viewOffset;}
-function viewWeek(){return Math.floor(viewAbsoluteDay()/7)+1;}
-function viewDayIndex(){return((viewAbsoluteDay()%7)+7)%7;}
-function isViewingCurrent(){return state.viewOffset===0;}
-function changeDay(d){
-  const newOffset=state.viewOffset+d;
-  if(currentAbsoluteDay()+newOffset<0)return;
-  if(newOffset>FORWARD_PREVIEW_DAYS)return;
-  state.viewOffset=newOffset;
-  save();renderToday();
-}
-
-// ─── LOGGING ─────────────────────────────────────────────────────────────────
-function isLogged(dayIdx,week){
-  week=week||viewWeek();
-  return state.logs.some(l=>l.week===week&&l.dayIdx===dayIdx);
-}
-function setKey(week,dayIdx,exIdx){return week+':'+dayIdx+':'+exIdx;}
-function logEntry(week,dayIdx){return state.logs.find(l=>l.week===week&&l.dayIdx===dayIdx);}
-function setsDoneFor(week,dayIdx,exIdx,prescribed){
-  const log=logEntry(week,dayIdx);
-  if(log){
-    const saved=log.exercises&&log.exercises[exIdx];
-    // A logged session is done. Show the sets you actually tapped when you
-    // tracked some; otherwise fill every pip.
-    if(saved&&saved.setsChecked)return saved.setsChecked;
-    return prescribed;
-  }
-  return state.setProgress[setKey(week,dayIdx,exIdx)]||0;
-}
-function rewindIfJustCompleted(week,dayIdx){
-  const abs=(week-1)*7+dayIdx;
-  if(abs!==currentAbsoluteDay()-1)return;
-  if(state.currentDayIdx===0){
-    if(state.currentWeek>1){state.currentWeek--;state.currentDayIdx=6;}
-  }else state.currentDayIdx--;
-  state.viewOffset=0;
-}
-function logDay(dayIdx){
-  const week=viewWeek();
-  const existing=state.logs.findIndex(l=>l.week===week&&l.dayIdx===dayIdx);
-  const plan=getWeekPlan(week);const day=plan[dayIdx];
-  if(existing>=0){
-    const removed=state.logs[existing];
-    state.logs.splice(existing,1);
-    if(removed.exercises){
-      removed.exercises.forEach((ex,ei)=>{
-        const n=ex.setsChecked||0;
-        if(n)state.setProgress[setKey(removed.week,removed.dayIdx,ei)]=n;
-      });
-    }
-    rewindIfJustCompleted(week,dayIdx);
-    toast('Session removed');
-  }else{
-    let exercises=null;
-    if(day.type==='lift'){
-      // Logging means the session is done. Sets you tapped are remembered
-      // separately so a rest-timer tap doesn't look like a short workout.
-      exercises=day.exercises.map((e,ei)=>({
-        ...e,
-        setsDone:e.sets,
-        setsChecked:state.setProgress[setKey(week,dayIdx,ei)]||0
-      }));
-      day.exercises.forEach((e,ei)=>{delete state.setProgress[setKey(week,dayIdx,ei)];});
-    }
-    state.logs.push({
-      week,dayIdx,type:day.type,name:day.label||day.day,
-      date:new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}),
-      timestamp:Date.now(),
-      exercises
-    });
-    if(isViewingCurrent()){
-      state.currentDayIdx++;
-      if(state.currentDayIdx>6){state.currentDayIdx=0;state.currentWeek++;}
-      state.viewOffset=0;
-      toast(day.type==='rest'?'Rest day logged':'Logged! 💪 On to the next day');
-    }else{
-      toast('Logged! 💪');
-    }
-  }
-  stopRest(false);
-  save();renderToday();renderStats();
-}
-function updateExWeight(dayIdx,exIdx,val){
-  const kg=toKg(val);
-  if(isNaN(kg))return;
-  state.basePlan[dayIdx].exercises[exIdx].weight=baseFromWorking(kg,viewWeek());
-  save();
-}
-
-// ─── MODAL ───────────────────────────────────────────────────────────────────
-function openModal(title,bodyHtml){
-  document.getElementById('modal-title').textContent=title;
-  document.getElementById('modal-body').innerHTML=bodyHtml;
-  const overlay=document.getElementById('modal-overlay');
-  overlay.classList.add('show');
-  document.body.style.overflow='hidden';
-  const closeBtn=overlay.querySelector('.modal-close');
-  if(closeBtn)closeBtn.focus();
-}
-function closeModal(){
-  document.getElementById('modal-overlay').classList.remove('show');
-  document.body.style.overflow='';
-}
-function closeModalBg(e){
-  if(e.target.id==='modal-overlay')closeModal();
-}
-function moveKey(str){
-  const idx=str.lastIndexOf('—');
-  return(idx<0?str:str.slice(0,idx)).trim().toLowerCase();
-}
-function showMoveInfo(di,cat,idx){
-  const day=getWeekPlan(viewWeek())[di];
-  const text=day[cat][idx];
-  const info=MOVE_INFO[moveKey(text)]||"No description available yet.";
-  openModal(text.split('—')[0].trim(),`<p>${info}</p>`);
-}
-function showExerciseInfo(di,ei){
-  const ex=getWeekPlan(viewWeek())[di].exercises[ei];
-  const info=EXERCISE_INFO[ex.name]||"No description available yet.";
-  openModal(ex.name,`<p>${info}</p>`);
-}
-function showRecipe(cat,idx){
-  const meal=NUTRITION.meals[cat][idx];
-  if(!meal||!meal.recipe){openModal(meal?meal.name:'Recipe','<p>No recipe available.</p>');return;}
-  const ing=meal.recipe.ingredients.map(i=>`<li>${fmtQty(i.qty)}${i.unit?' '+i.unit:''} ${i.item}</li>`).join('');
-  const steps=meal.recipe.steps.map(s=>`<li>${s}</li>`).join('');
-  openModal(meal.name,`<p>${meal.detail}</p><h4>Ingredients</h4><ul>${ing}</ul><h4>Steps</h4><ul>${steps}</ul>`);
-}
-const MEAL_SLOTS=[{id:'breakfast',label:'Breakfast'},{id:'lunch',label:'Lunch'},{id:'dinner',label:'Dinner'}];
-const AISLE_OF={
-  'Eggs':'Protein','Deli turkey':'Protein','Chicken thighs':'Protein','Ground turkey':'Protein','Canned tuna':'Protein','Salmon fillet':'Protein','Flank steak':'Protein','Shrimp':'Protein',
-  'Full-fat Greek yogurt':'Dairy','Sour cream':'Dairy','Butter':'Dairy',
-  'Banana':'Produce','Mixed berries':'Produce','Broccoli':'Produce','Avocado':'Produce','Lemon':'Produce','Mixed greens':'Produce','Sweet potato':'Produce','Green beans':'Produce','Bell pepper':'Produce','Onion':'Produce','Cherry tomatoes':'Produce','Garlic':'Produce','Red onion':'Produce',
-  'Rolled oats':'Pantry','Granola':'Pantry','Honey':'Pantry','Flour tortilla':'Pantry','Salsa':'Pantry','White rice (cooked)':'Pantry','Soy sauce':'Pantry','Sesame oil':'Pantry','Black beans':'Pantry','Tortilla wrap':'Pantry','Whole wheat pasta':'Pantry'
-};
-const AISLE_ORDER=['Produce','Protein','Dairy','Pantry','Other'];
-let mealsPane='menu';
-let shopOnlyUnmade=false;
-
-function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
-function ensureMenu(){
-  if(!state.menu||typeof state.menu!=='object')state.menu={};
-  if(!state.menu.choices)state.menu.choices={};
-  if(!state.menu.made)state.menu.made={};
-  if(!state.menu.bought)state.menu.bought={};
-}
-function defaultMealIndex(dayIdx,slot){
-  const list=NUTRITION.meals[slot];
-  return slot==='dinner'?dayIdx%list.length:dayIdx%list.length;
-}
-function mealKey(week,dayIdx,slot){return week+':'+dayIdx+':'+slot;}
-function mealIndex(week,dayIdx,slot){
-  ensureMenu();
-  const list=NUTRITION.meals[slot];
-  const stored=state.menu.choices[mealKey(week,dayIdx,slot)];
-  if(typeof stored==='number'&&stored>=0&&stored<list.length)return stored;
-  return defaultMealIndex(dayIdx,slot);
-}
-function chosenMeal(week,dayIdx,slot){return NUTRITION.meals[slot][mealIndex(week,dayIdx,slot)];}
-function isMealMade(week,dayIdx,slot){ensureMenu();return !!state.menu.made[mealKey(week,dayIdx,slot)];}
-function setMealMade(week,dayIdx,slot,on){
-  ensureMenu();
-  const k=mealKey(week,dayIdx,slot);
-  if(on)state.menu.made[k]=true;else delete state.menu.made[k];
-  save();
-}
-function setMealChoice(week,dayIdx,slot,idx){
-  ensureMenu();
-  const n=parseInt(idx,10);
-  const k=mealKey(week,dayIdx,slot);
-  if(n===defaultMealIndex(dayIdx,slot))delete state.menu.choices[k];
-  else state.menu.choices[k]=n;
-  save();
-}
-function buyKey(week,item,unit){return week+':'+item+'|'+(unit||'');}
-function weekMealStats(week){
-  let made=0;
-  const total=7*MEAL_SLOTS.length;
-  for(let di=0;di<7;di++) MEAL_SLOTS.forEach(s=>{if(isMealMade(week,di,s.id))made++;});
-  return {made,total,left:total-made};
-}
-function mealOptions(slot,selected){
-  return NUTRITION.meals[slot].map((m,i)=>`<option value="${i}"${i===selected?' selected':''}>${esc(m.name)}</option>`).join('');
-}
-function buildWeekShoppingList(week,onlyUnmade){
-  const agg={};
-  for(let di=0;di<7;di++){
-    MEAL_SLOTS.forEach(slot=>{
-      if(onlyUnmade&&isMealMade(week,di,slot.id))return;
-      const meal=chosenMeal(week,di,slot.id);
-      if(!meal||!meal.recipe)return;
-      meal.recipe.ingredients.forEach(ing=>{
-        const key=ing.item+'|'+(ing.unit||'');
-        if(!agg[key])agg[key]={item:ing.item,unit:ing.unit||'',qty:0,uses:[]};
-        agg[key].qty+=ing.qty;
-        const label=PLAN[di].day.slice(0,3)+' '+meal.name;
-        if(!agg[key].uses.includes(label))agg[key].uses.push(label);
-      });
-    });
-  }
-  return Object.values(agg).map(row=>({...row,aisle:AISLE_OF[row.item]||'Other'})).sort((a,b)=>{
-    const d=AISLE_ORDER.indexOf(a.aisle)-AISLE_ORDER.indexOf(b.aisle);
-    return d||a.item.localeCompare(b.item);
-  });
-}
-function usesLabel(uses){
-  if(uses.length<=2)return uses.join(' · ');
-  return uses.slice(0,2).join(' · ')+' · +'+(uses.length-2);
-}
-function shoppingListText(week){
-  const items=buildWeekShoppingList(week,shopOnlyUnmade).filter(item=>!state.menu.bought[buyKey(week,item.item,item.unit)]);
-  if(!items.length)return '';
-  const lines=['Week '+week+' shopping list',''];
-  let aisle='';
-  items.forEach(item=>{
-    if(item.aisle!==aisle){aisle=item.aisle;lines.push(aisle);}
-    lines.push('- '+fmtQty(item.qty)+(item.unit?' '+item.unit:'')+' '+item.item);
-  });
-  return lines.join('\n');
-}
-function clearShopChecks(week){
-  ensureMenu();
-  Object.keys(state.menu.bought).forEach(k=>{if(k.startsWith(week+':'))delete state.menu.bought[k];});
-  save();
-}
-function showShoppingList(){openMeals('shop');}
-
-// ─── RENDER TODAY ─────────────────────────────────────────────────────────────
-function setPips(week,di,ei,ex){
-  const done=setsDoneFor(week,di,ei,ex.sets);
-  const locked=isLogged(di,week);
-  let html='';
-  for(let i=0;i<ex.sets;i++){
-    const on=i<done;
-    if(locked){
-      html+=`<button type="button" class="set-pip${on?' done':''}" disabled aria-pressed="${on}">${i+1}</button>`;
-    }else{
-      html+=`<button type="button" class="set-pip${on?' done':''}" data-day="${di}" data-ex="${ei}" data-pip="${i}" aria-pressed="${on}" aria-label="Set ${i+1}, ${ex.name}">${i+1}</button>`;
-    }
-  }
-  return `<div class="set-row" data-ex="${ei}">${html}</div>`;
-}
-function paintSets(exIdx,done){
-  const row=document.querySelector('#day-content .set-row[data-ex="'+exIdx+'"]');
-  if(!row){renderToday();return;}
-  row.querySelectorAll('.set-pip').forEach((btn,i)=>{
-    const on=i<done;
-    btn.classList.toggle('done',on);
-    btn.setAttribute('aria-pressed',on?'true':'false');
-  });
-}
-function updateSetSummary(){
-  const el=document.getElementById('set-summary');
-  const pips=[...document.querySelectorAll('#day-content .set-pip')];
-  if(el){
-    const done=pips.filter(p=>p.classList.contains('done')).length;
-    el.textContent=done+'/'+pips.length+' sets'+(el.dataset.suffix||'');
-  }
-  const btn=document.querySelector('#day-content .log-btn');
-  if(btn&&!btn.classList.contains('logged')&&pips.length){
-    const done=pips.filter(p=>p.classList.contains('done')).length;
-    btn.classList.toggle('ready',done===pips.length);
-  }
-}
-function toggleSet(dayIdx,exIdx,pipIdx){
-  const week=viewWeek();
-  if(isLogged(dayIdx,week))return;
-  const key=setKey(week,dayIdx,exIdx);
-  const cur=state.setProgress[key]||0;
-  const ex=getWeekPlan(week)[dayIdx].exercises[exIdx];
-  const next=pipIdx<cur?pipIdx:Math.min(ex.sets,pipIdx+1);
-  if(next<=0)delete state.setProgress[key];
-  else state.setProgress[key]=next;
-  save();
-  paintSets(exIdx,next);
-  updateSetSummary();
-  if(next>cur)startRest(ex.name);
-}
-function renderToday(){
-  const week=viewWeek();
-  const plan=getWeekPlan(week);
-  const di=viewDayIndex();
-  const day=plan[di];
-  const current=isViewingCurrent();
-  const logged=isLogged(di,week);
-  const deload=weekLoad(week).deload;
-
-  document.getElementById('header-date').textContent=new Date().toLocaleDateString('en-US',{month:'short',day:'numeric'});
-  document.getElementById('day-label').textContent=day.day;
-  document.getElementById('day-sublabel').textContent=`Day ${di+1} of 7 · Week ${week}`;
-  const pill=document.getElementById('today-pill');
-  pill.classList.toggle('jump',!current);
-  pill.textContent=current?'Current':'Back to today';
-  document.getElementById('week-label').textContent=`Week ${week}`;
-  document.getElementById('week-phase').textContent=phaseName(week);
-  document.getElementById('prev-day').disabled=(currentAbsoluteDay()+state.viewOffset)<=0;
-  document.getElementById('next-day').disabled=state.viewOffset>=FORWARD_PREVIEW_DAYS;
-
-  // week progress
-  const weekLogs=state.logs.filter(l=>l.week===week).length;
-  document.getElementById('week-progress').style.width=Math.round(weekLogs/7*100)+'%';
-
-  let html='';
-
-  if(day.type==='lift'){
-    // Warmup
-    html+=`<div class="section-block">
-      <div class="section-header" role="button" tabindex="0" data-toggle="wu-${di}" data-chev="wc-${di}">
-        <div class="section-header-left">
-          <div class="section-icon icon-flex">🧘</div>
-          <div><div class="section-title">Warmup</div><div class="section-meta">${day.warmup.length} movements · 5 min</div></div>
-        </div>
-        <span class="section-chevron" id="wc-${di}">▾</span>
-      </div>
-      <div class="section-body" id="wu-${di}">
-        <div class="mobility-block">
-          ${day.warmup.map((w,wi)=>`<button type="button" class="mobility-item" data-day="${di}" data-move="warmup" data-idx="${wi}"><div class="mobility-item-left"><div class="mobility-dot"></div><span>${w}</span></div><span class="tap-arrow">›</span></button>`).join('')}
-        </div>
-      </div>
-    </div>`;
-
-    // Exercises
-    const isEditable=current&&!logged;
-    let doneSets=0,totalSets=0;
-    day.exercises.forEach((ex,ei)=>{totalSets+=ex.sets;doneSets+=setsDoneFor(week,di,ei,ex.sets);});
-    const setSuffix=' · '+day.tags[1]+(deload?' · Deload 60%':'');
-    const ready=!logged&&totalSets>0&&doneSets===totalSets;
-    html+=`<div class="section-block">
-      <div class="section-header" role="button" tabindex="0" data-toggle="ex-${di}" data-chev="ec-${di}">
-        <div class="section-header-left">
-          <div class="section-icon icon-lift">🏋️</div>
-          <div><div class="section-title">${day.label}</div><div class="section-meta" id="set-summary" data-suffix="${setSuffix}">${doneSets}/${totalSets} sets${setSuffix}</div></div>
-        </div>
-        <span class="section-chevron open" id="ec-${di}">▾</span>
-      </div>
-      <div class="section-body open" id="ex-${di}">
-        <div class="ex-table-head"><span>Exercise</span><span>Sets</span><span>Reps</span><span>${unit()}</span></div>
-        ${day.exercises.map((ex,ei)=>`<div class="ex-row">
-          <div><button type="button" class="ex-name-btn" data-day="${di}" data-exinfo="${ei}"><div class="ex-name"><span>${ex.name}</span><span class="tap-arrow">›</span></div>${ex.note?`<div class="ex-note">${ex.note}</div>`:''}</button>${setPips(week,di,ei,ex)}</div>
-          <div class="ex-cell">${ex.sets}</div>
-          <div class="ex-cell">${ex.reps}</div>
-          ${isEditable
-            ?`<input class="ex-input" type="number" inputmode="decimal" autocomplete="off" data-day="${di}" data-w="${ei}" value="${dispWNum(ex.weight)}" min="0" max="1500" step="${unit()==='lbs'?5:2.5}" aria-label="${ex.name} weight">`
-            :`<div class="ex-cell">${dispW(ex.weight)}</div>`}
-        </div>`).join('')}
-        <button type="button" class="log-btn${logged?' logged':''}${ready?' ready':''}" data-log="${di}">${logged?'✓ Session logged':'Log this session'}</button>
-      </div>
-    </div>`;
-
-    // Cooldown
-    html+=`<div class="section-block">
-      <div class="section-header" role="button" tabindex="0" data-toggle="cd-${di}" data-chev="cc-${di}">
-        <div class="section-header-left">
-          <div class="section-icon icon-flex">🧊</div>
-          <div><div class="section-title">Cool-down</div><div class="section-meta">${day.cooldown.length} stretches · 3 min</div></div>
-        </div>
-        <span class="section-chevron" id="cc-${di}">▾</span>
-      </div>
-      <div class="section-body" id="cd-${di}">
-        <div class="mobility-block">
-          ${day.cooldown.map((c,ci)=>`<button type="button" class="mobility-item" data-day="${di}" data-move="cooldown" data-idx="${ci}"><div class="mobility-item-left"><div class="mobility-dot"></div><span>${c}</span></div><span class="tap-arrow">›</span></button>`).join('')}
-        </div>
-      </div>
-    </div>`;
-
-    // Cardio note
-    if(day.cardio){
-      html+=`<div class="section-block">
-        <div class="section-header" role="button" tabindex="0" data-toggle="ca-${di}" data-chev="cac-${di}">
-          <div class="section-header-left">
-            <div class="section-icon icon-burn">🏃</div>
-            <div><div class="section-title">Cardio</div><div class="section-meta">${day.cardio.type}</div></div>
-          </div>
-          <span class="section-chevron" id="cac-${di}">▾</span>
-        </div>
-        <div class="section-body" id="ca-${di}">
-          <div class="info-card"><p>${day.cardio.detail}</p></div>
-        </div>
-      </div>`;
-    }
-  }
-
-  if(day.type==='cardio'){
-    html+=`<div class="section-block">
-      <div class="section-header" role="button" tabindex="0" data-toggle="cd-main-${di}" data-chev="cd-c-${di}">
-        <div class="section-header-left">
-          <div class="section-icon icon-burn">🏃</div>
-          <div><div class="section-title">${day.label}</div><div class="section-meta">${day.tags.join(' · ')}</div></div>
-        </div>
-        <span class="section-chevron open" id="cd-c-${di}">▾</span>
-      </div>
-      <div class="section-body open" id="cd-main-${di}">
-        <div class="info-card">
-          <p>${day.detail}</p>
-          ${day.options.map(o=>`<p>• ${o}</p>`).join('')}
-        </div>
-        <button type="button" class="log-btn${logged?' logged':''}" data-log="${di}">${logged?'✓ Logged':'Log cardio session'}</button>
-      </div>
-    </div>`;
-
-    html+=`<div class="section-block">
-      <div class="section-header" role="button" tabindex="0" data-toggle="mob-${di}" data-chev="mobc-${di}">
-        <div class="section-header-left">
-          <div class="section-icon icon-flex">🧘</div>
-          <div><div class="section-title">Mobility Work</div><div class="section-meta">${day.mobility.length} movements</div></div>
-        </div>
-        <span class="section-chevron" id="mobc-${di}">▾</span>
-      </div>
-      <div class="section-body" id="mob-${di}">
-        <div class="mobility-block">
-          ${day.mobility.map((m,mi)=>`<button type="button" class="mobility-item" data-day="${di}" data-move="mobility" data-idx="${mi}"><div class="mobility-item-left"><div class="mobility-dot"></div><span>${m}</span></div><span class="tap-arrow">›</span></button>`).join('')}
-        </div>
-      </div>
-    </div>`;
-  }
-
-  if(day.type==='rest'){
-    html+=`<div class="section-block">
-      <div class="section-header" role="button" tabindex="0" data-toggle="rest-${di}" data-chev="restc-${di}">
-        <div class="section-header-left">
-          <div class="section-icon icon-food">💤</div>
-          <div><div class="section-title">Rest Day</div><div class="section-meta">Recovery · Reset</div></div>
-        </div>
-        <span class="section-chevron open" id="restc-${di}">▾</span>
-      </div>
-      <div class="section-body open" id="rest-${di}">
-        <div class="info-card">
-          <p>${day.detail}</p>
-          ${day.recovery.map(r=>`<p>• ${r}</p>`).join('')}
-          ${day.nutrition_focus?`<p style="margin-top:8px;padding-top:8px;border-top:0.5px solid var(--border);color:var(--ink3)">💡 ${day.nutrition_focus}</p>`:''}
-        </div>
-        <button type="button" class="log-btn${logged?' logged':''}" data-log="${di}">${logged?'✓ Rest day logged':'Log rest day'}</button>
-      </div>
-    </div>`;
-  }
-
-  // Nutrition card — shown every day
-  const isTraining=day.type==='lift';
-  const nut=isTraining?NUTRITION.training:NUTRITION.rest;
-  const madeN=MEAL_SLOTS.filter(s=>isMealMade(week,di,s.id)).length;
-  html+=`<div class="section-block">
-    <div class="section-header" role="button" tabindex="0" data-toggle="nut-${di}" data-chev="nutc-${di}">
-      <div class="section-header-left">
-        <div class="section-icon icon-food">🥗</div>
-        <div><div class="section-title">Nutrition</div><div class="section-meta" id="nut-meta-${di}">${madeN}/3 meals · ${nut.cal} cal · ${isTraining?'Training day':'Rest day'}</div></div>
-      </div>
-      <span class="section-chevron" id="nutc-${di}">▾</span>
-    </div>
-    <div class="section-body" id="nut-${di}">
-      <div class="macro-row">
-        <div class="macro-cell"><div class="macro-val">${nut.cal}</div><div class="macro-label">Calories</div></div>
-        <div class="macro-cell"><div class="macro-val">${nut.protein}g</div><div class="macro-label">Protein</div></div>
-        <div class="macro-cell"><div class="macro-val">${nut.carbs}g</div><div class="macro-label">Carbs</div></div>
-        <div class="macro-cell"><div class="macro-val">${nut.fat}g</div><div class="macro-label">Fat</div></div>
-      </div>
-      ${MEAL_SLOTS.map(slot=>{
-        const idx=mealIndex(week,di,slot.id);
-        const meal=NUTRITION.meals[slot.id][idx];
-        const made=isMealMade(week,di,slot.id);
-        return `<div class="meal-row${made?' made':''}">
-          <div class="meal-top">
-            <label class="made-toggle"><input type="checkbox" data-made-slot="${slot.id}" data-day="${di}" ${made?'checked':''}> ${slot.label}</label>
-            <button type="button" class="recipe-link" data-recipe="${slot.id}" data-idx="${idx}">Recipe ›</button>
-          </div>
-          <div class="meal-name">${esc(meal.name)}</div>
-          <div class="meal-detail">${esc(meal.detail)}</div>
-        </div>`;
-      }).join('')}
-      <div class="info-card" style="padding-top:8px;border-top:0.5px solid var(--border)">
-        <button type="button" class="recipe-link" data-open-meals>Plan this week’s meals ›</button>
-        <p style="color:var(--ink3);font-size:12px;margin-top:8px">Weekend flexibility is built in. Keep protein high and enjoy going out — one or two meals out won't derail your progress if weekdays are dialed in.</p>
-      </div>
-    </div>
-  </div>`;
-
-  document.getElementById('day-content').innerHTML=html;
-}
-
-// ─── TOGGLE ──────────────────────────────────────────────────────────────────
-function toggle(bodyId,chevronId){
-  const b=document.getElementById(bodyId);
-  const c=document.getElementById(chevronId);
-  if(b)b.classList.toggle('open');
-  if(c)c.classList.toggle('open');
-}
-
-// ─── STATS ───────────────────────────────────────────────────────────────────
-function historyDetail(s){
-  if(!s.exercises)return `<div class="history-detail">${s.type==='rest'?'Rest day':'Cardio session'}</div>`;
-  const total=s.exercises.reduce((t,e)=>t+(parseInt(e.sets,10)||0),0);
-  const checked=s.exercises.reduce((t,e)=>t+(e.setsChecked||0),0);
-  const tracked=checked>0?` · ${checked} of ${total} sets tracked`:` · ${total} sets`;
-  return `<div class="history-detail">${s.exercises.length} exercises${tracked}</div>`;
-}
-function renderStats(){
-  document.getElementById('s-sessions').textContent=state.logs.length;
-  document.getElementById('s-runs').textContent=state.logs.filter(l=>l.type==='cardio').length;
-  document.getElementById('s-weeks').textContent=[...new Set(state.logs.map(l=>l.week))].length;
-  document.getElementById('s-streak').textContent=calcStreak();
-  const sessions=state.logs.slice().sort((a,b)=>(b.timestamp||0)-(a.timestamp||0));
-  if(!sessions.length){
-    document.getElementById('history-list').innerHTML='<div class="empty-state">No sessions logged yet.<br>Complete your first workout to see progress here.</div>';
-    return;
-  }
-  document.getElementById('history-list').innerHTML=sessions.map(s=>`<div class="history-item">
-    <div class="history-date">Week ${s.week} · ${s.date||''}</div>
-    <div class="history-title">${s.name}</div>
-    ${historyDetail(s)}
-  </div>`).join('');
-}
-
-function calcStreak(){
-  const logged=new Set(state.logs.map(l=>(l.week-1)*7+l.dayIdx));
-  let cursor=currentAbsoluteDay();
-  if(!logged.has(cursor))cursor--;
-  let streak=0;
-  while(cursor>=0&&logged.has(cursor)){streak++;cursor--;}
-  return streak;
-}
-
-// ─── SETTINGS ────────────────────────────────────────────────────────────────
-let settingsUnitShown='lbs';
-function loadSettings(){
-  const u=unit();
-  settingsUnitShown=u;
-  document.getElementById('set-unit').value=u;
-  document.getElementById('set-inc').value=incDisplay(state.settings.incKg||2.27,u);
-  document.getElementById('set-inc-label').textContent=`Overload increase / week (${u})`;
-  document.getElementById('set-level').value=state.settings.level||'advanced';
-  document.getElementById('set-rest').value=String(state.settings.restSec||90);
-  document.getElementById('set-chime').checked=state.settings.chime!==false;
-}
-function saveSettings(){
-  const u=document.getElementById('set-unit').value;
-  const incVal=parseFloat(document.getElementById('set-inc').value)||(u==='lbs'?5:2.5);
-  state.settings.unit=u;
-  state.settings.incKg=u==='lbs'?parseFloat((incVal/2.2046).toFixed(3)):incVal;
-  state.settings.level=document.getElementById('set-level').value;
-  state.settings.restSec=parseInt(document.getElementById('set-rest').value,10)||90;
-  state.settings.chime=document.getElementById('set-chime').checked;
-  settingsUnitShown=u;
-  save();renderToday();toast('Settings saved');
-}
-function onUnitChange(){
-  const u=document.getElementById('set-unit').value;
-  const incEl=document.getElementById('set-inc');
-  const inc=parseFloat(incEl.value);
-  if(!isNaN(inc)){
-    const kg=settingsUnitShown==='lbs'?inc/2.2046:inc;
-    incEl.value=incDisplay(kg,u);
-  }
-  settingsUnitShown=u;
-  document.getElementById('set-inc-label').textContent=`Overload increase / week (${u})`;
-}
-function onLevelChange(){
-  const u=document.getElementById('set-unit').value;
-  const level=document.getElementById('set-level').value;
-  document.getElementById('set-inc').value=level==='intermediate'?(u==='lbs'?2.5:1.25):(u==='lbs'?5:2.5);
-}
-function resetWeek(){
-  if(!confirm('Reset progress to Day 1, Week 1? Your logged history stays intact.'))return;
-  state.currentWeek=1;state.currentDayIdx=0;state.viewOffset=0;save();renderToday();toast('Reset to Day 1');
-}
-function clearHistory(){
-  if(!confirm('Clear all history? This cannot be undone.'))return;
-  state.logs=[];state.setProgress={};save();renderToday();renderStats();toast('History cleared');
-}
-
-// ─── TAB NAV ─────────────────────────────────────────────────────────────────
-function showTab(tab,btn){
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  document.querySelectorAll('.tab-bar button').forEach(b=>{b.classList.remove('active');b.setAttribute('aria-selected','false');});
-  document.getElementById('screen-'+tab).classList.add('active');
-  btn.classList.add('active');
-  btn.setAttribute('aria-selected','true');
-  const main=document.querySelector('main');
-  if(main)main.scrollTop=0;
-  if(tab==='stats')renderStats();
-  if(tab==='settings')loadSettings();
-  if(tab==='meals')renderMeals();
-}
-function openMeals(pane,btn){
-  if(pane)mealsPane=pane;
-  showTab('meals',btn||document.querySelector('[data-tab="meals"]'));
-}
-function changeMealWeek(delta){
-  const target=viewWeek()+delta;
-  if(target<1)return;
-  const targetAbs=(target-1)*7+viewDayIndex();
-  const offset=targetAbs-currentAbsoluteDay();
-  if(targetAbs<0||offset>FORWARD_PREVIEW_DAYS)return;
-  state.viewOffset=offset;
-  save();
-  const main=document.querySelector('main');
-  if(main)main.scrollTop=0;
-  renderToday();
-  renderMeals();
-}
-function renderMeals(){
-  const main=document.querySelector('main');
-  const top=main?main.scrollTop:0;
-  const week=viewWeek();
-  const stats=weekMealStats(week);
-  const weekEl=document.getElementById('meals-week');
-  if(weekEl)weekEl.textContent=`Week ${week} · ${phaseName(week)} · ${stats.made} of ${stats.total} cooked`;
-  const prev=document.getElementById('meals-prev');
-  const next=document.getElementById('meals-next');
-  if(prev)prev.disabled=week<=1;
-  if(next){
-    const nextAbs=week*7+viewDayIndex();
-    next.disabled=nextAbs-currentAbsoluteDay()>FORWARD_PREVIEW_DAYS;
-  }
-  document.getElementById('pane-menu').classList.toggle('active',mealsPane!=='shop');
-  document.getElementById('pane-shop').classList.toggle('active',mealsPane==='shop');
-  document.getElementById('pane-menu').setAttribute('aria-selected',mealsPane!=='shop'?'true':'false');
-  document.getElementById('pane-shop').setAttribute('aria-selected',mealsPane==='shop'?'true':'false');
-  document.getElementById('meals-body').innerHTML=mealsPane==='shop'?renderShopPane(week,stats):renderMenuPane(week);
-  if(main)main.scrollTop=top;
-}
-function renderMenuPane(week){
-  const viewing=viewDayIndex();
-  let html='';
-  for(let di=0;di<7;di++){
-    const day=PLAN[di];
-    const kind=day.type==='lift'?'Training':day.type==='cardio'?'Cardio':'Rest';
-    const nut=day.type==='lift'?NUTRITION.training:NUTRITION.rest;
-    const current=di===viewing;
-    const planCurrent=week===state.currentWeek&&di===state.currentDayIdx;
-    html+=`<section class="menu-day${current?' current':''}">
-      <div class="menu-day-h"><strong>${day.day}</strong><span>${kind} · ${nut.cal} cal${planCurrent?' · Current':''}</span></div>
-      ${MEAL_SLOTS.map(slot=>{
-        const idx=mealIndex(week,di,slot.id);
-        const meal=NUTRITION.meals[slot.id][idx];
-        const made=isMealMade(week,di,slot.id);
-        return `<div class="menu-slot${made?' made':''}">
-          <label class="made-hit"><input type="checkbox" data-meal-made data-week="${week}" data-day="${di}" data-slot="${slot.id}" ${made?'checked':''} aria-label="Mark ${slot.label} on ${day.day} made"></label>
-          <div>
-            <div class="meal-timing">${slot.label}</div>
-            <select data-meal-choice data-week="${week}" data-day="${di}" data-slot="${slot.id}" aria-label="${slot.label} for ${day.day}">${mealOptions(slot.id,idx)}</select>
-            <div class="menu-detail">${esc(meal.detail)}</div>
-          </div>
-          <button type="button" class="recipe-link" data-recipe="${slot.id}" data-idx="${idx}">Recipe</button>
-        </div>`;
-      }).join('')}
-    </section>`;
-  }
-  return `<p class="menu-hint">Check a meal after you cook it. Change any meal and the shopping list follows.</p>`+html;
-}
-function renderShopPane(week,stats){
-  const items=buildWeekShoppingList(week,shopOnlyUnmade);
-  const boughtN=items.filter(item=>state.menu.bought[buyKey(week,item.item,item.unit)]).length;
-  const leftBuy=items.length-boughtN;
-  let list='';
-  if(!items.length){
-    list='<div class="empty-state">Every meal this week is marked made, so this filtered list is empty.</div>';
-  }else{
-    let aisle='';
-    items.forEach(item=>{
-      if(item.aisle!==aisle){aisle=item.aisle;list+=`<div class="aisle-label">${aisle}</div>`;}
-      const bought=!!state.menu.bought[buyKey(week,item.item,item.unit)];
-      const unit=item.unit?' '+esc(item.unit):'';
-      list+=`<label class="shop-item${bought?' bought':''}">
-        <input type="checkbox" data-shop-item data-item="${esc(item.item)}" data-unit="${esc(item.unit)}" ${bought?'checked':''}>
-        <span><span class="shop-name">${fmtQty(item.qty)}${unit} ${esc(item.item)}</span><span class="shop-uses">${esc(usesLabel(item.uses))}</span></span>
-      </label>`;
-    });
-  }
-  return `<div class="shop-summary">${leftBuy} to buy · ${stats.left} meals still to cook</div>
-    <div class="shop-tools">
-      <label class="made-toggle"><input type="checkbox" data-shop-unmade ${shopOnlyUnmade?'checked':''}> Still to cook</label>
-      <div class="shop-actions">
-        <button type="button" class="quiet-btn" data-copy-list>Copy</button>
-        <button type="button" class="quiet-btn" data-clear-shop>Clear</button>
-      </div>
-    </div>
-    ${list}`;
-}
-async function copyShoppingList(){
-  const text=shoppingListText(viewWeek());
-  if(!text){toast('Nothing left to copy');return;}
-  try{
-    await navigator.clipboard.writeText(text);
-    toast('Unchecked items copied');
-  }catch(e){toast('Could not copy the list');}
-}
-
-// ─── TOAST ───────────────────────────────────────────────────────────────────
-function toast(msg){
-  const el=document.getElementById('toast');
-  el.textContent=msg;el.classList.add('show');
-  setTimeout(()=>el.classList.remove('show'),2200);
-}
-
-// ─── REST TIMER ──────────────────────────────────────────────────────────────
-let restTimer=null,restUntil=0,restTotal=90,audioCtx=null;
-function unlockAudio(){
-  try{
-    const Ctx=window.AudioContext||window.webkitAudioContext;
-    if(!Ctx)return;
-    audioCtx=audioCtx||new Ctx();
-    if(audioCtx.state==='suspended')audioCtx.resume();
-  }catch(e){}
-}
-function chime(){
-  if(state.settings.chime===false)return;
-  try{
-    unlockAudio();
-    if(!audioCtx)return;
-    const o=audioCtx.createOscillator();
-    const g=audioCtx.createGain();
-    o.frequency.value=880;
-    o.type='sine';
-    const t=audioCtx.currentTime;
-    g.gain.setValueAtTime(0.0001,t);
-    g.gain.exponentialRampToValueAtTime(0.18,t+0.02);
-    g.gain.exponentialRampToValueAtTime(0.0001,t+0.38);
-    o.connect(g);g.connect(audioCtx.destination);
-    o.start(t);o.stop(t+0.4);
-  }catch(e){}
-}
-function startRest(label){
-  unlockAudio();
-  restTotal=state.settings.restSec||90;
-  restUntil=Date.now()+restTotal*1000;
-  document.getElementById('rest-label').textContent=label;
-  document.getElementById('rest-bar').classList.add('show');
-  document.body.classList.add('resting');
-  tickRest();
-  if(restTimer)clearInterval(restTimer);
-  restTimer=setInterval(tickRest,250);
-}
-function tickRest(){
-  const leftMs=restUntil-Date.now();
-  if(leftMs<=0){stopRest(true);return;}
-  const left=Math.ceil(leftMs/1000);
-  document.getElementById('rest-time').textContent=Math.floor(left/60)+':'+String(left%60).padStart(2,'0');
-  const fill=document.getElementById('rest-fill');
-  if(fill)fill.style.transform='scaleX('+(leftMs/(restTotal*1000))+')';
-}
-function stopRest(done){
-  if(restTimer){clearInterval(restTimer);restTimer=null;}
-  restUntil=0;
-  const bar=document.getElementById('rest-bar');
-  if(bar)bar.classList.remove('show');
-  document.body.classList.remove('resting');
-  if(!done)return;
-  try{if(navigator.vibrate)navigator.vibrate([180,80,180]);}catch(e){}
-  chime();
-  toast('Rest complete');
-}
-
-// ─── DAY EVENTS ──────────────────────────────────────────────────────────────
-function onDayClick(e){
-  const t=e.target;
-  if(t.closest('input,select,textarea'))return;
-  const pip=t.closest('[data-pip]');
-  if(pip){toggleSet(+pip.dataset.day,+pip.dataset.ex,+pip.dataset.pip);return;}
-  const log=t.closest('[data-log]');
-  if(log){logDay(+log.dataset.log);return;}
-  if(t.closest('[data-open-meals]')){openMeals('menu');return;}
-  const recipe=t.closest('[data-recipe]');
-  if(recipe){showRecipe(recipe.dataset.recipe,+recipe.dataset.idx);return;}
-  const move=t.closest('[data-move]');
-  if(move){showMoveInfo(+move.dataset.day,move.dataset.move,+move.dataset.idx);return;}
-  const ex=t.closest('[data-exinfo]');
-  if(ex){showExerciseInfo(+ex.dataset.day,+ex.dataset.exinfo);return;}
-  const tog=t.closest('[data-toggle]');
-  if(tog)toggle(tog.dataset.toggle,tog.dataset.chev);
-}
-function onDayChange(e){
-  const made=e.target.closest('[data-made-slot]');
-  if(made){
-    const di=+made.dataset.day;
-    setMealMade(viewWeek(),di,made.dataset.madeSlot,made.checked);
-    const row=made.closest('.meal-row');
-    if(row)row.classList.toggle('made',made.checked);
-    const meta=document.getElementById('nut-meta-'+di);
-    if(meta){
-      const n=MEAL_SLOTS.filter(s=>isMealMade(viewWeek(),di,s.id)).length;
-      const isTraining=getWeekPlan(viewWeek())[di].type==='lift';
-      const nut=isTraining?NUTRITION.training:NUTRITION.rest;
-      meta.textContent=n+'/3 meals · '+nut.cal+' cal · '+(isTraining?'Training day':'Rest day');
-    }
-    return;
-  }
-  const input=e.target.closest('[data-w]');
-  if(!input)return;
-  updateExWeight(+input.dataset.day,+input.dataset.w,input.value);
-}
-function onMealsClick(e){
-  const t=e.target;
-  if(t.closest('select,input,label'))return;
-  const pane=t.closest('[data-meals-pane]');
-  if(pane){mealsPane=pane.dataset.mealsPane;const main=document.querySelector('main');if(main)main.scrollTop=0;renderMeals();return;}
-  const weekBtn=t.closest('[data-meal-week]');
-  if(weekBtn){changeMealWeek(+weekBtn.dataset.mealWeek);return;}
-  const recipe=t.closest('[data-recipe]');
-  if(recipe){showRecipe(recipe.dataset.recipe,+recipe.dataset.idx);return;}
-  if(t.closest('[data-copy-list]')){copyShoppingList();return;}
-  if(t.closest('[data-clear-shop]')){
-    if(confirm('Clear the check marks on this week\'s shopping list?')){clearShopChecks(viewWeek());renderMeals();}
-  }
-}
-function onMealsChange(e){
-  const t=e.target;
-  if(t.matches('[data-meal-choice]')){
-    setMealChoice(+t.dataset.week,+t.dataset.day,t.dataset.slot,t.value);
-    renderToday();
-    renderMeals();
-    return;
-  }
-  if(t.matches('[data-meal-made]')){
-    setMealMade(+t.dataset.week,+t.dataset.day,t.dataset.slot,t.checked);
-    renderToday();
-    renderMeals();
-    return;
-  }
-  if(t.matches('[data-shop-item]')){
-    ensureMenu();
-    const k=buyKey(viewWeek(),t.dataset.item,t.dataset.unit||'');
-    if(t.checked)state.menu.bought[k]=true;else delete state.menu.bought[k];
-    save();
-    renderMeals();
-    return;
-  }
-  if(t.matches('[data-shop-unmade]')){
-    shopOnlyUnmade=t.checked;
-    renderMeals();
-  }
-}
-
-// ─── INIT ────────────────────────────────────────────────────────────────────
-load();
-renderToday();
-document.getElementById('header-date').textContent=new Date().toLocaleDateString('en-US',{month:'short',day:'numeric'});
-document.getElementById('day-content').addEventListener('click',onDayClick);
-document.getElementById('day-content').addEventListener('change',onDayChange);
-document.getElementById('screen-meals').addEventListener('click',onMealsClick);
-document.getElementById('screen-meals').addEventListener('change',onMealsChange);
-document.getElementById('day-content').addEventListener('keydown',e=>{
-  if(e.key!=='Enter'&&e.key!==' ')return;
-  const tog=e.target.closest('[data-toggle]');
-  if(!tog||e.target!==tog)return;
-  e.preventDefault();
-  toggle(tog.dataset.toggle,tog.dataset.chev);
-});
-document.getElementById('today-pill').addEventListener('click',()=>{
-  if(state.viewOffset===0)return;
-  state.viewOffset=0;save();renderToday();
-});
-document.getElementById('rest-skip').addEventListener('click',()=>stopRest(false));
-document.getElementById('set-unit').addEventListener('change',onUnitChange);
-document.getElementById('set-level').addEventListener('change',onLevelChange);
-document.addEventListener('keydown',e=>{
-  if(e.key!=='Escape')return;
-  if(document.getElementById('modal-overlay').classList.contains('show'))closeModal();
-  else if(document.getElementById('rest-bar').classList.contains('show'))stopRest(false);
-});
-document.addEventListener('visibilitychange',()=>{if(!document.hidden&&restTimer)tickRest();});
-
-if('serviceWorker' in navigator){
-  navigator.serviceWorker.register('sw.js').catch(()=>{});
-}
-</script>
+<script src="nutrition.js"></script>
+<script src="program.js"></script>
+<script src="ai.js"></script>
+<script src="app.js"></script>
 </body>
 </html>
