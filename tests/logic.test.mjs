@@ -6,6 +6,7 @@ const ctx = { console, Math, Date, Object, String, Number, Array, JSON, isFinite
 vm.createContext(ctx);
 vm.runInContext(readFileSync(new URL('../program.js', import.meta.url), 'utf8'), ctx);
 vm.runInContext(readFileSync(new URL('../ai.js', import.meta.url), 'utf8'), ctx);
+vm.runInContext(readFileSync(new URL('../nutrition.js', import.meta.url), 'utf8'), ctx);
 
 const settings = { unit:'lbs', incKg:2.27 };
 const empty = { loads:{}, patternNudge:{} };
@@ -98,5 +99,115 @@ const legacy = ctx.seedFromLegacy([
 ], true);
 const seeded = ctx.plateValue(ctx.suggestKg(bench, 1, { loads:legacy, patternNudge:{} }, settings), bench, 'lbs');
 assert.ok(seeded < 135 && seeded > 90, 'old 6–8 bench is scaled into the volume week, got '+seeded);
+
+ctx.state = {
+  currentWeek:1,
+  ai:{ key:'' },
+  menu:{ choices:{}, made:{}, bought:{}, plans:{}, history:[], staples:{ 'olive oil':true, salt:true, 'black pepper':true }, salt:0, prefs:{ diet:'omnivore', avoid:'', likes:'', note:'', minutes:25, servings:1 } }
+};
+ctx.save = ()=>{};
+ctx.shopOnlyUnmade = false;
+ctx.esc = s=>String(s);
+
+const mondayMeal = ctx.fallbackMeal(1, 0, 'breakfast');
+const nextWeekMeal = ctx.fallbackMeal(2, 0, 'breakfast');
+assert.notStrictEqual(mondayMeal.name, nextWeekMeal.name, 'a new training week is not the same breakfast');
+assert.ok(mondayMeal.description && mondayMeal.description.length>20);
+assert.ok(mondayMeal.recipe.ingredients.every(item=>item.unit!=='g' && item.unit!=='ml'));
+
+const later = ctx.rotationKey(1, new Date(2026, 10, 23));
+const earlier = ctx.rotationKey(1, new Date(2026, 10, 16));
+assert.notStrictEqual(later, earlier, 'a new calendar week rotates the built-in menu');
+
+const grams = ctx.sanitizeMeals({
+  note:'Mostly oats',
+  meals:[{
+    day:0, slot:'breakfast', name:'Oat plate',
+    description:'A warm bowl of oats with peanut butter and a banana.',
+    minutes:10, cost:2,
+    ingredients:[
+      { item:'Rolled oats', qty:40, unit:'g', aisle:'Pantry' },
+      { item:'Banana', qty:1, unit:'each', aisle:'Produce' }
+    ],
+    steps:['Microwave the oats.','Slice the banana on top.']
+  }]
+}, 3, 1);
+assert.strictEqual(grams.accepted, 1);
+const oats = grams.meals['0:breakfast'].recipe.ingredients.find(item=>/oat/i.test(item.item));
+assert.strictEqual(oats.unit, 'oz');
+assert.ok(grams.meals['0:lunch'].description);
+assert.strictEqual(ctx.menuFromModel({ meals:[] }, 3, 1), null);
+
+const full = [];
+for(let day=0; day<7; day++){
+  ['breakfast','lunch','dinner'].forEach(slot=>{
+    full.push({
+      day, slot, name:slot+' plate '+day,
+      description:'A simple one-pan plate with protein and vegetables.',
+      minutes:20, cost:4,
+      ingredients:[
+        { item:'Chicken thighs', qty:0.4, unit:'lb', aisle:'Protein' },
+        { item:'Broccoli', qty:200, unit:'g', aisle:'Produce' }
+      ],
+      steps:['Cook the chicken.','Cook the broccoli and serve.']
+    });
+  });
+}
+const modeled = ctx.menuFromModel({ note:'A fresh week', meals:full }, 4, 1);
+assert.ok(modeled);
+assert.strictEqual(modeled.accepted, 21);
+assert.strictEqual(modeled.meals['2:dinner'].recipe.ingredients[1].unit, 'oz');
+
+ctx.installBuiltinMenu(1);
+const plain = {
+  name:'Rice plate', description:'Rice and broccoli in one pot.',
+  minutes:15, cost:2, timing:'Midday',
+  recipe:{ ingredients:[
+    { item:'Long grain white rice', qty:0.33, unit:'cup', aisle:'Pantry' },
+    { item:'Broccoli', qty:0.5, unit:'lb', aisle:'Produce' }
+  ], steps:['Cook the rice.','Cook the broccoli.'] }
+};
+const eggs = {
+  name:'Egg plate', description:'Eggs cooked in one pan with spinach.',
+  minutes:10, cost:2, timing:'Morning',
+  recipe:{ ingredients:[
+    { item:'Eggs', qty:3, unit:'large', aisle:'Dairy' },
+    { item:'Olive oil', qty:1, unit:'tsp', aisle:'Pantry', staple:true }
+  ], steps:['Heat the oil.','Scramble the eggs.'] }
+};
+for(let day=0; day<7; day++){
+  ['breakfast','lunch','dinner'].forEach(slot=>{
+    ctx.state.menu.plans['1'].meals[day+':'+slot] = JSON.parse(JSON.stringify(plain));
+  });
+}
+ctx.state.menu.plans['1'].meals['0:breakfast'] = JSON.parse(JSON.stringify(eggs));
+ctx.state.menu.plans['1'].meals['1:breakfast'] = JSON.parse(JSON.stringify(eggs));
+const shop = ctx.buildWeekShoppingList(1, false);
+const eggRow = shop.find(row=>/egg/i.test(row.item));
+assert.strictEqual(eggRow.label, '1 dozen');
+assert.strictEqual(ctx.groceryName('Banana', 2, 'each'), 'Bananas');
+assert.strictEqual(ctx.fmtMoney(2.5), '$2.50');
+assert.strictEqual(eggRow.unit, 'dozen');
+const oil = shop.find(row=>/olive oil/i.test(row.item));
+assert.strictEqual(oil.stocked, true);
+const text = ctx.shoppingListText(1);
+assert.ok(text.indexOf('1 dozen Eggs')>=0);
+assert.ok(text.indexOf('Olive oil')<0);
+
+const plan = ctx.state.menu.plans['1'];
+plan.sig = ctx.menuSig(1, new Date(2026, 10, 16));
+plan.source = 'builtin';
+assert.strictEqual(ctx.menuIsCurrent(plan, 1, new Date(2026, 10, 16)), true);
+assert.strictEqual(ctx.menuIsCurrent(plan, 1, new Date(2026, 10, 23)), false);
+ctx.state.ai.key = 'sk-test';
+assert.strictEqual(ctx.menuIsCurrent(plan, 1, new Date(2026, 10, 16)), false);
+plan.source = 'ai';
+plan.sig = ctx.menuSig(1, new Date(2026, 10, 16));
+assert.strictEqual(ctx.menuIsCurrent(plan, 1, new Date(2026, 10, 16)), true);
+ctx.state.menu.made['1:0:breakfast'] = true;
+assert.strictEqual(ctx.weekHasActivity(1), true);
+
+const mealEstimate = ctx.estimateMilli('gpt-4o-mini', 6000, 4200);
+assert.ok(mealEstimate < 100000, 'a weekly menu stays under the single-call cap');
 
 console.log('logic ok');

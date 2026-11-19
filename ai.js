@@ -109,7 +109,7 @@ function aiEndpoint(){
 
 let aiBusy = false;
 
-async function askModel(messages){
+async function askModel(messages, outTokens, temperature){
   if(!state.ai || !String(state.ai.key||'').trim()) return { ok:false, reason:'nokey' };
   if(aiBusy) return { ok:false, reason:'busy' };
   const model = state.ai.model || 'gpt-4o-mini';
@@ -118,8 +118,8 @@ async function askModel(messages){
     flagAlert('ai', 'The model address has to start with https. The built-in plan is on.', true);
     return { ok:false, reason:'url' };
   }
-  const bodyObj = { model, temperature:0.2, messages };
-  const est = estimateMilli(model, JSON.stringify(bodyObj).length+800, 600);
+  const bodyObj = { model, temperature:temperature==null?0.2:temperature, messages };
+  const est = estimateMilli(model, JSON.stringify(bodyObj).length+800, outTokens||600);
   const room = spendRoom(state.ai, est);
   if(!room.ok){
     const text = room.reason==='call'
@@ -246,4 +246,75 @@ async function personalizeRun(force){
   state.running.ai = { sig, note:clean.note, sessions:clean.sessions };
   save();
   renderAll();
+}
+
+const MEAL_SYSTEM = 'You plan one week of meals for one person who shops at a US grocery store. The meals are healthy, easy, and inexpensive. Reply with JSON only: {"note":"","meals":[{"day":0,"slot":"breakfast","name":"","description":"","minutes":15,"cost":3,"ingredients":[{"item":"","qty":1,"unit":"each","aisle":"Produce","staple":false}],"steps":["",""]}]}. Rules: exactly 21 meals, day 0 is Monday through day 6 Sunday, slot is breakfast, lunch, or dinner. description is one or two sentences about the dish. minutes is 30 or less. cost is your estimate in dollars and stays at or under 7. Units are only lb, oz, cup, tbsp, tsp, fl oz, large, medium, small, each, bunch, head, clove, can, package, bag, slice, stick, pint, quart, jar, bottle. Never use grams, kilograms, milliliters, or liters. Proteins are in pounds. Eggs are large. Produce is each, lb, bunch, or bag. Put the can size in the item name, such as "Black beans (15 oz)". List the amount to buy: dry rice in cups, dry pasta in ounces, not a cooked volume. aisle is Produce, Protein, Dairy, Bakery, Frozen, or Pantry. staple is true only for oil, salt, pepper, and common sauces. Do not repeat a meal name, and do not use a name in doNotRepeat. Follow diet and avoidIngredients. Training days need the higher protein. Vary the proteins and the cooking styles through the week. note is one sentence.';
+
+function mealTargetWeek(){
+  if(typeof activeTab!=='undefined' && activeTab==='meals' && typeof mealWeekOffset!=='undefined'){
+    return Math.max(1, viewWeek()+mealWeekOffset);
+  }
+  return state.currentWeek||1;
+}
+
+function mealPrompt(week){
+  const days = [];
+  for(let di=0; di<7; di++){
+    const day = dayTemplate(week, di);
+    const train = isTrainingDay(day.type);
+    const nut = train ? NUTRITION.training : NUTRITION.rest;
+    days.push({ day:di, name:DAY_NAMES[di], training:train, kind:day.type, calories:nut.cal, protein:nut.protein });
+  }
+  const prefs = menuPrefs();
+  return {
+    messages:[
+      { role:'system', content:MEAL_SYSTEM },
+      { role:'user', content:JSON.stringify({
+        week,
+        servings:prefs.servings,
+        diet:prefs.diet,
+        avoidIngredients:prefs.avoid,
+        likes:prefs.likes,
+        maxMinutes:prefs.minutes,
+        note:prefs.note,
+        doNotRepeat:recentMealNames(30),
+        days
+      }) }
+    ]
+  };
+}
+
+async function personalizeMeals(force){
+  const week = mealTargetWeek();
+  ensureWeekMenu(week);
+  const plan = state.menu.plans[String(week)];
+  const active = weekHasActivity(week);
+  if(!force && menuIsCurrent(plan, week)) return;
+  if(!force && active) return;
+  const keyed = !!(state.ai && String(state.ai.key||'').trim());
+  if(!keyed){
+    if(!menuIsCurrent(plan, week)) installBuiltinMenu(week);
+    save();
+    if(typeof renderAll==='function') renderAll();
+    return;
+  }
+  const packed = mealPrompt(week);
+  const res = await askModel(packed.messages, 4200, 0.8);
+  if(!res.ok){
+    if(!plan || plan.source!=='ai') installBuiltinMenu(week);
+    save();
+    if(typeof renderAll==='function') renderAll();
+    return;
+  }
+  const clean = menuFromModel(res.json, week, menuPrefs().servings);
+  if(!clean){
+    flagAlert('ai', 'The model’s menu was not usable, so this week is using the built-in meals.', true);
+    if(!active) installBuiltinMenu(week);
+    save();
+    if(typeof renderAll==='function') renderAll();
+    return;
+  }
+  installMenu(week, clean, 'ai');
+  save();
+  if(typeof renderAll==='function') renderAll();
 }

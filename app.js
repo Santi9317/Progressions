@@ -1,7 +1,7 @@
 /* Progressions. Self-paced days, a 4-week lifting wave, running that follows
    what you logged, and an optional model that stays inside a $3 weekly cap. */
 
-const APP_VERSION = '4';
+const APP_VERSION = '5';
 const SK = 'prog_v1';
 const FORWARD_PREVIEW_DAYS = 27;
 
@@ -209,9 +209,11 @@ function rewindIfJustCompleted(week, dayIdx){
 }
 
 function advance(){
+  const prevWeek = state.currentWeek;
   state.currentDayIdx++;
   if(state.currentDayIdx>6){ state.currentDayIdx = 0; state.currentWeek++; }
   state.viewOffset = 0;
+  if(state.currentWeek!==prevWeek) personalizeMeals(false);
 }
 
 function canUndo(week, dayIdx){
@@ -478,6 +480,7 @@ function renderMobilityDay(week, dayIdx, day, logged){
 }
 
 function renderNutritionCard(week, dayIdx, day){
+  ensureWeekMenu(week);
   const train = isTrainingDay(day.type);
   const nut = train ? NUTRITION.training : NUTRITION.rest;
   const made = MEAL_SLOTS.filter(s=>isMealMade(week, dayIdx, s.id)).length;
@@ -490,7 +493,7 @@ function renderNutritionCard(week, dayIdx, day){
   MEAL_SLOTS.forEach(slot=>{
     const meal = chosenMeal(week, dayIdx, slot.id);
     const on = isMealMade(week, dayIdx, slot.id);
-    html += '<div class="meal-row'+(on?' made':'')+'"><div class="meal-top"><label class="made-toggle"><input type="checkbox" data-made-slot="'+slot.id+'" data-day="'+dayIdx+'" '+(on?'checked':'')+'> '+slot.label+'</label><button type="button" class="recipe-link" data-recipe="'+slot.id+'" data-idx="'+mealIndex(week, dayIdx, slot.id)+'">Recipe</button></div><div class="meal-name">'+esc(meal.name)+'</div><div class="meal-detail">'+esc(meal.detail)+'</div></div>';
+    html += '<div class="meal-row'+(on?' made':'')+'"><div class="meal-top"><label class="made-toggle"><input type="checkbox" data-made-slot="'+slot.id+'" data-day="'+dayIdx+'" '+(on?'checked':'')+'> '+slot.label+'</label><button type="button" class="recipe-link" data-open-meal data-week="'+week+'" data-day="'+dayIdx+'" data-slot="'+slot.id+'">Recipe</button></div><div class="meal-name">'+esc(meal.name)+'</div><div class="meal-detail">'+esc(meal.description||meal.detail)+'</div></div>';
   });
   html += '</div></div>';
   return html;
@@ -576,36 +579,56 @@ function renderRun(){
   host.innerHTML = html;
 }
 
+function setMealsPane(name){
+  ['menu','shop','used'].forEach(id=>{
+    const el = document.getElementById('pane-'+id);
+    if(!el) return;
+    const on = mealsPane===id;
+    el.classList.toggle('active', on);
+    el.setAttribute('aria-selected', on?'true':'false');
+  });
+}
+
 function renderMeals(){
   const week = Math.max(1, viewWeek()+mealWeekOffset);
+  ensureWeekMenu(week);
   const stats = weekMealStats(week);
+  const plan = state.menu.plans[String(week)];
   const weekEl = document.getElementById('meals-week');
-  if(weekEl) weekEl.textContent = 'Week '+week+' · '+phaseName(week)+' · '+stats.made+' of '+stats.total+' cooked';
+  if(weekEl){
+    const fresh = plan && plan.source==='ai' ? 'Written for this week' : 'Changes each week';
+    weekEl.textContent = 'Week '+week+' · '+phaseName(week)+' · '+stats.made+' of '+stats.total+' cooked · '+fresh;
+  }
   const prev = document.getElementById('meals-prev');
   const next = document.getElementById('meals-next');
   if(prev) prev.disabled = week<=1;
   if(next) next.disabled = mealWeekOffset>=3;
-  const menuBtn = document.getElementById('pane-menu');
-  const shopBtn = document.getElementById('pane-shop');
-  if(menuBtn){ menuBtn.classList.toggle('active', mealsPane!=='shop'); menuBtn.setAttribute('aria-selected', mealsPane!=='shop'?'true':'false'); }
-  if(shopBtn){ shopBtn.classList.toggle('active', mealsPane==='shop'); shopBtn.setAttribute('aria-selected', mealsPane==='shop'?'true':'false'); }
+  setMealsPane(mealsPane);
   const body = document.getElementById('meals-body');
   if(!body) return;
-  body.innerHTML = mealsPane==='shop' ? renderShopPane(week, stats) : renderMenuPane(week);
+  if(mealsPane==='shop') body.innerHTML = renderShopPane(week, stats);
+  else if(mealsPane==='used') body.innerHTML = renderUsedPane(week);
+  else body.innerHTML = renderMenuPane(week);
 }
 
 function renderMenuPane(week){
-  let html = '<p class="menu-hint">Check a meal after you cook it. Change any meal and the shopping list follows.</p>';
-  for(let di=0;di<7;di++){
+  const plan = state.menu.plans[String(week)] || {};
+  let html = '';
+  if(plan.note) html += '<div class="settings-note" style="margin-bottom:10px">'+esc(plan.note)+'</div>';
+  if(plan.sig && plan.sig!==menuSig(week) && weekHasActivity(week)){
+    html += '<div class="alert"><span>A new week of meals is ready, and this one stayed because you already started it.</span><button type="button" data-refresh="meals">New menu</button></div>';
+  }
+  html += '<p class="menu-hint">Check a meal after you cook it. Swap any dish and the shopping list follows. Each new week writes a different menu.</p>';
+  html += '<button type="button" class="quiet-btn" data-refresh="meals" style="margin:0 0 12px">New meals for this week</button>';
+  for(let di=0; di<7; di++){
     const day = dayTemplate(week, di);
     const kind = day.type==='lift' ? 'Lifting' : day.type==='run' ? 'Running' : 'Rest';
     const nut = isTrainingDay(day.type) ? NUTRITION.training : NUTRITION.rest;
-    html += '<section class="menu-day"><div class="menu-day-h"><strong>'+day.day+'</strong><span>'+kind+' · '+nut.cal+' cal</span></div>';
+    html += '<section class="menu-day'+(di===viewDayIndex() && mealWeekOffset===0?' current':'')+'"><div class="menu-day-h"><strong>'+esc(day.day)+'</strong><span>'+kind+' · '+nut.cal+' cal</span></div>';
     MEAL_SLOTS.forEach(slot=>{
-      const idx = mealIndex(week, di, slot.id);
-      const meal = NUTRITION.meals[slot.id][idx];
+      const meal = chosenMeal(week, di, slot.id);
       const made = isMealMade(week, di, slot.id);
-      html += '<div class="menu-slot'+(made?' made':'')+'"><label class="made-hit"><input type="checkbox" data-meal-made data-week="'+week+'" data-day="'+di+'" data-slot="'+slot.id+'" '+(made?'checked':'')+' aria-label="Mark '+slot.label+' on '+day.day+' made"></label><div><div class="meal-timing">'+slot.label+'</div><select data-meal-choice data-week="'+week+'" data-day="'+di+'" data-slot="'+slot.id+'" aria-label="'+slot.label+' for '+day.day+'">'+mealOptions(slot.id, idx)+'</select><div class="menu-detail">'+esc(meal.detail)+'</div></div><button type="button" class="recipe-link" data-recipe="'+slot.id+'" data-idx="'+idx+'">Recipe</button></div>';
+      html += '<div class="menu-slot'+(made?' made':'')+'"><label class="made-hit"><input type="checkbox" data-meal-made data-week="'+week+'" data-day="'+di+'" data-slot="'+slot.id+'" '+(made?'checked':'')+' aria-label="Mark '+slot.label+' on '+day.day+' cooked"></label><div><div class="meal-meta">'+slot.label+' · '+meal.minutes+' min · about '+fmtMoney(meal.cost)+'</div><select data-meal-choice data-week="'+week+'" data-day="'+di+'" data-slot="'+slot.id+'" aria-label="'+slot.label+' for '+day.day+'">'+mealOptions(week, di, slot.id)+'</select><div class="menu-detail">'+esc(meal.description||meal.detail)+'</div></div><button type="button" class="recipe-link" data-open-meal data-week="'+week+'" data-day="'+di+'" data-slot="'+slot.id+'">Recipe</button></div>';
     });
     html += '</section>';
   }
@@ -613,21 +636,69 @@ function renderMenuPane(week){
 }
 
 function renderShopPane(week, stats){
-  const items = buildWeekShoppingList(week, shopOnlyUnmade);
-  const boughtN = items.filter(item=>state.menu.bought[buyKey(week, item.item, item.unit)]).length;
-  const leftBuy = items.length-boughtN;
+  const rows = buildWeekShoppingList(week, shopOnlyUnmade);
+  const buy = rows.filter(item=>!item.stocked);
+  const stocked = rows.filter(item=>item.stocked);
+  const boughtN = buy.filter(item=>state.menu.bought[buyKey(week, item.item, item.unit)]).length;
+  const leftBuy = buy.length-boughtN;
   let list = '';
-  if(!items.length) list = '<div class="empty-state">Every meal this week is marked made, so this filtered list is empty.</div>';
+  if(!buy.length) list = '<div class="empty-state">Nothing left to buy for the meals still on this list.</div>';
   else {
     let aisle = '';
-    items.forEach(item=>{
-      if(item.aisle!==aisle){ aisle = item.aisle; list += '<div class="aisle-label">'+aisle+'</div>'; }
+    buy.forEach(item=>{
+      if(item.aisle!==aisle){ aisle = item.aisle; list += '<div class="aisle-label">'+esc(aisle)+'</div>'; }
       const bought = !!state.menu.bought[buyKey(week, item.item, item.unit)];
-      const u = item.unit ? ' '+esc(item.unit) : '';
-      list += '<label class="shop-item'+(bought?' bought':'')+'"><input type="checkbox" data-shop-item data-week="'+week+'" data-item="'+esc(item.item)+'" data-unit="'+esc(item.unit)+'" '+(bought?'checked':'')+'><span><span class="shop-name">'+fmtQty(item.qty)+u+' '+esc(item.item)+'</span><span class="shop-uses">'+esc(usesLabel(item.uses))+'</span></span></label>';
+      const hint = item.hint ? ' · '+esc(item.hint) : '';
+      list += '<label class="shop-item'+(bought?' bought':'')+'"><input type="checkbox" data-shop-item data-week="'+week+'" data-item="'+esc(item.item)+'" data-unit="'+esc(item.unit)+'" '+(bought?'checked':'')+'><span><span class="shop-name">'+esc(item.label)+' '+esc(groceryName(item.item, item.qty, item.unit))+'</span><span class="shop-uses">'+esc(usesLabel(item.uses))+hint+'</span></span></label>';
     });
   }
-  return '<div class="shop-summary">'+leftBuy+' to buy · '+stats.left+' meals still to cook</div><div class="shop-tools"><label class="made-toggle"><input type="checkbox" data-shop-unmade '+(shopOnlyUnmade?'checked':'')+'> Still to cook</label><div class="shop-actions"><button type="button" class="quiet-btn" data-copy-list>Copy</button><button type="button" class="quiet-btn" data-clear-shop data-week="'+week+'">Clear</button></div></div>'+list;
+  let parked = '';
+  if(stocked.length){
+    parked = '<div class="aisle-label">Already in the kitchen</div><p class="menu-hint">Left off the list because you marked them on the Used page.</p>';
+    stocked.forEach(item=>{
+      parked += '<div class="shop-item"><span><span class="shop-name">'+esc(item.item)+'</span><span class="shop-uses">'+esc(usesLabel(item.uses))+'</span></span></div>';
+    });
+  }
+  return '<div class="shop-hero"><strong>Week '+week+' shopping list</strong><p>Buy this once at the start of the week. Quantities are grocery-store amounts: pounds, dozens, cans, and bags.</p><div class="shop-stat">'+leftBuy+' to buy · about $'+weekCost(week)+' of food · '+stats.left+' meals still to cook</div></div><div class="shop-tools"><label class="made-toggle"><input type="checkbox" data-shop-unmade '+(shopOnlyUnmade?'checked':'')+'> Still to cook</label><div class="shop-actions"><button type="button" class="quiet-btn" data-copy-list>Copy</button><button type="button" class="quiet-btn" data-clear-shop data-week="'+week+'">Clear</button></div></div>'+list+parked;
+}
+
+function renderUsedPane(week){
+  const prefs = menuPrefs();
+  const diets = ['omnivore','pescatarian','vegetarian','dairy-free'];
+  let html = '<div class="used-block"><h3>How you like to eat</h3><p class="menu-hint">The next menu uses this. A week you already started cooking stays until you ask for a new one.</p>';
+  html += '<div class="edit-grid"><label>Diet<select id="pref-diet">'+diets.map(d=>'<option value="'+d+'"'+(prefs.diet===d?' selected':'')+'>'+d.charAt(0).toUpperCase()+d.slice(1)+'</option>').join('')+'</select></label>';
+  html += '<label>Foods to skip<input id="pref-avoid" value="'+esc(prefs.avoid)+'" placeholder="mushrooms, cilantro"></label>';
+  html += '<label>Foods you want more of<input id="pref-likes" value="'+esc(prefs.likes)+'" placeholder="beans, eggs, rice"></label>';
+  html += '<label>Most meals under (minutes)<input id="pref-minutes" type="number" min="10" max="40" value="'+prefs.minutes+'"></label>';
+  html += '<label>Servings<input id="pref-servings" type="number" min="1" max="4" value="'+prefs.servings+'"></label>';
+  html += '<label>Anything else<textarea id="pref-note" placeholder="Keep breakfast no-cook on work days.">'+esc(prefs.note)+'</textarea></label></div>';
+  html += '<button type="button" class="save-btn" data-save-prefs style="margin-top:10px">Save preferences</button></div>';
+  const known = STAPLE_CHOICES.slice();
+  Object.keys(state.menu.staples).forEach(name=>{ if(known.indexOf(name)<0) known.push(name); });
+  html += '<div class="used-block"><h3>Already in the kitchen</h3><p class="menu-hint">Checked items stay off the shopping list.</p><div class="staple-grid">';
+  known.forEach(name=>{
+    const on = !!state.menu.staples[name];
+    html += '<label><input type="checkbox" data-staple="'+esc(name)+'" '+(on?'checked':'')+'>'+esc(name)+'</label>';
+  });
+  html += '</div><div class="edit-grid" style="margin-top:8px"><label>Add a staple<input id="staple-add" placeholder="rice vinegar"></label></div><button type="button" class="quiet-btn" data-add-staple style="margin-top:8px">Add</button></div>';
+  html += '<div class="used-block"><h3>What you have cooked</h3>';
+  const history = state.menu.history||[];
+  if(!history.length) html += '<div class="empty-state">Nothing cooked yet. Check a meal on the menu and it lands here, where you can change it.</div>';
+  history.forEach((row, i)=>{
+    const when = new Date(row.at);
+    const date = when.toLocaleDateString('en-US', { month:'short', day:'numeric' });
+    html += '<article class="history-item"><div class="history-date">Week '+row.week+' · '+esc(DAY_NAMES[row.dayIdx]||'')+' '+esc(row.slot)+' · '+date+'</div><div class="history-title">'+esc(row.meal.name)+'</div><div class="history-detail">'+esc(row.meal.description||row.meal.detail||'')+'</div><div class="history-actions"><button type="button" class="quiet-btn" data-edit-used="'+i+'">Edit</button><button type="button" class="quiet-btn" data-open-used="'+i+'">Recipe</button><button type="button" class="quiet-btn" data-forget-used="'+i+'">Remove</button></div></article>';
+  });
+  html += '</div><div class="used-block"><h3>Ingredients you have used</h3>';
+  const roll = usedIngredientRollup();
+  if(!roll.length) html += '<p class="menu-hint">Cooked meals will add up here.</p>';
+  else {
+    roll.slice(0, 16).forEach(item=>{
+      html += '<div class="shop-item"><span><span class="shop-name">'+esc(fmtQty(item.qty))+' '+esc(item.unit)+' '+esc(item.item)+'</span></span></div>';
+    });
+  }
+  html += '</div>';
+  return html;
 }
 
 function renderSettings(){
@@ -708,7 +779,7 @@ function showTab(tab){
   if(tab==='today') renderToday();
   if(tab==='lift'){ renderLift(); personalizeLift(false); }
   if(tab==='run'){ renderRun(); personalizeRun(false); }
-  if(tab==='meals') renderMeals();
+  if(tab==='meals'){ renderMeals(); personalizeMeals(false); }
   if(tab==='settings') renderSettings();
 }
 
@@ -766,12 +837,84 @@ function openInfo(id){
   openModal(ex.name, '<p>'+esc(ex.cue)+'</p><p>'+esc(PATTERN_LABEL[ex.pattern]||'')+' · '+esc(EQUIP_LABEL[ex.equip]||'')+'</p>');
 }
 
-function showRecipe(cat, idx){
-  const meal = NUTRITION.meals[cat] && NUTRITION.meals[cat][idx];
-  if(!meal || !meal.recipe){ openModal(meal?meal.name:'Recipe', '<p>No recipe for this one.</p>'); return; }
+function mealSheet(meal, editBtn){
+  if(!meal || !meal.recipe) return '<p>No recipe for this one.</p>';
   const ing = meal.recipe.ingredients.map(i=>'<li>'+fmtQty(i.qty)+(i.unit?' '+esc(i.unit):'')+' '+esc(i.item)+'</li>').join('');
   const steps = meal.recipe.steps.map(s=>'<li>'+esc(s)+'</li>').join('');
-  openModal(meal.name, '<p>'+esc(meal.detail)+'</p><h4>Ingredients</h4><ul>'+ing+'</ul><h4>Steps</h4><ul>'+steps+'</ul>');
+  const meta = (meal.minutes?meal.minutes+' min':'')+(meal.cost?' · about '+fmtMoney(meal.cost):'');
+  return '<p>'+esc(meal.description||meal.detail||'')+'</p>'+(meta?'<p>'+esc(meta)+'</p>':'')+'<h4>Ingredients</h4><ul>'+ing+'</ul><h4>Steps</h4><ul>'+steps+'</ul>'+(editBtn||'');
+}
+function openMeal(week, dayIdx, slot){
+  const meal = chosenMeal(week, dayIdx, slot);
+  openModal(meal.name, mealSheet(meal, '<button type="button" class="quiet-btn" data-edit-slot data-week="'+week+'" data-day="'+dayIdx+'" data-slot="'+slot+'" style="margin-top:12px">Edit this recipe</button>'));
+}
+function openUsedMeal(index){
+  const row = (state.menu.history||[])[index];
+  if(!row) return;
+  openModal(row.meal.name, mealSheet(row.meal, '<button type="button" class="quiet-btn" data-edit-used="'+index+'" style="margin-top:12px">Edit this recipe</button>'));
+}
+function openMealEditor(target){
+  const meal = target.kind==='history' ? state.menu.history[target.index] && state.menu.history[target.index].meal : chosenMeal(target.week, target.day, target.slot);
+  if(!meal) return;
+  const attr = target.kind==='history'
+    ? 'data-save-edit data-kind="history" data-index="'+target.index+'"'
+    : 'data-save-edit data-kind="slot" data-week="'+target.week+'" data-day="'+target.day+'" data-slot="'+target.slot+'"';
+  const body = '<div class="edit-grid"><label>Name<input id="edit-name" value="'+esc(meal.name)+'"></label><label>Description<textarea id="edit-desc">'+esc(meal.description||meal.detail||'')+'</textarea></label><label>Minutes<input id="edit-min" type="number" min="5" max="40" value="'+(meal.minutes||20)+'"></label><label>About this much ($)<input id="edit-cost" type="number" min="1" max="12" step="0.25" value="'+(meal.cost||4)+'"></label><label>Ingredients, one per line<textarea id="edit-ing">'+esc(ingredientLines(meal))+'</textarea></label><p class="menu-hint">Example: 0.5 lb chicken thighs</p><label>Steps, one per line<textarea id="edit-steps">'+esc((meal.recipe.steps||[]).join('\n'))+'</textarea></label></div><button type="button" class="save-btn" '+attr+' style="margin-top:12px">Save recipe</button>';
+  openModal('Edit recipe', body);
+}
+function saveMealEditor(btn){
+  const name = document.getElementById('edit-name').value.replace(/\s+/g,' ').trim().slice(0, 80);
+  const description = document.getElementById('edit-desc').value.replace(/\s+/g,' ').trim().slice(0, 400);
+  const minutes = Math.round(Number(document.getElementById('edit-min').value));
+  const cost = Number(document.getElementById('edit-cost').value);
+  const ingredients = parseIngredientLines(document.getElementById('edit-ing').value);
+  const steps = document.getElementById('edit-steps').value.split('\n').map(s=>s.trim()).filter(Boolean).slice(0, 6);
+  if(name.length<3 || description.length<12 || ingredients.length<2 || steps.length<2){
+    toast('Add a name, a description, two ingredients, and two steps');
+    return;
+  }
+  const prev = btn.dataset.kind==='history' ? state.menu.history[+btn.dataset.index].meal : chosenMeal(+btn.dataset.week, +btn.dataset.day, btn.dataset.slot);
+  const meal = {
+    name, description, detail:description,
+    timing:prev.timing||'',
+    minutes: isFinite(minutes)?Math.max(5, Math.min(40, minutes)):20,
+    cost: isFinite(cost)?Math.max(0.5, Math.min(12, Math.round(cost*100)/100)):4,
+    recipe:{ ingredients, steps }
+  };
+  if(btn.dataset.kind==='history'){
+    const row = state.menu.history[+btn.dataset.index];
+    const previous = normName(row.meal.name);
+    row.meal = meal;
+    const plan = state.menu.plans[String(row.week)];
+    const key = row.dayIdx+':'+row.slot;
+    if(plan && plan.meals && plan.meals[key] && normName(plan.meals[key].name)===previous) plan.meals[key] = cloneMeal(meal);
+  }else{
+    replaceSlotMeal(+btn.dataset.week, +btn.dataset.day, btn.dataset.slot, meal);
+    const id = mealKey(+btn.dataset.week, +btn.dataset.day, btn.dataset.slot)+':'+normName(meal.name);
+    const row = state.menu.history.find(item=>item.id===id);
+    if(row) row.meal = cloneMeal(meal);
+  }
+  save();
+  closeModal();
+  renderAll();
+  toast('Recipe saved');
+}
+function saveMealPrefs(){
+  const prefs = menuPrefs();
+  prefs.diet = document.getElementById('pref-diet').value || 'omnivore';
+  prefs.avoid = document.getElementById('pref-avoid').value.trim().slice(0, 160);
+  prefs.likes = document.getElementById('pref-likes').value.trim().slice(0, 160);
+  prefs.note = document.getElementById('pref-note').value.trim().slice(0, 240);
+  prefs.minutes = Math.max(10, Math.min(40, Math.round(Number(document.getElementById('pref-minutes').value)||25)));
+  prefs.servings = clampServings(document.getElementById('pref-servings').value);
+  save();
+  const week = Math.max(1, viewWeek()+mealWeekOffset);
+  if(weekHasActivity(week)) toast('Saved. This week stays until you ask for a new menu.');
+  else {
+    toast('Saved. The next menu will use this.');
+    personalizeMeals(false);
+  }
+  renderMeals();
 }
 
 function openModal(title, bodyHtml){
@@ -929,14 +1072,48 @@ function onClick(e){
     renderToday();
     return;
   }
-  const recipe = t.closest('[data-recipe]');
-  if(recipe){ showRecipe(recipe.dataset.recipe, +recipe.dataset.idx); return; }
+  const recipe = t.closest('[data-open-meal]');
+  if(recipe){ openMeal(recipe.dataset.week?+recipe.dataset.week:viewWeek(), +recipe.dataset.day, recipe.dataset.slot); return; }
+  const editSlot = t.closest('[data-edit-slot]');
+  if(editSlot){ openMealEditor({ kind:'slot', week:+editSlot.dataset.week, day:+editSlot.dataset.day, slot:editSlot.dataset.slot }); return; }
+  const editUsed = t.closest('[data-edit-used]');
+  if(editUsed){ openMealEditor({ kind:'history', index:+editUsed.dataset.editUsed }); return; }
+  const openUsed = t.closest('[data-open-used]');
+  if(openUsed){ openUsedMeal(+openUsed.dataset.openUsed); return; }
+  const forget = t.closest('[data-forget-used]');
+  if(forget){
+    state.menu.history.splice(+forget.dataset.forgetUsed, 1);
+    save(); renderMeals(); return;
+  }
+  const saveEdit = t.closest('[data-save-edit]');
+  if(saveEdit){ saveMealEditor(saveEdit); return; }
+  if(t.closest('[data-save-prefs]')){ saveMealPrefs(); return; }
+  if(t.closest('[data-add-staple]')){
+    const input = document.getElementById('staple-add');
+    const name = normName(input && input.value);
+    if(name){ state.menu.staples[name] = true; save(); renderMeals(); }
+    return;
+  }
   const tog = t.closest('[data-toggle]');
   if(tog && !t.closest('input,select,button.recipe-link')){ toggle(tog.dataset.toggle, tog.dataset.chev); return; }
   const jump = t.closest('[data-jump]');
   if(jump){ jumpToDay(+jump.dataset.jump); return; }
   const refresh = t.closest('[data-refresh]');
   if(refresh){
+    if(refresh.dataset.refresh==='meals'){
+      const week = Math.max(1, viewWeek()+mealWeekOffset);
+      if(weekHasActivity(week) && !confirm('Replace this week’s meals? Cooked checks reset. What you already cooked stays on the Used page.')) return;
+      if(weekHasActivity(week)) clearWeekProgress(week);
+      state.menu.salt = (state.menu.salt||0)+1;
+      save();
+      if(!String(state.ai.key||'').trim()){
+        installBuiltinMenu(week);
+        save();
+        renderAll();
+        toast('New built-in meals for this week');
+      }else personalizeMeals(true);
+      return;
+    }
     if(!String(state.ai.key||'').trim()){ toast('Add an API key in Settings. The built-in plan stays on until then.'); return; }
     if(refresh.dataset.refresh==='run') personalizeRun(true);
     else personalizeLift(true);
@@ -946,8 +1123,8 @@ function onClick(e){
   if(logRunBtn){ logRunDay(+logRunBtn.dataset.logRun, false); return; }
   const pane = t.closest('[data-meals-pane]');
   if(pane){ mealsPane = pane.dataset.mealsPane; renderMeals(); return; }
-  if(t.closest('#meals-prev')){ if(mealWeekOffset>-viewWeek()+1){ mealWeekOffset--; renderMeals(); } return; }
-  if(t.closest('#meals-next')){ if(mealWeekOffset<3){ mealWeekOffset++; renderMeals(); } return; }
+  if(t.closest('#meals-prev')){ if(mealWeekOffset>-viewWeek()+1){ mealWeekOffset--; renderMeals(); personalizeMeals(false); } return; }
+  if(t.closest('#meals-next')){ if(mealWeekOffset<3){ mealWeekOffset++; renderMeals(); personalizeMeals(false); } return; }
   if(t.closest('[data-copy-list]')){ copyShoppingList(); return; }
   const clearShop = t.closest('[data-clear-shop]');
   if(clearShop){
@@ -1019,8 +1196,15 @@ function onChange(e){
     return;
   }
   if(t.matches('[data-meal-choice]')){
-    setMealChoice(+t.dataset.week, +t.dataset.day, t.dataset.slot, t.value);
+    applyMealChoice(+t.dataset.week, +t.dataset.day, t.dataset.slot, t.value);
     renderToday(); renderMeals(); return;
+  }
+  if(t.matches('[data-staple]')){
+    const name = t.dataset.staple;
+    if(t.checked) state.menu.staples[name] = true;
+    else delete state.menu.staples[name];
+    save();
+    return;
   }
   if(t.matches('[data-meal-made]')){
     setMealMade(+t.dataset.week, +t.dataset.day, t.dataset.slot, t.checked);
@@ -1112,7 +1296,9 @@ async function watchUpdates(){
 }
 
 load();
+ensureWeekMenu(state.currentWeek);
 renderAll();
+personalizeMeals(false);
 document.body.addEventListener('click', onClick);
 document.body.addEventListener('change', onChange);
 document.getElementById('rest-skip').addEventListener('click', ()=>stopRest(false));

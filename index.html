@@ -267,6 +267,19 @@ button,.ex-name-btn,.mobility-item,.recipe-link,.shop-link{touch-action:manipula
 .meter{height:6px;background:var(--paper3);border-radius:4px;overflow:hidden;margin-top:8px}
 .meter span{display:block;height:100%;background:var(--lift);width:0}
 #alerts:empty{display:none}
+.meal-meta{font-size:11px;color:var(--ink3);font-weight:600;margin-bottom:2px}
+.shop-hero{border:0.5px solid var(--border);border-radius:var(--radius);padding:14px;background:var(--paper2);margin-bottom:12px}
+.shop-hero strong{display:block;font-size:16px;letter-spacing:-0.2px;margin-bottom:4px}
+.shop-hero p{font-size:13px;color:var(--ink2);line-height:1.45}
+.shop-stat{margin-top:8px;font-size:13px;font-weight:600}
+.used-block{margin-bottom:18px}
+.used-block h3{font-size:13px;font-weight:700;margin-bottom:8px}
+.staple-grid{display:flex;flex-wrap:wrap;gap:6px}
+.staple-grid label{display:flex;align-items:center;gap:6px;font-size:12px;border:0.5px solid var(--border);border-radius:999px;padding:6px 10px;background:var(--paper)}
+.history-actions{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.edit-grid textarea,.edit-grid input,.edit-grid select{width:100%;font-family:var(--font);font-size:14px;border:0.5px solid var(--border2);border-radius:8px;padding:8px;background:var(--paper2);color:var(--ink);margin-top:4px}
+.edit-grid textarea{min-height:72px;resize:vertical}
+.edit-grid label{display:block;font-size:12px;font-weight:600;margin-top:10px}
 </style>
 </head>
 <body>
@@ -328,6 +341,7 @@ button,.ex-name-btn,.mobility-item,.recipe-link,.shop-link{touch-action:manipula
   <div class="seg" role="tablist">
     <button type="button" id="pane-menu" class="active" data-meals-pane="menu" role="tab" aria-selected="true">Menu</button>
     <button type="button" id="pane-shop" data-meals-pane="shop" role="tab" aria-selected="false">Shop</button>
+    <button type="button" id="pane-used" data-meals-pane="used" role="tab" aria-selected="false">Used</button>
   </div>
   <div id="meals-body"></div>
 </div>
@@ -350,7 +364,7 @@ button,.ex-name-btn,.mobility-item,.recipe-link,.shop-link{touch-action:manipula
     <div class="settings-stack"><label for="set-key">API key</label><input type="password" id="set-key" autocomplete="off" spellcheck="false" placeholder="Stored on this phone"></div>
     <div class="settings-note" id="spend-label">$0.00 of $3.00 this week</div>
     <div class="meter" aria-hidden="true"><span id="spend-fill"></span></div>
-    <div class="settings-note">The key stays on this phone and is sent only to the address above. Calls stop at $3 each Monday-to-Sunday week. Past that, or if a call fails, the built-in plan is used and a banner says so. The counter lives on this phone, so clearing site data resets it. With no key, the built-in plans run on their own.</div>
+    <div class="settings-note">The key stays on this phone and is sent only to the address above. Calls stop at $3 each Monday-to-Sunday week. Lifting, running, and the weekly menu share that limit. Past it, or if a call fails, the built-in plan is used and a banner says so. The counter lives on this phone, so clearing site data resets it. With no key, the built-in plans run on their own, and the meals still change every week.</div>
   </div>
   <div class="settings-section">
     <div class="settings-section-label">Updates</div>
